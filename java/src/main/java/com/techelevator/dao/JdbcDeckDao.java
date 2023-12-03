@@ -74,12 +74,12 @@ public class JdbcDeckDao implements DeckDao {
     }
 
     @Override
-    public DeckDto updateDeck(DeckDto deckDto) {
+    public DeckDto updateDeck(DeckDto deckDto, int id) {
         String sql = "UPDATE flashcard_decks\n" +
                 "SET title = ?, description = ?\n" +
                 "WHERE deck_id = ?";
         try{
-            int numOfRowsUpdated = jdbcTemplate.update(sql, deckDto.getTitle(), deckDto.getDescription());
+            int numOfRowsUpdated = jdbcTemplate.update(sql, deckDto.getTitle(), deckDto.getDescription(), id);
             if(numOfRowsUpdated == 0){
                 throw new DaoException("No records were updated");
             }
@@ -91,6 +91,9 @@ public class JdbcDeckDao implements DeckDao {
         return deckDto;
     }
 
+    //Not sure if we should keep the deleteFlashcards() considering the fact
+    //that it is not in the user stories...keeping this here to discuss with
+    //team and product owner
     @Override
     public int deleteDeck(int id){
         int numberOfRows = 0;

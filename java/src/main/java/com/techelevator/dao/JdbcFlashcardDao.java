@@ -77,12 +77,12 @@ public class JdbcFlashcardDao implements FlashcardDao {
     }
 
     @Override
-    public FlashcardDto updateFlashcard(FlashcardDto flashcardDto) {
+    public FlashcardDto updateFlashcard(FlashcardDto flashcardDto, int id) {
         String sql = "UPDATE flashcards\n" +
                 "SET deck_id = ?, question = ?, answer = ?, tags = ?, creator = ?\n" +
                 "WHERE flashcard_id = ?";
         try {
-            int numOfRowsUpdated = jdbcTemplate.update(sql, flashcardDto.getDeckId(), flashcardDto.getQuestion(), flashcardDto.getAnswer(), flashcardDto.getTag(), flashcardDto.getCreator());
+            int numOfRowsUpdated = jdbcTemplate.update(sql, flashcardDto.getDeckId(), flashcardDto.getQuestion(), flashcardDto.getAnswer(), flashcardDto.getTag(), flashcardDto.getCreator(), id);
             if(numOfRowsUpdated == 0){
                 throw new DaoException("No records were updated");
             }
@@ -94,9 +94,7 @@ public class JdbcFlashcardDao implements FlashcardDao {
         return flashcardDto;
     }
 
-    //Not sure if we should keep the deleteFlashcards() considering the fact
-    //that it is not in the user stories...keeping this here to discuss with
-    //team and product owner
+
     @Override
     public int deleteFlashcard(int id) {
         int numberOfRows = 0;

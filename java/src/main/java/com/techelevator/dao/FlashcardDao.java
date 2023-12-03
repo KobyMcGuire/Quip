@@ -12,7 +12,7 @@ public interface FlashcardDao {
     Flashcard getFlashcardById(int id);
 
     Flashcard createFlashcard(FlashcardDto flashcardDto);
-    FlashcardDto updateFlashcard(FlashcardDto flashcardDto);
+    FlashcardDto updateFlashcard(FlashcardDto flashcardDto, int id);
 
     int deleteFlashcard(int id);
 }
