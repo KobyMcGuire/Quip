@@ -11,7 +11,7 @@ public interface FlashcardDao {
     Flashcard getFlashcardById(int id);
 
     Flashcard createFlashcard(Flashcard flashcard);
-    Flashcard updateFlashcard(Flashcard flashcard, int id);
+    Flashcard updateFlashcard(Flashcard flashcard);
 
-    void deleteFlashcard(int id);
+    int deleteFlashcard(int id);
 }

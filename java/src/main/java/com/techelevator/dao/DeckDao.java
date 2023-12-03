@@ -13,7 +13,7 @@ public interface DeckDao {
     //createDeck() probably needs to pass in a Dto as an argument
     Deck createDeck(Deck deck);
 
-    Deck updateDeck(Deck deck, int id);
+    Deck updateDeck(Deck deck);
 
-    void deleteDeck(int id);
+    int deleteDeck(int id);
 }
