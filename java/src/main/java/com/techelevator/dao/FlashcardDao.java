@@ -1,6 +1,7 @@
 package com.techelevator.dao;
 
 import com.techelevator.model.Flashcard;
+import com.techelevator.model.FlashcardDto;
 
 import java.util.List;
 
@@ -10,8 +11,8 @@ public interface FlashcardDao {
 
     Flashcard getFlashcardById(int id);
 
-    Flashcard createFlashcard(Flashcard flashcard);
-    Flashcard updateFlashcard(Flashcard flashcard);
+    Flashcard createFlashcard(FlashcardDto flashcardDto);
+    FlashcardDto updateFlashcard(FlashcardDto flashcardDto);
 
     int deleteFlashcard(int id);
 }

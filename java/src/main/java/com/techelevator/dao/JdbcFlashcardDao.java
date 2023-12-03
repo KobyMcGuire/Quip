@@ -3,6 +3,7 @@ package com.techelevator.dao;
 import com.techelevator.exception.DaoException;
 import com.techelevator.model.Deck;
 import com.techelevator.model.Flashcard;
+import com.techelevator.model.FlashcardDto;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -60,12 +61,12 @@ public class JdbcFlashcardDao implements FlashcardDao {
     }
 
     @Override
-    public Flashcard createFlashcard(Flashcard flashcard) {
+    public Flashcard createFlashcard(FlashcardDto flashcardDto) {
         Flashcard newFlashcard = null;
         String sql = "INSERT INTO flashcards(deck_id, question, answer, tags, creator)\n" +
                 "VALUES(?, ?, ?, ?, ?) RETURNING flashcard_id;";
         try{
-            int newFlashcardId = jdbcTemplate.queryForObject(sql, int.class, flashcard.getDeckId(), flashcard.getQuestion(), flashcard.getAnswer(), flashcard.getTag(), flashcard.getCreator());
+            int newFlashcardId = jdbcTemplate.queryForObject(sql, int.class, flashcardDto.getDeckId(), flashcardDto.getQuestion(), flashcardDto.getAnswer(), flashcardDto.getTag(), flashcardDto.getCreator());
             newFlashcard = getFlashcardById(newFlashcardId);
         }catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to server or database", e);
@@ -76,12 +77,12 @@ public class JdbcFlashcardDao implements FlashcardDao {
     }
 
     @Override
-    public Flashcard updateFlashcard(Flashcard flashcard) {
+    public FlashcardDto updateFlashcard(FlashcardDto flashcardDto) {
         String sql = "UPDATE flashcards\n" +
                 "SET deck_id = ?, question = ?, answer = ?, tags = ?, creator = ?\n" +
                 "WHERE flashcard_id = ?";
         try {
-            int numOfRowsUpdated = jdbcTemplate.update(sql, flashcard.getDeckId(), flashcard.getQuestion(), flashcard.getAnswer(), flashcard.getTag(), flashcard.getCreator());
+            int numOfRowsUpdated = jdbcTemplate.update(sql, flashcardDto.getDeckId(), flashcardDto.getQuestion(), flashcardDto.getAnswer(), flashcardDto.getTag(), flashcardDto.getCreator());
             if(numOfRowsUpdated == 0){
                 throw new DaoException("No records were updated");
             }
@@ -90,7 +91,7 @@ public class JdbcFlashcardDao implements FlashcardDao {
         }catch(DataIntegrityViolationException e){
             throw new DaoException("Your attempt to add data to this table violates data integrity.", e);
         }
-        return flashcard;
+        return flashcardDto;
     }
 
     //Not sure if we should keep the deleteFlashcards() considering the fact

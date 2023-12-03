@@ -1,6 +1,7 @@
 package com.techelevator.dao;
 
 import com.techelevator.model.Deck;
+import com.techelevator.model.DeckDto;
 
 import java.util.List;
 
@@ -11,9 +12,9 @@ public interface DeckDao {
     Deck getDeckById(int id);
 
     //createDeck() probably needs to pass in a Dto as an argument
-    Deck createDeck(Deck deck);
+    Deck createDeck(DeckDto deckDto);
 
-    Deck updateDeck(Deck deck);
+    DeckDto updateDeck(DeckDto deckDto);
 
     int deleteDeck(int id);
 }

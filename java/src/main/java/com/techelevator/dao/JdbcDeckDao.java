@@ -2,6 +2,7 @@ package com.techelevator.dao;
 
 import com.techelevator.exception.DaoException;
 import com.techelevator.model.Deck;
+import com.techelevator.model.DeckDto;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -57,12 +58,12 @@ public class JdbcDeckDao implements DeckDao {
     }
 
     @Override
-    public Deck createDeck(Deck deck) {
+    public Deck createDeck(DeckDto deckDto) {
         Deck newDeck = null;
         String sql = "INSERT INTO flashcard_decks(title, description)\n" +
-                "VALUES(?, ?, ?) RETURNING deck_id;";
+                "VALUES(?, ?) RETURNING deck_id;";
         try{
-            int newDeckId = jdbcTemplate.queryForObject(sql, int.class, deck.getTitle(), deck.getDescription());
+            int newDeckId = jdbcTemplate.queryForObject(sql, int.class, deckDto.getTitle(), deckDto.getDescription());
             newDeck = getDeckById(newDeckId);
         }catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to server or database", e);
@@ -73,12 +74,12 @@ public class JdbcDeckDao implements DeckDao {
     }
 
     @Override
-    public Deck updateDeck(Deck deck) {
+    public DeckDto updateDeck(DeckDto deckDto) {
         String sql = "UPDATE flashcard_decks\n" +
                 "SET title = ?, description = ?\n" +
                 "WHERE deck_id = ?";
         try{
-            int numOfRowsUpdated = jdbcTemplate.update(sql, deck.getTitle(), deck.getDescription());
+            int numOfRowsUpdated = jdbcTemplate.update(sql, deckDto.getTitle(), deckDto.getDescription());
             if(numOfRowsUpdated == 0){
                 throw new DaoException("No records were updated");
             }
@@ -87,7 +88,7 @@ public class JdbcDeckDao implements DeckDao {
         }catch(DataIntegrityViolationException e){
             throw new DaoException("Your attempt to add data to this table violates data integrity.", e);
         }
-        return deck;
+        return deckDto;
     }
 
     @Override
