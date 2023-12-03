@@ -1,5 +1,19 @@
 <template>
   <div class = 'deck-container'>
+    
+    <div class="deck-card">
+        <h1>Create a new Deck</h1>
+
+        <label for="deckTitle">Title: </label>
+        <input type="text" id="deckTitle" name="deckTitle" v-model="newDeck.title">
+
+        <label for="deckDescription">Description: </label>
+        <input type="text" id="deckDescription" name="deckDescription" v-model="newDeck.description">
+
+        <label for="submitNewDeck"></label>
+        <input type="submit" id="submitNewDeck" v-on:click="addDeck">
+    </div>
+
     <deck-card class="deck-card" v-for="deck in decks" v-bind:key="deck.id" v-bind:deck="deck"></deck-card>
   </div>
 </template>
@@ -13,15 +27,30 @@ export default {
         DeckCard
     },
 
-    data() {
-        return {
-            decks:[]
+    methods : {
+        // API call to add deck to DB
+        addDeck() {
+            this.$store.state.decks.push(this.newDeck)
+            this.newDeck = '';
         }
     },
 
-    created() {
-        // API call to update data
-        this.decks = this.$store.state.decks;
+    data() {
+        return {
+            newDeck:{
+                id : 4,
+                title: "",
+                description:""
+            }
+
+        }
+    },
+
+    computed : {
+        // API call to update decks
+        decks() {
+            return this.$store.state.decks;
+        }
     }
 
 }
