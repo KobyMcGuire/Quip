@@ -1,6 +1,6 @@
 <template>
   <div class = 'deck-container'>
-    
+
     <div class="deck-card">
         <h1>Create a new Deck</h1>
 
@@ -14,12 +14,13 @@
         <input type="submit" id="submitNewDeck" v-on:click="addDeck">
     </div>
 
-    <deck-card class="deck-card" v-for="deck in decks" v-bind:key="deck.id" v-bind:deck="deck"></deck-card>
+    <deck-card class="deck-card" v-for="deck in decks" v-bind:key="deck.deckId" v-bind:deck="deck"></deck-card>
   </div>
 </template>
 
 <script>
 import DeckCard from "../components/DeckCard.vue"
+import DeckService from "../services/DeckService";
 
 export default {
 
@@ -38,19 +39,23 @@ export default {
     data() {
         return {
             newDeck:{
-                id : 4,
+                deckId : 4,
                 title: "",
                 description:""
-            }
+            },
+
+            decks : []
 
         }
     },
 
-    computed : {
-        // API call to update decks
-        decks() {
-            return this.$store.state.decks;
-        }
+    created() {
+        
+        DeckService.getDecks()
+        .then((response) => {
+            this.decks = response.data;
+        })
+    
     }
 
 }
