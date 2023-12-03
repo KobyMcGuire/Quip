@@ -3,10 +3,66 @@ import axios from 'axios';
 
 export function createStore(currentToken, currentUser) {
   let store = _createStore({
+
     state: {
       token: currentToken || '',
-      user: currentUser || {}
+      user: currentUser || {},
+
+      /* Dummy Deck Data to test with */
+      decks : [
+
+        {
+          id : 1,
+          title : 'Biology',
+          description : 'Flashcards for Biology'
+        },
+
+        {
+          id : 2,
+          title : 'Chemistry',
+          description : 'Flashcards for Chemistry'
+        },
+
+        {
+          id : 3,
+          title : 'Math',
+          description : 'Flashcards for Math'
+        },
+
+      ],
+
+      flashcards : [
+        {
+          cardId : 1,
+          deckId : 1,
+          question : "What is a mitochondria?",
+          answer : "The powerhouse of the cell.",
+          tags : [],
+          creator : "Koby"
+        },
+
+        {
+          cardId : 2,
+          deckId : 1,
+          question : "What is Biology?",
+          answer : ":D",
+          tags : [],
+          creator : "Koby"
+        },
+
+        {
+          cardId : 3,
+          deckId : 1,
+          question : "meep",
+          answer : "hehe",
+          tags : [],
+          creator : "Koby"
+        }
+      ]
+
+
     },
+
     mutations: {
       SET_AUTH_TOKEN(state, token) {
         state.token = token;

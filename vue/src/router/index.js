@@ -6,6 +6,8 @@ import HomeView from '../views/HomeView.vue';
 import LoginView from '../views/LoginView.vue';
 import LogoutView from '../views/LogoutView.vue';
 import RegisterView from '../views/RegisterView.vue';
+import DecksView from '../views/DecksView.vue';
+import SingleDeckView from '../views/SingleDeckView.vue';
 
 /**
  * The Vue Router is used to "direct" the browser to render a specific view component
@@ -15,13 +17,30 @@ import RegisterView from '../views/RegisterView.vue';
  * If the user has not yet authenticated (and needs to) they are redirected to /login
  * If they have (or don't need to) they're allowed to go about their way.
  */
+
 const routes = [
   {
     path: '/',
     name: 'home',
     component: HomeView,
     meta: {
-      requiresAuth: true
+      requiresAuth: false
+    }
+  },
+  {
+    path: '/decks',
+    name: 'decks',
+    component: DecksView,
+    meta: {
+      requiresAuth: false
+    }
+  },
+  {
+    path: '/decks/:id',
+    name: 'deck-cards',
+    component: SingleDeckView,
+    meta: {
+      requiresAuth: false
     }
   },
   {
