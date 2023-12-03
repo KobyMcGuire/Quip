@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <flash-card v-for="flashcard in flashcards" v-bind:key="flashcard.id" v-bind:flashcard="flashcard" />
+  <div class = 'flash-cards-container'>
+    <flash-card v-for="flashcard in flashcards" v-bind:key="flashcard.cardId" v-bind:flashcard="flashcard" />
   </div>
 </template>
 
@@ -10,15 +10,30 @@ import FlashCard from "../components/FlashCard.vue";
 export default {
   components: { FlashCard },
 
-  computed: {
-    flashcards() {
-      return this.$store.state.flashcards.filter((card) => {
-        return card.deckId === this.$route.params.id;
-      })
-    },
+  data () {
+    return {
+        flashcards : []
+    }
+  },
+
+  created() {
+    // Make API call here to get flashcards that pertain to a specific deck
+      for (let i = 0; i < this.$store.state.flashcards.length; i++) {
+        let currentFlashCard = this.$store.state.flashcards[i];
+        if (currentFlashCard.deckId == this.$route.params.id) {
+            this.flashcards.push(currentFlashCard);
+        }
+      }
   },
 };
 </script>
 
 <style scoped>
+
+    .flash-cards-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+    
 </style>
