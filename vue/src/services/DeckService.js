@@ -14,8 +14,13 @@ export default{
         return http.get(`/decks/${deckId}`);
     },
 
+    // Add get all cards by ID back-end method?
+    getCards() {
+        return http.get('/flashcards')
+    },
+
     getCard(cardId) {
-        return http.get(`/flashCard/${cardId}`);
+        return http.get(`/flashcards/${cardId}`);
     }
 
 }

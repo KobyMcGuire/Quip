@@ -31,8 +31,8 @@ public class DeckController {
     public List<Deck> getDecks() {
         return deckDao.getDecks();
     }
-    @RequestMapping(path = "/deck/{deckId}", method = RequestMethod.GET)
-    public Deck getDeckByDeckId(int id){
+    @RequestMapping(path = "/decks/{id}", method = RequestMethod.GET)
+    public Deck getDeckByDeckId(@PathVariable int id){
         return deckDao.getDeckById(id);
     }
 

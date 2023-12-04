@@ -8,7 +8,6 @@
     <button v-on:click="this.showEditDeck = !this.showEditDeck">Edit Deck</button>
     
     <div class="edit-deck-info" v-if="showEditDeck">
-
         <label for="deckTitle">Title: </label>
         <input type="text" id="deckTitle" name="deckTitle" v-model="deck.title">
 
@@ -17,8 +16,8 @@
 
         <label for="submitEditedDeck"></label>
         <input type="submit" id="submitEditedDeck" v-on:click="editDeck">
-
     </div>
+
     <div class = 'flash-cards-container'>
         <flash-card v-for="flashcard in flashcards" v-bind:key="flashcard.cardId" v-bind:flashcard="flashcard" />
     </div>
@@ -27,6 +26,7 @@
 
 <script>
 import FlashCard from "../components/FlashCard.vue";
+import DeckService from '../services/DeckService';
 
 export default {
   components: { FlashCard },
@@ -34,6 +34,7 @@ export default {
   data () {
     return {
         flashcards : [],
+        deck : {},
         showEditDeck: false,
         editedDeck : {
             title : '',
@@ -50,20 +51,29 @@ export default {
   },
 
   computed : {
-    deck() {
-        // Subtract one because arrays are zero indexed
-        return this.$store.state.decks[this.$route.params.id - 1];
-    }
   },
 
   created() {
-    // Make API call here to get flashcards that pertain to a specific deck
-      for (let i = 0; i < this.$store.state.flashcards.length; i++) {
-        let currentFlashCard = this.$store.state.flashcards[i];
-        if (currentFlashCard.deckId == this.$route.params.id) {
-            this.flashcards.push(currentFlashCard);
-        }
-      }
+    // API call to grab the deck by id, using the id from the url
+    DeckService.getDeck(this.$route.params.id)
+    .then((response) => {
+      this.deck = response.data;
+    })
+    // Fill out this catch with an error handler
+    .catch((error) => {
+      console.log(error)
+    })
+
+    // API Call to grab all flashcards associated with deck
+    DeckService.getCards()
+    .then((response) => {
+      this.flashcards = response.data.filter((flashcard) => flashcard.deckId === this.deck.deckId);
+    })
+    // Fill out catch with an error handler
+    .catch((error) => {
+      console.log(error);
+    })
+
   },
 };
 </script>

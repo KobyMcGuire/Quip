@@ -55,6 +55,10 @@ export default {
         .then((response) => {
             this.decks = response.data;
         })
+        // Fill out this catch with an error handler
+        .catch((error) => {
+            console.log(error);
+        })
     
     }
 
