@@ -9,10 +9,10 @@
     
     <div class="edit-deck-info" v-if="showEditDeck">
         <label for="deckTitle">Title: </label>
-        <input type="text" id="deckTitle" name="deckTitle" v-model="deck.title">
+        <input type="text" id="deckTitle" name="deckTitle" v-model="editedDeck.title">
 
         <label for="deckDescription">Description: </label>
-        <input type="text" id="deckDescription" name="deckDescription" v-model="deck.description">
+        <input type="text" id="deckDescription" name="deckDescription" v-model="editedDeck.description">
 
         <label for="submitEditedDeck"></label>
         <input type="submit" id="submitEditedDeck" v-on:click="editDeck">
@@ -20,23 +20,15 @@
 
     <!-- TO DO: Create new flashcard fields -->
     <div class="new-flashcard-card">
-        <label for="deckTitle">Title: </label>
-        <input type="text" id="deckTitle" name="deckTitle" v-model="deck.title">
+        <label for="newFlashcardQuestion">Question: </label>
+        <input type="text" id="newFlashcardQuestion" name="newFlashcardQuestion" v-model="newFlashcard.question">
 
-        <label for="deckDescription">Description: </label>
-        <input type="text" id="deckDescription" name="deckDescription" v-model="deck.description">
+        <label for="newFlashcardAnswer">Answer: </label>
+        <input type="text" id="newFlashcardAnswer" name="newFlashcardAnswer" v-model="newFlashcard.answer">
 
-        <label for="deckTitle">Title: </label>
-        <input type="text" id="deckTitle" name="deckTitle" v-model="deck.title">
+      <label for="submitNewFlashcard"></label>
+      <input type="submit" id="submitNewFlashcard" v-on:click="addFlashcard">
 
-        <label for="deckDescription">Description: </label>
-        <input type="text" id="deckDescription" name="deckDescription" v-model="deck.description">
-
-        <label for="deckTitle">Title: </label>
-        <input type="text" id="deckTitle" name="deckTitle" v-model="deck.title">
-
-        <label for="deckDescription">Description: </label>
-        <input type="text" id="deckDescription" name="deckDescription" v-model="deck.description">
     </div>
 
     <div class = 'flash-cards-container'>
@@ -54,13 +46,20 @@ export default {
 
   data () {
     return {
-        flashcards : [],
-        deck : {},
-        showEditDeck: false,
-        editedDeck : {
-            title : '',
-            description : ''
-        }
+      flashcards: [],
+      deck: {},
+      showEditDeck: false,
+      editedDeck: {
+        title: '',
+        description: ''
+      },
+      newFlashcard: {
+        deckId: "",
+        question: "",
+        answer: "",
+        tag: null,
+        creator: ""
+      },
     }
   },
 
@@ -68,15 +67,39 @@ export default {
     editDeck() {
         this.deck.title = this.editedDeck.title;
         this.deck.description = this.editedDeck.description;
+
+        DeckService.editDeck(this.$route.params.id, this.editedDeck)
+            .then((response) => {
+              this.editedDeck = ""
+            })
+            .catch ((error) => {
+              this.errorHandler(error, "Edited Deck");
+            })
+    },
+    addFlashcard() {
+      this.newFlashcard.deckId = this.$route.params.id;
+      this.newFlashcard.tag = 'UniqueTag';
+      this.newFlashcard.creator = 'Christian'
+
+      DeckService.addFlashcard(this.newFlashcard)
+        .then((response) => {
+          this.newFlashcard = ""
+          this.flashcards.push(response.data);
+      })
+        .catch ((error) => {
+          this.errorHandler(error, "Adding flashcard");
+      })
+      //TODO add creator info (principle)
     },
 
     // Make error handler display message to site.
     errorHandler(error, verb) {
-       console.log(`There was an error ${verb}. The error was: ${error}`);
+      console.log(`There was an error ${verb}. The error was: ${error}`);
     }
   },
 
   computed : {
+
   },
 
   created() {
@@ -86,7 +109,7 @@ export default {
       this.deck = response.data;
     })
     .catch((error) => {
-      console.log(error, 'fetching the current deck');
+      this.errorHandler(error, 'fetching the current deck');
     })
 
     // API Call to grab all flashcards associated with deck
@@ -95,10 +118,11 @@ export default {
       this.flashcards = response.data.filter((flashcard) => flashcard.deckId === this.deck.deckId);
     })
     .catch((error) => {
-      console.log(error, 'fetching the flashcards associated with the current deck');
+      this.errorHandler(error, 'fetching the flashcards associated with the current deck');
     })
 
   },
+
 };
 </script>
 
