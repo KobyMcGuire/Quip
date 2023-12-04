@@ -10,7 +10,11 @@
     </button>
 
     <div class="edit-deck-info" v-if="showEditDeck">
-      <label for="deckTitle">Title: </label>
+      <div class="error-message" v-if="editDeckError">
+        <p>You must enter a new title or a new description</p>
+      </div>
+
+      <label for="deckTitle">New Title: </label>
       <input
         type="text"
         id="deckTitle"
@@ -18,7 +22,7 @@
         v-model="editedDeck.title"
       />
 
-      <label for="deckDescription">Description: </label>
+      <label for="deckDescription">New Description: </label>
       <input
         type="text"
         id="deckDescription"
@@ -31,9 +35,9 @@
     </div>
 
     <div class="new-flashcard-card">
-      <h2>Create new Flashcard</h2>
+      <h2>Create A New Flashcard</h2>
 
-      <div class="error-message" v-if="error">
+      <div class="error-message" v-if="newCardError">
         <p>You must enter a question and an answer</p>
       </div>
 
@@ -90,18 +94,38 @@ export default {
         tag: "",
         creator: "",
       },
-      error: false,
+      newCardError: false,
+      editDeckError: false,
     };
   },
 
   methods: {
     editDeck() {
-      this.deck.title = this.editedDeck.title;
-      this.deck.description = this.editedDeck.description;
+      if (this.editedDeck.title === "" && this.editedDeck.description === "") {
+        this.editDeckError = true;
+        return;
+      }
 
+      if (this.editedDeck.title === "") {
+        this.editedDeck.title = this.deck.title;
+      }
+
+      if (this.editedDeck.description === "") {
+        this.editedDeck.description = this.deck.description;
+      }
+
+      this.editDeckError = false;
       DeckService.editDeck(this.$route.params.id, this.editedDeck)
         .then((response) => {
-          this.editedDeck = "";
+          // Force reactivity without refreshing
+          this.deck.title = this.editedDeck.title;
+          this.deck.description = this.editedDeck.description;
+
+          // Reset edited deck
+          this.editedDeck = {
+            title: "",
+            description: "",
+          };
         })
         .catch((error) => {
           this.errorHandler(error, "Edited Deck");
@@ -110,7 +134,11 @@ export default {
 
     addFlashcard() {
       this.newFlashcard.deckId = this.$route.params.id;
-      this.newFlashcard.tag = "UniqueTag";
+
+      // TO DO: FINISH CREATING TAGS FOR FLASHCARDS
+      this.newFlashcard.tag = this.deck.title;
+
+      // TO DO: AFTER LOGIN AND REGISTER IS DONE, SET THIS UP
       this.newFlashcard.creator = "Christian";
 
       // Check to make sure that the question and answer fields are not empty
@@ -118,7 +146,7 @@ export default {
         this.newFlashcard.answer !== "" &&
         this.newFlashcard.question !== ""
       ) {
-        this.error = false;
+        this.newCardError = false;
         DeckService.addFlashcard(this.newFlashcard)
           .then((response) => {
             this.newFlashcard = {
@@ -134,7 +162,7 @@ export default {
             this.errorHandler(error, "Adding flashcard");
           });
       } else {
-        this.error = true;
+        this.newCardError = true;
       }
       //TODO add creator info (principle)
     },
@@ -187,25 +215,42 @@ export default {
   margin-left: auto;
   margin-right: auto;
 
-  border: 1px solid black;
-  border-radius: 5px;
-
   max-width: 25%;
 }
 
 .new-flashcard-card input {
-  max-width: 50%;
+  width: 150px;
 }
 
 #submitNewFlashcard {
+  width: 75px;
+
   margin-top: 10px;
 }
 
 .flash-cards-container {
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
   gap: 20px;
 
   margin-top: 10px;
+}
+
+.edit-deck-info {
+  display: flex;
+  flex-direction: column;
+
+  max-width: 20%;
+}
+
+.edit-deck-info input {
+  width: 150px;
+}
+
+#submitEditedDeck {
+  margin-top: 5px;
+
+  width: 75px;
 }
 </style>

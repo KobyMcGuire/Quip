@@ -100,6 +100,7 @@ export default {
 <style scoped>
 .deck-container {
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
   gap: 15px;
 }
@@ -111,11 +112,10 @@ export default {
 
   padding: 10px;
   background-color: #f5f5f4;
-
 }
 
-.deck-card::onhover {
-  cursor: pointer;
+.deck-card:hover {
+  border: 1px solid black;
 }
 
 .new-deck-card {
@@ -130,10 +130,7 @@ export default {
   margin-right: auto;
   margin-bottom: 10px;
 
-  text-align: left;
-
   padding: 10px;
-  background-color: #f5f5f4;
 }
 
 #submitNewDeck {

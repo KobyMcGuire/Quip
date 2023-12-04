@@ -2,8 +2,13 @@
   <div id="capstone-app">
     <div id="nav">
       <router-link v-bind:to="{ name: 'home' }">Home</router-link>&nbsp;|&nbsp;
-      <router-link v-bind:to="{ name: 'decks' }">Decks</router-link>&nbsp;|&nbsp;
-      <router-link v-bind:to="{ name: 'logout' }" v-if="this.$store.state.token != ''">Logout</router-link>
+      <router-link v-bind:to="{ name: 'decks' }">Decks</router-link
+      >&nbsp;|&nbsp;
+      <router-link
+        v-bind:to="{ name: 'logout' }"
+        v-if="this.$store.state.token != ''"
+        >Logout</router-link
+      >
     </div>
     <div id="main-container">
       <router-view />
@@ -12,23 +17,58 @@
 </template>
 
 <style>
-  #nav {
-    width: 10%;
+* {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  box-sizing: border-box;
+}
 
-    margin-left: auto;
-    margin-right: auto;
+button {
+  border: none;
+  border-radius: 15px;
 
-    margin-bottom: 3%;
+  padding: 10px;
+}
 
-    font-size: large;
-  }
+button:hover {
+  border: 1px solid black;
 
-  #main-container {
-    padding-left: 5%;
-    padding-right: 5%;
-  }
+  cursor: pointer;
+}
 
-  .error-message {
+input[type="submit"] {
+  border: none;
+  border-radius: 15px;
+
+  padding: 10px;
+
+  background-color: #a7f3d0;
+}
+
+input[type="submit"]:hover {
+  border: 1px solid black;
+
+  cursor: pointer;
+}
+
+#nav {
+  width: 10%;
+
+  margin-left: auto;
+  margin-right: auto;
+
+  margin-bottom: 3%;
+
+  font-size: large;
+}
+
+#main-container {
+  padding-left: 5%;
+  padding-right: 5%;
+}
+
+.error-message {
+  text-align: center;
+
   padding-left: 5px;
   padding-right: 5px;
 
