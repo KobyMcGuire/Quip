@@ -1,7 +1,7 @@
 <template>
   <div class = 'deck-container'>
 
-    <div class="deck-card">
+    <div class="new-deck-card">
         <h1>Create a new Deck</h1>
 
         <label for="deckTitle">Title: </label>
@@ -31,33 +31,34 @@ export default {
     methods : {
         // API call to add deck to DB
         addDeck() {
-            this.$store.state.decks.push(this.newDeck)
+            DeckService.addDeck(this.newDeck);
             this.newDeck = '';
+        },
+
+        // Make error handler display a message to the site
+        errorHandler(error, verb) {
+            console.log(`There was an error ${verb}. The error was: ${error}`);
         }
     },
 
     data() {
         return {
             newDeck:{
-                deckId : 4,
                 title: "",
                 description:""
             },
 
             decks : []
-
         }
     },
 
     created() {
-        
         DeckService.getDecks()
         .then((response) => {
             this.decks = response.data;
         })
-        // Fill out this catch with an error handler
         .catch((error) => {
-            console.log(error);
+            this.errorHandler(error, 'fetching all decks');
         })
     
     }
@@ -78,5 +79,31 @@ export default {
         padding: 10px;
         background-color: aqua;
 
+        min-width: 10%;
+    }
+
+    .new-deck-card {
+        display: flex;
+        flex-direction: column;
+
+        text-align: center;
+
+        padding: 10px;
+        background-color: aqua;
+
+    }
+
+    .new-deck-card {
+        text-align: left;
+    }
+
+    #submitNewDeck {
+        max-width: 30%;
+
+        margin-top: 5px;
+    }
+
+    .new-deck-card input{
+      max-width: 70%;
     }
 </style>

@@ -14,6 +14,10 @@ export default{
         return http.get(`/decks/${deckId}`);
     },
 
+    addDeck(deck) {
+        return http.post(`/decks`, deck);
+    },
+
     // Add get all cards by ID back-end method?
     getCards() {
         return http.get('/flashcards')

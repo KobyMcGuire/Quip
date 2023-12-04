@@ -18,6 +18,27 @@
         <input type="submit" id="submitEditedDeck" v-on:click="editDeck">
     </div>
 
+    <!-- TO DO: Create new flashcard fields -->
+    <div class="new-flashcard-card">
+        <label for="deckTitle">Title: </label>
+        <input type="text" id="deckTitle" name="deckTitle" v-model="deck.title">
+
+        <label for="deckDescription">Description: </label>
+        <input type="text" id="deckDescription" name="deckDescription" v-model="deck.description">
+
+        <label for="deckTitle">Title: </label>
+        <input type="text" id="deckTitle" name="deckTitle" v-model="deck.title">
+
+        <label for="deckDescription">Description: </label>
+        <input type="text" id="deckDescription" name="deckDescription" v-model="deck.description">
+
+        <label for="deckTitle">Title: </label>
+        <input type="text" id="deckTitle" name="deckTitle" v-model="deck.title">
+
+        <label for="deckDescription">Description: </label>
+        <input type="text" id="deckDescription" name="deckDescription" v-model="deck.description">
+    </div>
+
     <div class = 'flash-cards-container'>
         <flash-card v-for="flashcard in flashcards" v-bind:key="flashcard.cardId" v-bind:flashcard="flashcard" />
     </div>
@@ -47,6 +68,11 @@ export default {
     editDeck() {
         this.deck.title = this.editedDeck.title;
         this.deck.description = this.editedDeck.description;
+    },
+
+    // Make error handler display message to site.
+    errorHandler(error, verb) {
+       console.log(`There was an error ${verb}. The error was: ${error}`);
     }
   },
 
@@ -59,9 +85,8 @@ export default {
     .then((response) => {
       this.deck = response.data;
     })
-    // Fill out this catch with an error handler
     .catch((error) => {
-      console.log(error)
+      console.log(error, 'fetching the current deck');
     })
 
     // API Call to grab all flashcards associated with deck
@@ -69,9 +94,8 @@ export default {
     .then((response) => {
       this.flashcards = response.data.filter((flashcard) => flashcard.deckId === this.deck.deckId);
     })
-    // Fill out catch with an error handler
     .catch((error) => {
-      console.log(error);
+      console.log(error, 'fetching the flashcards associated with the current deck');
     })
 
   },
@@ -79,6 +103,19 @@ export default {
 </script>
 
 <style scoped>
+
+    .new-flashcard-card {
+      display: flex;
+      flex-direction: column;
+
+      
+    }
+
+    .new-flashcard-card input{
+      max-width: 10%;
+
+      
+    }
 
     .flash-cards-container {
         display: flex;
