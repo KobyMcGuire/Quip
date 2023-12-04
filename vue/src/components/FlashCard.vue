@@ -56,8 +56,11 @@ export default {
 
 <style scoped>
 .flashcard-card {
+  min-width: 20%;
+  min-height: 20%;
+
   border: 1px solid black;
-  border-radius: 5px;
+  border-radius: 10px;
 
   text-align: center;
 

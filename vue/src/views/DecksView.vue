@@ -1,76 +1,100 @@
 <template>
-  <div class='deck-container'>
+  <div class="new-deck-card">
+    <h1>Create A New Deck</h1>
 
-    <div class="new-deck-card">
-      <h1>Create a new Deck</h1>
-
-      <label for="deckTitle">Title: </label>
-      <input type="text" id="deckTitle" name="deckTitle" v-model="newDeck.title">
-
-      <label for="deckDescription">Description: </label>
-      <input type="text" id="deckDescription" name="deckDescription" v-model="newDeck.description">
-
-      <label for="submitNewDeck"></label>
-      <input type="submit" id="submitNewDeck" v-on:click="addDeck">
+    <div class="error-message" v-if="error">
+      <p>You must enter a title and a description</p>
     </div>
 
-    <deck-card class="deck-card" v-for="deck in decks" v-bind:key="deck.deckId" v-bind:deck="deck"></deck-card>
+    <label for="deckTitle">Title: </label>
+    <input
+      type="text"
+      id="deckTitle"
+      name="deckTitle"
+      v-model="newDeck.title"
+    />
+
+    <label for="deckDescription">Description: </label>
+    <input
+      type="text"
+      id="deckDescription"
+      name="deckDescription"
+      v-model="newDeck.description"
+    />
+
+    <label for="submitNewDeck"></label>
+    <input type="submit" id="submitNewDeck" v-on:click="addDeck" />
+  </div>
+  <div class="deck-container">
+    <deck-card
+      class="deck-card"
+      v-for="deck in decks"
+      v-bind:key="deck.deckId"
+      v-bind:deck="deck"
+    ></deck-card>
   </div>
 </template>
 
 <script>
-import DeckCard from "../components/DeckCard.vue"
+import DeckCard from "../components/DeckCard.vue";
 import DeckService from "../services/DeckService";
 
 export default {
-
   components: {
-    DeckCard
+    DeckCard,
   },
 
   methods: {
     // API call to add deck to DB
     addDeck() {
-      DeckService.addDeck(this.newDeck)
+      // Check to make sure that the title and description fields are not empty.
+      if (this.newDeck.title !== "" && this.newDeck.description !== "") {
+        this.error = false;
+        DeckService.addDeck(this.newDeck)
           .then((response) => {
-            this.newDeck = ""
+            this.newDeck = {
+              title: "",
+              description: "",
+            };
             this.decks.push(response.data);
           })
           .catch((error) => {
             this.errorHandler(error, "Adding deck");
-          })
+          });
+      } else {
+        this.error = true;
+      }
     },
-
 
     // Make error handler display a message to the site
     errorHandler(error, verb) {
       console.log(`There was an error ${verb}. The error was: ${error}`);
-    }
+    },
   },
 
   data() {
     return {
       newDeck: {
         title: "",
-        description: ""
+        description: "",
       },
 
-      decks: []
-    }
+      decks: [],
+
+      error: false,
+    };
   },
 
   created() {
     DeckService.getDecks()
-        .then((response) => {
-          this.decks = response.data;
-        })
-        .catch((error) => {
-          this.errorHandler(error, 'fetching all decks');
-        })
-
-  }
-
-}
+      .then((response) => {
+        this.decks = response.data;
+      })
+      .catch((error) => {
+        this.errorHandler(error, "fetching all decks");
+      });
+  },
+};
 </script>
 
 <style scoped>
@@ -81,33 +105,41 @@ export default {
 }
 
 .deck-card {
+  min-width: 30%;
+  min-height: 25%;
   text-align: center;
 
   padding: 10px;
-  background-color: aqua;
+  background-color: #f5f5f4;
 
-  min-width: 10%;
+}
+
+.deck-card::onhover {
+  cursor: pointer;
 }
 
 .new-deck-card {
   display: flex;
+  justify-content: center;
+  align-items: center;
   flex-direction: column;
 
-  text-align: center;
+  width: 30%;
+
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 10px;
+
+  text-align: left;
 
   padding: 10px;
-  background-color: aqua;
-
-}
-
-.new-deck-card {
-  text-align: left;
+  background-color: #f5f5f4;
 }
 
 #submitNewDeck {
   max-width: 30%;
 
-  margin-top: 5px;
+  margin-top: 10px;
 }
 
 .new-deck-card input {
