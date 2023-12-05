@@ -61,11 +61,16 @@ public class DeckController {
     }
 
     @RequestMapping(path = "/flashcards", method = RequestMethod.GET)
-    public List<Flashcard> getFlashcards(@RequestParam(required = false) String tag,@RequestParam(required = false, defaultValue = "true") boolean useWildcard) {
+    public List<Flashcard> getFlashcards(@RequestParam(required = false) String tag, @RequestParam(required = false, defaultValue = "true") boolean useWildcard) {
         if(tag != null){
             return flashcardDao.getFlashcardsByTag(tag, useWildcard);
         }
         return flashcardDao.getFlashcards();
+    }
+
+    @RequestMapping(path = "/flashcards/{id}", method = RequestMethod.GET)
+    public Flashcard getFlashcardsById(@PathVariable int id){
+        return flashcardDao.getFlashcardById(id);
     }
 
 //    @RequestMapping(path = "/flashcards/{tag}", method = RequestMethod.GET)
