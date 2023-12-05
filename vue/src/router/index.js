@@ -9,6 +9,7 @@ import RegisterView from '../views/RegisterView.vue';
 import DecksView from '../views/DecksView.vue';
 import SingleDeckView from '../views/SingleDeckView.vue';
 import EditCardView from '../views/EditCardView.vue';
+import SearchView from '../views/SearchView.vue';
 import StudySessionView from '../views/StudySessionView.vue';
 
 /**
@@ -49,6 +50,14 @@ const routes = [
     path: '/editCard/:id',
     name: 'edit-card',
     component: EditCardView,
+    meta: {
+      requiresAuth: false
+    }
+  },
+  {
+    path: '/search',
+    name: 'search',
+    component: SearchView,
     meta: {
       requiresAuth: false
     }

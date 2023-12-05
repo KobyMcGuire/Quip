@@ -24,9 +24,18 @@ export default{
     },
 
     // Flashcard Services
+
+    // Combine these two calls with an if 
+    getCardsByTag(tag) {
+        return http.get('/flashcards', {params : {tag : tag}})
+    },
+
+
     getCards() {
         return http.get('/flashcards')
     },
+
+
 
     addFlashcard(flashCard) {
         return http.post('/flashcards', flashCard)
