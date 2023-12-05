@@ -7,14 +7,6 @@
 </template>
 
 <script>
-// import DeckCard from '../components/DeckCard.vue';
-// import FlashCard from '../components/FlashCard.vue';
-
-// export default {
-//     components: {
-//         DeckCard,
-//         FlashCard
-//     }
 
 </script>
 

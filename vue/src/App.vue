@@ -10,7 +10,7 @@
         >Logout</router-link
       >
     </div>
-    <router-link v-bind:to="{name: 'study session'}">Study Session</router-link>
+    
     <div id="main-container">
       <router-view />
     </div>
