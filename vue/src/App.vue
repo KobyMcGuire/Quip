@@ -10,10 +10,6 @@
         >Logout</router-link
       >
     </div>
-<<<<<<< HEAD
-    
-=======
->>>>>>> dc11ead8e99c3aefcf11736138b9a92a7b0089d3
     <div id="main-container">
       <router-view />
     </div>
