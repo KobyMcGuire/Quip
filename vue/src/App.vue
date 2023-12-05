@@ -3,14 +3,13 @@
     <div id="nav">
       <router-link v-bind:to="{ name: 'home' }">Home</router-link>&nbsp;|&nbsp;
       <router-link v-bind:to="{ name: 'decks' }">Decks</router-link>&nbsp;|&nbsp;
-      <router-link v-bind:to="{name: 'study-session'}">Study Session</router-link>
+      <!-- <router-link v-bind:to="{name: 'study-session'}">Study Session</router-link> -->
       <router-link
         v-bind:to="{ name: 'logout' }"
         v-if="this.$store.state.token != ''"
         >Logout</router-link
       >
     </div>
-    <router-link v-bind:to="{name: 'study session'}">Study Session</router-link>
     <div id="main-container">
       <router-view />
     </div>
