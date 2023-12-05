@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="isLoaded">
     <div class="deck-info">
       <h1>{{ deck.title }}</h1>
       <h2>{{ deck.description }}</h2>
@@ -127,6 +127,7 @@ export default {
       newCardError: false,
       editDeckError: false,
       showCreateFlashcard: false,
+      isLoaded : false,
     };
   },
 
@@ -227,6 +228,7 @@ export default {
         this.flashcards = response.data.filter(
           (flashcard) => flashcard.deckId === this.deck.deckId
         );
+        this.isLoaded = true;
       })
       .catch((error) => {
         this.errorHandler(
