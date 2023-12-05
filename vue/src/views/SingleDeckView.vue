@@ -5,60 +5,90 @@
       <h2>{{ deck.description }}</h2>
     </div>
 
-    <button v-on:click="this.showEditDeck = !this.showEditDeck">
-      Edit Deck
-    </button>
-
-    <div class="edit-deck-info" v-if="showEditDeck">
-      <div class="error-message" v-if="editDeckError">
-        <p>You must enter a new title or a new description</p>
-      </div>
-
-      <label for="deckTitle">New Title: </label>
-      <input
-        type="text"
-        id="deckTitle"
-        name="deckTitle"
-        v-model="editedDeck.title"
-      />
-
-      <label for="deckDescription">New Description: </label>
-      <input
-        type="text"
-        id="deckDescription"
-        name="deckDescription"
-        v-model="editedDeck.description"
-      />
-
-      <label for="submitEditedDeck"></label>
-      <input type="submit" id="submitEditedDeck" v-on:click="editDeck" />
+    <div class="form-action-buttons">
+      <button
+        v-on:click="this.showCreateFlashcard = !this.showCreateFlashcard"
+        v-if="!this.showEditDeck"
+      >
+        Create Flashcard
+      </button>
+      <button
+        v-on:click="this.showEditDeck = !this.showEditDeck"
+        v-if="!this.showCreateFlashcard"
+      >
+        Edit Deck
+      </button>
     </div>
 
-    <div class="new-flashcard-card">
-      <h2>Create A New Flashcard</h2>
+    <div class="form-container">
+      <div class="edit-deck-info" v-if="showEditDeck">
+        <div class="error-message" v-if="editDeckError">
+          <p>You must enter a new title or a new description</p>
+        </div>
 
-      <div class="error-message" v-if="newCardError">
-        <p>You must enter a question and an answer</p>
+        <label for="deckTitle">Title: </label>
+        <input
+          type="text"
+          id="deckTitle"
+          name="deckTitle"
+          v-model="editedDeck.title"
+        />
+
+        <label for="deckDescription">Description: </label>
+        <input
+          type="text"
+          id="deckDescription"
+          name="deckDescription"
+          v-model="editedDeck.description"
+        />
+
+        <div class="form-buttons">
+          <label for="submitEditedDeck"></label>
+          <input type="submit" id="submitEditedDeck" v-on:click="editDeck" />
+
+          <button v-on:click="this.showEditDeck = false" class="cancel-button">
+            Cancel
+          </button>
+        </div>
       </div>
 
-      <label for="newFlashcardQuestion">Question: </label>
-      <input
-        type="text"
-        id="newFlashcardQuestion"
-        name="newFlashcardQuestion"
-        v-model="newFlashcard.question"
-      />
+      <div class="new-flashcard-card" v-if="showCreateFlashcard">
+        <div class="error-message" v-if="newCardError">
+          <p>You must enter a question and an answer</p>
+        </div>
 
-      <label for="newFlashcardAnswer">Answer: </label>
-      <input
-        type="text"
-        id="newFlashcardAnswer"
-        name="newFlashcardAnswer"
-        v-model="newFlashcard.answer"
-      />
+        <label for="newFlashcardQuestion">Question: </label>
+        <input
+          type="text"
+          id="newFlashcardQuestion"
+          name="newFlashcardQuestion"
+          v-model="newFlashcard.question"
+        />
 
-      <label for="submitNewFlashcard"></label>
-      <input type="submit" id="submitNewFlashcard" v-on:click="addFlashcard" />
+        <label for="newFlashcardAnswer">Answer: </label>
+        <input
+          type="text"
+          id="newFlashcardAnswer"
+          name="newFlashcardAnswer"
+          v-model="newFlashcard.answer"
+        />
+
+        <div class="form-buttons">
+          <label for="submitNewFlashcard"></label>
+          <input
+            type="submit"
+            id="submitNewFlashcard"
+            v-on:click="addFlashcard"
+          />
+
+          <button
+            v-on:click="this.showCreateFlashcard = false"
+            class="cancel-button"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
     </div>
 
     <div class="flash-cards-container">
@@ -96,6 +126,7 @@ export default {
       },
       newCardError: false,
       editDeckError: false,
+      showCreateFlashcard: false,
     };
   },
 
@@ -136,10 +167,15 @@ export default {
       this.newFlashcard.deckId = this.$route.params.id;
 
       // TO DO: FINISH CREATING TAGS FOR FLASHCARDS
-      this.newFlashcard.tag = this.deck.title;
+      this.newFlashcard.tag =
+        this.deck.title.split(" ")[0] +
+        " " +
+        this.deck.description.split(" ")[0] +
+        " " +
+        this.newFlashcard.question.split(" ")[0];
 
       // TO DO: AFTER LOGIN AND REGISTER IS DONE, SET THIS UP
-      this.newFlashcard.creator = "Christian";
+      this.newFlashcard.creator = "TO-DO";
 
       // Check to make sure that the question and answer fields are not empty
       if (
@@ -203,7 +239,7 @@ export default {
 </script>
 
 <style scoped>
-.new-flashcard-card {
+.form-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -216,6 +252,13 @@ export default {
   margin-right: auto;
 
   max-width: 25%;
+}
+
+.new-flashcard-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .new-flashcard-card input {
@@ -240,8 +283,8 @@ export default {
 .edit-deck-info {
   display: flex;
   flex-direction: column;
-
-  max-width: 20%;
+  justify-content: center;
+  align-items: center;
 }
 
 .edit-deck-info input {
@@ -252,5 +295,14 @@ export default {
   margin-top: 5px;
 
   width: 75px;
+}
+
+.form-action-buttons { 
+  display: flex;
+  gap: 10px;
+}
+
+.cancel-button {
+  margin-left: 10px;
 }
 </style>

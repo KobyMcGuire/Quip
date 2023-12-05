@@ -6,6 +6,7 @@ const http = axios.create({
 
 export default{ 
 
+    // Deck Services
     getDecks(){
         return http.get('/decks');
     },
@@ -22,7 +23,7 @@ export default{
         return http.put(`/decks/${deckId}`, deck);
     },
 
-    // Add get all cards by ID back-end method?
+    // Flashcard Services
     getCards() {
         return http.get('/flashcards')
     },
@@ -37,5 +38,9 @@ export default{
 
     deleteFlashcard(cardId) {
         return http.delete(`/flashcards/${cardId}`)
+    },
+
+    updateFlashcard(cardId, flashCard) {
+        return http.put(`/flashcards/${cardId}`, flashCard);
     }
 }

@@ -1,0 +1,43 @@
+<div id="myModal" class="modal">
+      <!-- Modal -->
+      <div class="modal-content">
+        <span class="close" v-on:click="closeModal">&times;</span>
+
+        <div class="inner-modal-content">
+          <h1>Edit Flashcard Fields</h1>
+
+          <p v-if="editFlashcardError" class="error-message">
+            You must fill out all fields
+          </p>
+
+          <label for="editedFlashcardQuestion">Question </label>
+          <input
+            type="text"
+            id="editedFlashcardQuestion"
+            name="editedFlashcardQuestion"
+            v-model="editedFlashcard.question"
+          />
+
+          <label for="editedFlashcardAnswer">Answer </label>
+          <input
+            type="text"
+            id="editedFlashcardAnswer"
+            name="editedFlashcardAnswer"
+            v-model="editedFlashcard.answer"
+          />
+
+          <label for="editedFlashcardTags"
+            >Tags (Words separated by single spaces)</label
+          >
+          <input
+            type="text"
+            id="editedFlashcardTags"
+            name="editedFlashcardTags"
+            v-model="editedFlashcard.tag"
+          />
+        </div>
+        <button class="submit-flashcard-edit" v-on:click="editFlashcard">
+          Submit
+        </button>
+      </div>
+    </div>

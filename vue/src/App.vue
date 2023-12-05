@@ -69,11 +69,14 @@ input[type="submit"]:hover {
 .error-message {
   text-align: center;
 
-  padding-left: 5px;
-  padding-right: 5px;
+  padding: 5px;
 
   border-radius: 5px;
 
+  background-color: rgb(234, 105, 105);
+}
+
+.cancel-button {
   background-color: rgb(234, 105, 105);
 }
 </style>
