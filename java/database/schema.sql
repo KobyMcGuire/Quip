@@ -1,6 +1,6 @@
 BEGIN TRANSACTION;
 
-DROP TABLE IF EXISTS users, flashcard_decks, flashcards;
+DROP TABLE IF EXISTS users, flashcard_decks, flashcards, decks_flashcards;
 
 CREATE TABLE users (
 	user_id SERIAL,
@@ -14,18 +14,24 @@ CREATE TABLE flashcard_decks(
 	deck_id SERIAL,
 	title varchar(50) NOT NULL,
 	description varchar(100),
-	CONSTRAINT PK_flashcard_deck PRIMARY KEY(deck_id)
+	CONSTRAINT PK_flashcard_decks PRIMARY KEY(deck_id)
 );
 
 CREATE TABLE flashcards(
 	flashcard_id SERIAL,
-	deck_id int NOT NULL,
 	question text NOT NULL,
 	answer text NOT NULL,
 	tags varchar(50) NOT NULL,
 	creator varchar(50) NOT NULL,
-	CONSTRAINT PK_flashcard PRIMARY KEY(flashcard_id),
-	CONSTRAINT FK_flashcard_deck_flashcard FOREIGN KEY(deck_id) REFERENCES flashcard_decks(deck_id)
+	CONSTRAINT PK_flashcards PRIMARY KEY(flashcard_id)
+);
+
+CREATE TABLE decks_flashcards(
+	deck_id int NOT NULL,
+	flashcard_id int NOT NULL,
+	CONSTRAINT PK_decks_flashcards PRIMARY KEY(deck_id, flashcard_id),
+	CONSTRAINT FK_decks_flashcards_flashcard_decks FOREIGN KEY(deck_id) REFERENCES flashcard_decks(deck_id),
+	CONSTRAINT FK_decks_flashcards_flashcards FOREIGN KEY(flashcard_id) REFERENCES flashcards(flashcard_id)
 );
 
 COMMIT TRANSACTION;
