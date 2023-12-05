@@ -3,15 +3,14 @@ package com.techelevator.model;
 public class Flashcard {
 
     private int flashCardId;
-    private int deckId;
+//    private int deckId;
     private String question;
     private String answer;
     private String tag;
     private String creator;
 
-    public Flashcard(int flashCardId, int deckId, String question, String answer, String tag, String creator) {
+    public Flashcard(int flashCardId, String question, String answer, String tag, String creator) {
         this.flashCardId = flashCardId;
-        this.deckId = deckId;
         this.question = question;
         this.answer = answer;
         this.tag = tag;
@@ -27,14 +26,6 @@ public class Flashcard {
 
     public void setFlashCardId(int flashCardId) {
         this.flashCardId = flashCardId;
-    }
-
-    public int getDeckId() {
-        return deckId;
-    }
-
-    public void setDeckId(int deckId) {
-        this.deckId = deckId;
     }
 
     public String getQuestion() {
