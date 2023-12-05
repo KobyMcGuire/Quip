@@ -18,7 +18,7 @@
         name="newFlashcardAnswer"
         v-model="editedFlashcard.answer"
       />
-      <label for="newFlashcardQuestion">Tags </label>
+      <label for="newFlashcardQuestion">Tags (Enter words separated by spaces) </label>
       <input
         type="text"
         id="newFlashcardQuestion"
@@ -26,7 +26,7 @@
         v-model="editedFlashcard.tag"
       />
 
-      <input class="submit-button" type="submit" v:on:click="updateCard" />
+      <input class="submit-button" type="submit" v-on:click="updateCard"/>
     </div>
   </div>
 </template>
@@ -86,6 +86,21 @@ export default {
         if (this.editedFlashcard.tag === "") {
             this.editedFlashcard.tag = this.flashcard.tag;
         }
+
+        // Setting fields that still need to be set
+        this.editedFlashcard.flashCardId = this.flashcard.flashCardId;
+        this.editedFlashcard.deckId = this.flashcard.deckId;
+        this.editedFlashcard.creator = this.flashcard.creator;
+
+
+        DeckService.updateFlashcard(this.editedFlashcard.flashCardId, this.editedFlashcard)
+        .then((response) => {
+            // Push them back to deck page
+            this.$router.push({name : 'deck-cards', params : {id : this.flashcard.deckId}})
+        })
+        .catch((error) => {
+            this.errorHandler(error, "updating card")
+        })
     },
   }
 }
