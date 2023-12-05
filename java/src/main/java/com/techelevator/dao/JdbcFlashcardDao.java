@@ -61,6 +61,27 @@ public class JdbcFlashcardDao implements FlashcardDao {
     }
 
     @Override
+    public List<Flashcard> getFlashcardsByDeckId(int deckId){
+        List<Flashcard> flashcards = new ArrayList<>();
+        String sql = "SELECT flashcards.flashcard_id, flashcards.question, flashcards.answer, flashcards.tags, flashcards.creator FROM flashcards\n" +
+                "JOIN decks_flashcards ON flashcards.flashcard_id = decks_flashcards.flashcard_id\n" +
+                "JOIN flashcard_decks ON decks_flashcards.deck_id = flashcard_decks.deck_id\n" +
+                "WHERE decks_flashcards.deck_id = ?;";
+        try {
+            SqlRowSet results = jdbcTemplate.queryForRowSet(sql, deckId);
+            while (results.next()){
+               Flashcard flashcard = mapRowToFlashcard(results);
+               flashcards.add(flashcard);
+            }
+        }catch (CannotGetJdbcConnectionException e){
+            throw new DaoException("Unable to connect to server or database", e);
+        }catch(DataIntegrityViolationException e) {
+            throw new DaoException("Data integrity violation", e);
+        }
+        return flashcards;
+    }
+
+    @Override
     public List<Flashcard> getFlashcardsByTag(String tag, boolean useWildcard){
         List<Flashcard> flashcards = new ArrayList<>();
         String sql = "SELECT flashcard_id, question, answer, tags, creator FROM flashcards WHERE tags ILIKE ?;";

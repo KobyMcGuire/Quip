@@ -73,6 +73,10 @@ public class DeckController {
         return flashcardDao.getFlashcardById(id);
     }
 
+    @RequestMapping(path = "/flashcards/{deckId}", method = RequestMethod.GET)
+    public List<Flashcard> getFlashcardsByDeckId(@PathVariable int deckId){
+        return flashcardDao.getFlashcardsByDeckId(deckId);
+    }
 
     @RequestMapping(path = "/flashcards", method = RequestMethod.POST)
     public Flashcard createFlashcard(@RequestBody FlashcardDto flashcardDto) {
