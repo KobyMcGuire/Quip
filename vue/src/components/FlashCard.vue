@@ -17,8 +17,17 @@
     </div>
 
     <div class="flashcard-buttons">
-      <button v-on:click="this.displayTags = !this.displayTags">View Tags</button>
-      <button v-on:click="displayModal">Edit Card</button>
+      <button v-on:click="this.displayTags = !this.displayTags">
+        View Tags
+      </button>
+      <router-link
+        v-bind:to="{
+          name: 'edit-card',
+          params: { id: this.flashcard.flashCardId },
+        }"
+      >
+        <button>Edit Card</button>
+      </router-link>
       <button v-on:click="deleteFlashcard">Delete Card</button>
     </div>
   </div>
@@ -39,7 +48,7 @@ export default {
         tag: this.flashcard.tag,
       },
       editFlashcardError: false,
-      displayTags : false
+      displayTags: false,
     };
   },
   computed: {},
@@ -48,7 +57,6 @@ export default {
     flipCard() {
       this.showFront = !this.showFront;
     },
-
 
     editFlashcard() {
       console.log(this.flashcard.flashCardId);
@@ -64,7 +72,7 @@ export default {
         return;
       }
 
-      // Apply "still-needed" fields to edited flashcard  
+      // Apply "still-needed" fields to edited flashcard
       // this.editedFlashcard.flashCardId = this.flashcard.flashCardId;
       // this.editedFlashcard.deckId = this.flashcard.deckId;
       // this.editedFlashcard.creator = this.flashcard.creator;
