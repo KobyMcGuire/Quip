@@ -65,6 +65,11 @@ public class DeckController {
         return flashcardDao.getFlashcards();
     }
 
+    @RequestMapping(path = "/flashcards/?tag=", method = RequestMethod.GET)
+    public List<Flashcard> getFlashcardsByTag(@PathVariable String tag, @PathVariable boolean useWildcard){
+        return flashcardDao.getFlashcardsByTag(tag, useWildcard);
+    }
+
     @RequestMapping(path = "/flashcards", method = RequestMethod.POST)
     public Flashcard createFlashcard(@RequestBody FlashcardDto flashcardDto) {
         return flashcardDao.createFlashcard(flashcardDto);
