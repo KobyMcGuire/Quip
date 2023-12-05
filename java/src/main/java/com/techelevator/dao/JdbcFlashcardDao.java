@@ -100,10 +100,13 @@ public class JdbcFlashcardDao implements FlashcardDao {
     @Override
     public FlashcardDto updateFlashcard(FlashcardDto flashcardDto, int id) {
         String sql = "UPDATE flashcards\n" +
-                "SET deck_id = ?, question = ?, answer = ?, tags = ?, creator = ?\n" +
+                "SET question = ?, answer = ?, tags = ?\n" +
                 "WHERE flashcard_id = ?";
+//        String sql = "UPDATE flashcards\n" +
+//                "SET deck_id = ?, question = ?, answer = ?, tags = ?, creator = ?\n" +
+//                "WHERE flashcard_id = ?";
         try {
-            int numOfRowsUpdated = jdbcTemplate.update(sql, flashcardDto.getDeckId(), flashcardDto.getQuestion(), flashcardDto.getAnswer(), flashcardDto.getTag(), flashcardDto.getCreator(), id);
+            int numOfRowsUpdated = jdbcTemplate.update(sql, flashcardDto.getQuestion(), flashcardDto.getAnswer(), flashcardDto.getTag(), id);
             if(numOfRowsUpdated == 0){
                 throw new DaoException("No records were updated");
             }
