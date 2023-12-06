@@ -39,7 +39,6 @@ export default {
     return {
       flashcard: {
         flashCardId: "",
-        deckId: "",
         question: "",
         answer: "",
         tag: "",
@@ -47,7 +46,6 @@ export default {
       },
       editedFlashcard: {
         flashCardId: "",
-        deckId: "",
         question: "",
         answer: "",
         tag: "",
@@ -89,14 +87,13 @@ export default {
 
         // Setting fields that still need to be set
         this.editedFlashcard.flashCardId = this.flashcard.flashCardId;
-        this.editedFlashcard.deckId = this.flashcard.deckId;
         this.editedFlashcard.creator = this.flashcard.creator;
 
 
         DeckService.updateFlashcard(this.editedFlashcard.flashCardId, this.editedFlashcard)
         .then((response) => {
             // Push them back to deck page
-            this.$router.push({name : 'deck-cards', params : {id : this.flashcard.deckId}})
+            this.$router.go(-1);
         })
         .catch((error) => {
             this.errorHandler(error, "updating card")

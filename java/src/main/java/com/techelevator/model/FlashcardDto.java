@@ -9,7 +9,6 @@ public class FlashcardDto {
     private String creator;
 
     public FlashcardDto(int deckId, String question, String answer, String tag, String creator) {
-
         this.deckId = deckId;
         this.question = question;
         this.answer = answer;

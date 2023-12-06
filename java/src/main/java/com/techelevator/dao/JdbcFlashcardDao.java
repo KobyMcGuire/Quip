@@ -127,9 +127,14 @@ public class JdbcFlashcardDao implements FlashcardDao {
     public Flashcard createFlashcard(FlashcardDto flashcardDto) {
         Flashcard newFlashcard = null;
         String sql = "INSERT INTO flashcards(question, answer, tags, creator)\n" +
-                "VALUES(?, ?, ?, ?, ?) RETURNING flashcard_id;";
+                "VALUES(?, ?, ?, ?) RETURNING flashcard_id;";
+        String sqlInsertIntoJoinTable ="INSERT INTO decks_flashcards(deck_id, flashcard_id) VALUES (?, ?);";
+
         try{
-            int newFlashcardId = jdbcTemplate.queryForObject(sql, int.class, flashcardDto.getDeckId(), flashcardDto.getQuestion(), flashcardDto.getAnswer(), flashcardDto.getTag(), flashcardDto.getCreator());
+            // Inserting data in to flashcard deck
+            int newFlashcardId = jdbcTemplate.queryForObject(sql, int.class, flashcardDto.getQuestion(), flashcardDto.getAnswer(), flashcardDto.getTag(), flashcardDto.getCreator());
+            // Inserting connection in to join table
+            jdbcTemplate.update(sqlInsertIntoJoinTable, flashcardDto.getDeckId(), newFlashcardId);
             newFlashcard = getFlashcardById(newFlashcardId);
         }catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to server or database", e);
@@ -165,9 +170,10 @@ public class JdbcFlashcardDao implements FlashcardDao {
     public int deleteFlashcard(int id) {
         int numberOfRows = 0;
         String sql = "DELETE FROM decks_flashcards WHERE flashcard_id= ?;";
-        String sqlTwo = "DELETE FROM flashcards WHERE flashcard_id = ?;";
+        String sqlDeleteFromJoin = "DELETE FROM flashcards WHERE flashcard_id = ?;";
         try{
             numberOfRows = jdbcTemplate.update(sql, id);
+            numberOfRows += jdbcTemplate.update(sqlDeleteFromJoin, id);
         }catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to server or database", e);
         } catch (DataIntegrityViolationException e) {

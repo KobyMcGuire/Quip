@@ -44,7 +44,14 @@
 
         <div class="form-buttons">
           <label for="submitEditedDeck"></label>
-          <input type="submit" id="submitEditedDeck" v-on:click="editDeck" />
+          <input
+            type="submit"
+            id="submitEditedDeck"
+            v-on:click="
+              editDeck();
+              this.showEditDeck = false;
+            "
+          />
 
           <button v-on:click="this.showEditDeck = false" class="cancel-button">
             Cancel
@@ -78,7 +85,10 @@
           <input
             type="submit"
             id="submitNewFlashcard"
-            v-on:click="addFlashcard"
+            v-on:click="
+              addFlashcard();
+              this.showCreateFlashcard = false;
+            "
           />
 
           <button
@@ -127,7 +137,7 @@ export default {
       newCardError: false,
       editDeckError: false,
       showCreateFlashcard: false,
-      isLoaded : false,
+      isLoaded: false,
     };
   },
 
@@ -223,11 +233,9 @@ export default {
       });
 
     // API Call to grab all flashcards associated with deck
-    DeckService.getCards()
+    DeckService.getCardsByDeckId(this.$route.params.id)
       .then((response) => {
-        this.flashcards = response.data.filter(
-          (flashcard) => flashcard.deckId === this.deck.deckId
-        );
+        this.flashcards = response.data;
         this.isLoaded = true;
       })
       .catch((error) => {
@@ -299,7 +307,7 @@ export default {
   width: 75px;
 }
 
-.form-action-buttons { 
+.form-action-buttons {
   display: flex;
   gap: 10px;
 }

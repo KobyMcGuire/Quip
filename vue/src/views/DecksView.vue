@@ -1,5 +1,13 @@
 <template>
-  <div class="new-deck-card">
+  <button
+    class="show-new-deck"
+    v-on:click="showCreateNewDeck = !showCreateNewDeck"
+    v-if="!showCreateNewDeck"
+  >
+    Create New Deck
+  </button>
+
+  <div class="new-deck-card" v-if="showCreateNewDeck">
     <h1>Create A New Deck</h1>
 
     <div class="error-message" v-if="error">
@@ -22,9 +30,19 @@
       v-model="newDeck.description"
     />
 
-    <label for="submitNewDeck"></label>
-    <input type="submit" id="submitNewDeck" v-on:click="addDeck" />
+    <div class="new-deck-buttons">
+      <label for="submitNewDeck"></label>
+      <input type="submit" id="submitNewDeck" v-on:click="addDeck" />
+
+      <button
+        class="cancel-button"
+        v-on:click="showCreateNewDeck = !showCreateNewDeck"
+      >
+        Cancel
+      </button>
+    </div>
   </div>
+
   <div class="deck-container">
     <deck-card
       class="deck-card"
@@ -80,8 +98,8 @@ export default {
       },
 
       decks: [],
-
       error: false,
+      showCreateNewDeck: false,
     };
   },
 
@@ -98,9 +116,12 @@ export default {
 </script>
 
 <style scoped>
+.show-new-deck {
+  margin-bottom: 10px;
+}
 .deck-container {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   flex-wrap: wrap;
   gap: 15px;
 }
@@ -131,6 +152,17 @@ export default {
   margin-bottom: 10px;
 
   padding: 10px;
+}
+
+/* FIX THIS */
+.new-deck-buttons {
+  margin-left: 110px;
+}
+.new-deck-buttons input[type="submit"] {
+  margin-right: 15px;
+
+  display: inline-block;
+  width: 200px;
 }
 
 #submitNewDeck {
