@@ -83,14 +83,17 @@ public class JdbcFlashcardDao implements FlashcardDao {
     }
 
     @Override
-    public List<Flashcard> getFlashcardsByTag(String tag, boolean useWildcard){
+    public List<Flashcard> getFlashcardsByTag(String tag, int deckId, boolean useWildcard){
         List<Flashcard> flashcards = new ArrayList<>();
-        String sql = "SELECT flashcard_id, question, answer, tags, creator FROM flashcards WHERE tags ILIKE ?;";
+        String sql = "SELECT flashcards.flashcard_id, flashcards.question, flashcards.answer, flashcards.tags, flashcards.creator FROM flashcards\n" +
+                "JOIN decks_flashcards ON flashcards.flashcard_id = decks_flashcards.flashcard_id\n" +
+                "JOIN flashcard_decks ON decks_flashcards.deck_id = flashcard_decks.deck_id\n" +
+                "WHERE flashcards.tags ILIKE ? AND flashcard_decks.deck_id != ?;";
         if(useWildcard){
             tag = "%" + tag + "%";
         }
         try{
-            SqlRowSet results = jdbcTemplate.queryForRowSet(sql, tag);
+            SqlRowSet results = jdbcTemplate.queryForRowSet(sql, tag, deckId);
             while(results.next()){
                 Flashcard flashcard = mapRowToFlashcard(results);
                 flashcards.add(flashcard);
@@ -104,14 +107,17 @@ public class JdbcFlashcardDao implements FlashcardDao {
     }
 
     @Override
-    public List<Flashcard> getFlashcardsByQuestion(String question, boolean useWildcard){
+    public List<Flashcard> getFlashcardsByQuestion(String question, int deckId, boolean useWildcard){
         List<Flashcard> flashcards = new ArrayList<>();
-        String sql = "SELECT flashcard_id, question, answer, tags, creator FROM flashcards WHERE question ILIKE ?;";
+        String sql = "SELECT flashcards.flashcard_id, flashcards.question, flashcards.answer, flashcards.tags, flashcards.creator FROM flashcards\n" +
+                "JOIN decks_flashcards ON flashcards.flashcard_id = decks_flashcards.flashcard_id\n" +
+                "JOIN flashcard_decks ON decks_flashcards.deck_id = flashcard_decks.deck_id\n" +
+                "WHERE flashcards.question ILIKE ? AND flashcard_decks.deck_id != ?;";
         if(useWildcard){
             question = "%" + question + "%";
         }
         try{
-            SqlRowSet results = jdbcTemplate.queryForRowSet(sql, question);
+            SqlRowSet results = jdbcTemplate.queryForRowSet(sql, question, deckId);
             while(results.next()){
                 Flashcard flashcard = mapRowToFlashcard(results);
                 flashcards.add(flashcard);

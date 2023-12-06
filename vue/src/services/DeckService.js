@@ -24,12 +24,12 @@ export default{
     },
 
     // Flashcard Services
-    getCardsByTag(tag) {
-        return http.get('/flashcards', {params : {tag : tag}})
+    getCardsByTag(tag, deckId) {
+        return http.get('/flashcards', {params : {tag : tag, deckId : deckId}})
     },
 
-    getCardsByQuestion(question) {
-        return http.get('/flashcards', {params: {question : question}})
+    getCardsByQuestion(question, deckId) {
+        return http.get('/flashcards', {params: {question : question, deckId : deckId}})
     },
 
     getCardsByDeckId(deckId) {
