@@ -8,9 +8,11 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
+import java.sql.PreparedStatement;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,8 +108,13 @@ public class JdbcFlashcardDao implements FlashcardDao {
     public List<Flashcard> getFlashcardsByQuestion(String question, boolean useWildcard){
         List<Flashcard> flashcards = new ArrayList<>();
         String sql = "SELECT flashcard_id, question, answer, tags, creator FROM flashcards WHERE question ILIKE ?;";
-        if(useWildcard){
-            question = "%" + question + "%";
+        try{
+            if(useWildcard){
+                PreparedStatement preparedStatement = null;
+                preparedStatement.setString(1, "%question%question%");
+        }
+        }catch(SQLException e){
+            e.printStackTrace();
         }
         try{
             SqlRowSet results = jdbcTemplate.queryForRowSet(sql, question);
