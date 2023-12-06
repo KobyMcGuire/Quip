@@ -10,16 +10,20 @@
 
     <div v-if="selectedDeck">
       <div class="cardMovementButtons">
-        <div class="previousButton" @click="currentCardIndex--">
+        <div class="previousButton" @click="previousCard">
           <button> Previous Card</button>
         </div>
-        <div class="nextButton" @click="currentCardIndex++">
+        <div class="nextButton" @click="nextCard">
           <button>Next Card</button>
         </div>
       </div>
 
       <div>
         {{ cards[currentCardIndex].question }}
+      </div>
+
+      <div v-for="answer in randomAnswers">
+        {{ answer }}
       </div>
     </div>
 
@@ -37,11 +41,37 @@ export default {
       selectedDeck: null,
       decks: [],
       cards: [],
+      randomAnswers: [],
       currentCardIndex: 0,
     };
   },
 
+  methods: {
+    nextCard() {
+      if (this.currentCardIndex < this.cards.length -1) {
+        this.currentCardIndex ++
+        this.randomAnswers = this.getRandomAnswers();
+      }
+    },
+
+    previousCard() {
+      if (this.currentCardIndex < this.cards.length -1) {
+      this.currentCardIndex --;
+        }
+      this.randomAnswers = this.getRandomAnswers();
+    },
+
+    getRandomAnswers() {
+      return this.cards
+          .sort(() => Math.random() - 0.5)
+          .map(card => card.answer)
+          .slice(0, 4);
+    }
+  },
+
   created() {
+    this.randomAnswers = this.getRandomAnswers();
+
     DeckService.getDecks()
         .then((response) => {
           this.decks = response.data;
@@ -50,10 +80,6 @@ export default {
           console.log(error, "Deck selection");
         });
 
-    DeckService.getCardsByDeckId()
-        .then((response) => {
-          this.decks = response.data;
-        })
   },
 
   watch: {
@@ -62,6 +88,8 @@ export default {
         DeckService.getCardsByDeckId(newDeck.deckId)
             .then((response) => {
               this.cards = response.data;
+              this.currentCardIndex = 0;
+              this.randomAnswers = this.getRandomAnswers();
             })
             .catch((error) => {
               console.log(error, "Card selection");
