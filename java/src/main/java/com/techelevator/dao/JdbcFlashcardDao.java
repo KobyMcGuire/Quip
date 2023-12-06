@@ -89,6 +89,12 @@ public class JdbcFlashcardDao implements FlashcardDao {
                 "JOIN decks_flashcards ON flashcards.flashcard_id = decks_flashcards.flashcard_id\n" +
                 "JOIN flashcard_decks ON decks_flashcards.deck_id = flashcard_decks.deck_id\n" +
                 "WHERE flashcards.tags ILIKE ? AND flashcard_decks.deck_id != ?;";
+
+        String sqlForNoHomeFlashcards = "SELECT flashcards.flashcard_id, flashcards.question, flashcards.answer, flashcards.tags, flashcards.creator\n" +
+                "FROM flashcards\n" +
+                "LEFT JOIN decks_flashcards ON flashcards.flashcard_id = decks_flashcards.flashcard_id\n" +
+                "WHERE decks_flashcards.flashcard_id IS NULL AND flashcards.tags ILIKE ?;";
+
         if(useWildcard){
             tag = "%" + tag + "%";
         }
@@ -96,6 +102,13 @@ public class JdbcFlashcardDao implements FlashcardDao {
             SqlRowSet results = jdbcTemplate.queryForRowSet(sql, tag, deckId);
             while(results.next()){
                 Flashcard flashcard = mapRowToFlashcard(results);
+                flashcards.add(flashcard);
+            }
+
+            // Adding flashcards that do not have a current home
+            SqlRowSet resultsTwo = jdbcTemplate.queryForRowSet(sqlForNoHomeFlashcards, tag);
+            while(resultsTwo.next()) {
+                Flashcard flashcard = mapRowToFlashcard(resultsTwo);
                 flashcards.add(flashcard);
             }
         }catch (CannotGetJdbcConnectionException e){
@@ -113,13 +126,28 @@ public class JdbcFlashcardDao implements FlashcardDao {
                 "JOIN decks_flashcards ON flashcards.flashcard_id = decks_flashcards.flashcard_id\n" +
                 "JOIN flashcard_decks ON decks_flashcards.deck_id = flashcard_decks.deck_id\n" +
                 "WHERE flashcards.question ILIKE ? AND flashcard_decks.deck_id != ?;";
+
+        String sqlForNoHomeFlashcards = "SELECT flashcards.flashcard_id, flashcards.question, flashcards.answer, flashcards.tags, flashcards.creator\n" +
+                "FROM flashcards \n" +
+                "LEFT JOIN decks_flashcards ON flashcards.flashcard_id = decks_flashcards.flashcard_id\n" +
+                "WHERE decks_flashcards.flashcard_id IS NULL AND flashcards.question ILIKE ?;";
+
         if(useWildcard){
             question = "%" + question + "%";
         }
+
         try{
+            // Adding flashcards that have a connection to other decks
             SqlRowSet results = jdbcTemplate.queryForRowSet(sql, question, deckId);
             while(results.next()){
                 Flashcard flashcard = mapRowToFlashcard(results);
+                flashcards.add(flashcard);
+            }
+
+            // Adding flashcards that do not have a current home
+            SqlRowSet resultsTwo = jdbcTemplate.queryForRowSet(sqlForNoHomeFlashcards, question);
+            while(resultsTwo.next()) {
+                Flashcard flashcard = mapRowToFlashcard(resultsTwo);
                 flashcards.add(flashcard);
             }
         }catch (CannotGetJdbcConnectionException e){
@@ -177,10 +205,9 @@ public class JdbcFlashcardDao implements FlashcardDao {
     public int deleteFlashcard(int id) {
         int numberOfRows = 0;
         String sql = "DELETE FROM decks_flashcards WHERE flashcard_id= ?;";
-        String sqlDeleteFromJoin = "DELETE FROM flashcards WHERE flashcard_id = ?;";
+
         try{
             numberOfRows = jdbcTemplate.update(sql, id);
-            numberOfRows += jdbcTemplate.update(sqlDeleteFromJoin, id);
         }catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to server or database", e);
         } catch (DataIntegrityViolationException e) {
