@@ -2,10 +2,7 @@
   <button
     class="show-new-deck"
     v-on:click="showCreateNewDeck = !showCreateNewDeck"
-    v-if="!showCreateNewDeck"
-  >
-    Create New Deck
-  </button>
+    v-if="!showCreateNewDeck">Create New Deck</button>
 
   <div class="new-deck-card" v-if="showCreateNewDeck">
     <h1>Create A New Deck</h1>
