@@ -154,11 +154,13 @@ export default {
   padding: 10px;
 }
 
+/* FIX THIS */
 .new-deck-buttons {
-
+  margin-left: 110px;
 }
-
 .new-deck-buttons input[type="submit"] {
+  margin-right: 15px;
+
   display: inline-block;
   width: 200px;
 }
