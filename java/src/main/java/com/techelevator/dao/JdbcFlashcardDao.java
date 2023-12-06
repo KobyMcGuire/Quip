@@ -103,6 +103,27 @@ public class JdbcFlashcardDao implements FlashcardDao {
     }
 
     @Override
+    public List<Flashcard> getFlashcardsByQuestion(String question, boolean useWildcard){
+        List<Flashcard> flashcards = new ArrayList<>();
+        String sql = "SELECT flashcard_id, question, answer, tags, creator FROM flashcards WHERE question ILIKE ?;";
+        if(useWildcard){
+            question = "%" + question + "%";
+        }
+        try{
+            SqlRowSet results = jdbcTemplate.queryForRowSet(sql, question);
+            while(results.next()){
+                Flashcard flashcard = mapRowToFlashcard(results);
+                flashcards.add(flashcard);
+            }
+        }catch (CannotGetJdbcConnectionException e){
+            throw new DaoException("Unable to connect to server or database", e);
+        }catch(DataIntegrityViolationException e) {
+            throw new DaoException("Data integrity violation", e);
+        }
+        return flashcards;
+    }
+
+    @Override
     public Flashcard createFlashcard(FlashcardDto flashcardDto) {
         Flashcard newFlashcard = null;
         String sql = "INSERT INTO flashcards(question, answer, tags, creator)\n" +

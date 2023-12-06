@@ -15,6 +15,8 @@ public interface FlashcardDao {
 
     List<Flashcard> getFlashcardsByTag(String tag, boolean useWildcard);
 
+    List<Flashcard> getFlashcardsByQuestion(String question, boolean useWildcard);
+
     Flashcard createFlashcard(FlashcardDto flashcardDto);
     FlashcardDto updateFlashcard(FlashcardDto flashcardDto, int id);
 
