@@ -24,12 +24,13 @@ export default{
     },
 
     // Flashcard Services
-
-    // Combine these two calls with an if 
     getCardsByTag(tag) {
         return http.get('/flashcards', {params : {tag : tag}})
     },
 
+    getCardsByDeckId(deckId) {
+        return http.get(`/flashcards/decks/${deckId}`)
+    },
 
     getCards() {
         return http.get('/flashcards')

@@ -223,11 +223,9 @@ export default {
       });
 
     // API Call to grab all flashcards associated with deck
-    DeckService.getCards()
+    DeckService.getCardsByDeckId(this.$route.params.id)
       .then((response) => {
-        this.flashcards = response.data.filter(
-          (flashcard) => flashcard.deckId === this.deck.deckId
-        );
+        this.flashcards = response.data;
         this.isLoaded = true;
       })
       .catch((error) => {

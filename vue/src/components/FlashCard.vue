@@ -58,50 +58,6 @@ export default {
       this.showFront = !this.showFront;
     },
 
-    editFlashcard() {
-      console.log(this.flashcard.flashCardId);
-
-      // Check fields to make sure none are empty
-      if (
-        this.editedFlashcard.question === "" ||
-        this.editedFlashcard.answer === "" ||
-        this.editedFlashcard.tag === ""
-      ) {
-        this.editFlashcardError = true;
-        console.log(this.flashcard.flashCardId);
-        return;
-      }
-
-      // Apply "still-needed" fields to edited flashcard
-      // this.editedFlashcard.flashCardId = this.flashcard.flashCardId;
-      // this.editedFlashcard.deckId = this.flashcard.deckId;
-      // this.editedFlashcard.creator = this.flashcard.creator;
-
-      // API call to update flashcard
-      DeckService.updateFlashcard(
-        // this.flashcard.flashCardId,
-        this.editedFlashcard.flashCardId,
-        this.editedFlashcard
-      )
-        .then((response) => {
-          // Close modal
-          this.closeModal();
-
-          // Reset edited flashcard fields
-          // this.editedFlashcard = {
-          //   flashCardId: "",
-          //   deckId: "",
-          //   question: "",
-          //   answer: "",
-          //   tag: "",
-          //   creator: "",
-          // };
-        })
-        .catch((error) => {
-          this.errorHandler(error, "updating flashcard");
-        });
-    },
-
     // Delete Flashcard
     deleteFlashcard() {
       DeckService.deleteFlashcard(this.flashcard.flashCardId)
@@ -112,6 +68,8 @@ export default {
           this.errorHandler(error, "deleting flashcard");
         });
     },
+
+    
     errorHandler(error, verb) {
       console.log(`There was an error ${verb}. The error was: ${error}`);
     },
