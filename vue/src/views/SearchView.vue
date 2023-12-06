@@ -46,8 +46,36 @@ export default {
   methods: {
     searchFlashCardsByTag() {
       if (this.searchByQuestion === false) {
-        DeckService.getCardsByTag(this.searchTerms)
+        DeckService.getCards()
             .then((response) => {
+              // let allFlashcards = response.data;
+
+              // let splitSearchTerms = this.searchTerms.split(" ");
+              // let splitSearchTermsLower = [];
+
+              // // Lowercase our search terms
+              // for (let i = 0; i < splitSearchTerms.length; i++) {
+              //   splitSearchTermsLower.push(splitSearchTerms[i].toLowerCase());
+              // }
+
+
+              // for (let i = 0; i < allFlashcards.length; i++) {
+              //   let flashcardTags = allFlashcards[i].tag.split(" ");
+              //   let flashcardTagsToLower = [];
+
+              //   // Lowercase the flashcard tags
+              //   for (let j = 0; j < flashcardTags.length; j++) {
+              //     flashcardTagsToLower.push(flashcardTags[j].toLowerCase());
+              //   }
+
+              //   for (let k = 0; k < splitSearchTermsLower.length; k++) {
+              //     console.log(flashcardTagsToLower);
+              //     console.log(splitSearchTermsLower);
+              //     if (flashcardTagsToLower.includes(splitSearchTermsLower[k])); {
+              //       this.flashcards.push(allFlashcards[i]);
+              //     }
+              //   }
+              // }
               this.flashcards = response.data;
             })
             .catch((error) => {
