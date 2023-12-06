@@ -108,15 +108,17 @@
         v-bind:flashcard="flashcard"
       />
     </div>
+    <search-bar></search-bar>
   </div>
 </template>
 
 <script>
 import FlashCard from "../components/FlashCard.vue";
 import DeckService from "../services/DeckService";
+import SearchBar from "../components/SearchBar.vue";
 
 export default {
-  components: { FlashCard },
+  components: { FlashCard, SearchBar },
 
   data() {
     return {
