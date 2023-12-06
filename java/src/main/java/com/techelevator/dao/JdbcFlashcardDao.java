@@ -107,7 +107,7 @@ public class JdbcFlashcardDao implements FlashcardDao {
         List<Flashcard> flashcards = new ArrayList<>();
         String sql = "SELECT flashcard_id, question, answer, tags, creator FROM flashcards WHERE question ILIKE ?;";
         if(useWildcard){
-            question = "%" + question + "%";
+            question = "%" + question + "%" + question + "%";
         }
         try{
             SqlRowSet results = jdbcTemplate.queryForRowSet(sql, question);
