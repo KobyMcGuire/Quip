@@ -22,8 +22,14 @@
         {{ cards[currentCardIndex].question }}
       </div>
 
-      <div v-for="answer in randomAnswers">
-        {{ answer }}
+      <div class="answer-container">
+        <div
+            v-for="(answer, index) in randomAnswers" :key="index" class="answer-item">
+          {{ answer }}
+          <button>
+            <input type="radio" :name="'answerButton'">
+          </button>
+        </div>
       </div>
     </div>
 
@@ -124,5 +130,18 @@ export default {
   justify-content: center;
 
   padding: 10px;
+}
+
+.answer-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  padding-top: 20px;
+}
+
+.answer-item {
+  border: 1px solid black;
+  padding: 10px;
+  text-align: center;
 }
 </style>
