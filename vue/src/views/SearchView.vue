@@ -3,100 +3,82 @@
     <div class="search-field">
       <label for="flashcardSearch"> Search </label>
       <input
-          type="text"
-          id="flashcardSearch"
-          name="flashcardSearch"
-          v-model="searchTerms"
+        type="text"
+        id="flashcardSearch"
+        name="flashcardSearch"
+        v-model="searchTerms"
       />
 
       <div class="radioButtons">
         <label for="question">Question </label>
-        <input type="radio" id="question" name="SearchByQuestionOrTag" v-on:click="searchByQuestion = true"/>
+        <input
+          type="radio"
+          id="question"
+          name="SearchByQuestionOrTag"
+          v-on:click="searchByQuestion = true"
+        />
         <label for="tag">Tag </label>
-        <input type="radio" id="tag" name="SearchByQuestionOrTag" v-on:click="searchByQuestion = false"/>
+        <input
+          type="radio"
+          id="tag"
+          name="SearchByQuestionOrTag"
+          v-on:click="searchByQuestion = false"
+        />
       </div>
-      <input type="submit" v-on:click="searchFlashCardsByTag"/>
+      <input type="submit" v-on:click="searchFlashCardsByTag" />
     </div>
 
     <div class="flashcard-results-container">
       <flash-card
-          v-for="flashcard in flashcards"
-          v-bind:key="flashcard.cardId"
-          v-bind:flashcard="flashcard"
+        v-for="flashcard in flashcards"
+        v-bind:key="flashcard.cardId"
+        v-bind:flashcard="flashcard"
       />
     </div>
   </div>
 </template>
 
 <script>
-import FlashCard from '../components/FlashCard.vue';
-import DeckService from '../services/DeckService';
+import FlashCard from "../components/FlashCard.vue";
+import DeckService from "../services/DeckService";
 
 export default {
-  components: {FlashCard},
+  components: { FlashCard },
 
   data() {
     return {
       searchTerms: "",
       flashcards: [],
       searchByQuestion: "",
-    }
+    };
   },
 
   methods: {
     searchFlashCardsByTag() {
       if (this.searchByQuestion === false) {
-        DeckService.getCards()
-            .then((response) => {
-              // let allFlashcards = response.data;
-
-              // let splitSearchTerms = this.searchTerms.split(" ");
-              // let splitSearchTermsLower = [];
-
-              // // Lowercase our search terms
-              // for (let i = 0; i < splitSearchTerms.length; i++) {
-              //   splitSearchTermsLower.push(splitSearchTerms[i].toLowerCase());
-              // }
-
-
-              // for (let i = 0; i < allFlashcards.length; i++) {
-              //   let flashcardTags = allFlashcards[i].tag.split(" ");
-              //   let flashcardTagsToLower = [];
-
-              //   // Lowercase the flashcard tags
-              //   for (let j = 0; j < flashcardTags.length; j++) {
-              //     flashcardTagsToLower.push(flashcardTags[j].toLowerCase());
-              //   }
-
-              //   for (let k = 0; k < splitSearchTermsLower.length; k++) {
-              //     console.log(flashcardTagsToLower);
-              //     console.log(splitSearchTermsLower);
-              //     if (flashcardTagsToLower.includes(splitSearchTermsLower[k])); {
-              //       this.flashcards.push(allFlashcards[i]);
-              //     }
-              //   }
-              // }
-              this.flashcards = response.data;
-            })
-            .catch((error) => {
-              this.errorHandler(error, "fetching for searched flashcards");
-            })
+        DeckService.getCardsByTag(this.searchTerms)
+          .then((response) => {
+            this.flashcards = response.data;
+          })
+          .catch((error) => {
+            this.errorHandler(error, "fetching for searched flashcards");
+          });
       } else {
         DeckService.getCardsByQuestion(this.searchTerms)
-            .then((response) => {
-              this.flashcards = response.data;
-            })
-            .catch((error) => {
-              this.errorHandler(error, "fetching for searched flashcards");
-            })
+          .then((response) => {
+            this.flashcards = response.data;
+          })
+          .catch((error) => {
+            this.errorHandler(error, "fetching for searched flashcards");
+          });
       }
     },
 
     errorHandler(error, verb) {
       console.log(`There was an error ${verb}. The error was: ${error}`);
     },
-  }
-}
+  },
+};
 </script>
 
 <style scoped>
