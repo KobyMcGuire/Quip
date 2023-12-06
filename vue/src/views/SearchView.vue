@@ -3,19 +3,26 @@
     <div class="search-field">
       <label for="flashcardSearch"> Search </label>
       <input
-        type="text"
-        id="flashcardSearch"
-        name="flashcardSearch"
-        v-model="searchTags"
+          type="text"
+          id="flashcardSearch"
+          name="flashcardSearch"
+          v-model="searchTerms"
       />
-      <input type="submit" v-on:click="searchFlashCards"/>
+
+      <div class="radioButtons">
+        <label for="question">Question </label>
+        <input type="radio" id="question" name="SearchByQuestionOrTag" v-on:click="searchByQuestion = true"/>
+        <label for="tag">Tag </label>
+        <input type="radio" id="tag" name="SearchByQuestionOrTag" v-on:click="searchByQuestion = false"/>
+      </div>
+      <input type="submit" v-on:click="searchFlashCardsByTag"/>
     </div>
 
     <div class="flashcard-results-container">
       <flash-card
-        v-for="flashcard in flashcards"
-        v-bind:key="flashcard.cardId"
-        v-bind:flashcard="flashcard"
+          v-for="flashcard in flashcards"
+          v-bind:key="flashcard.cardId"
+          v-bind:flashcard="flashcard"
       />
     </div>
   </div>
@@ -26,30 +33,41 @@ import FlashCard from '../components/FlashCard.vue';
 import DeckService from '../services/DeckService';
 
 export default {
-  components: { FlashCard },
+  components: {FlashCard},
 
-    data() {
-        return {
-            searchTags: "",
-            flashcards: []
-        }
-    },
+  data() {
+    return {
+      searchTerms: "",
+      flashcards: [],
+      searchByQuestion: "",
+    }
+  },
 
-    methods : {
-        searchFlashCards() {
-            DeckService.getCardsByTag(this.searchTags)
+  methods: {
+    searchFlashCardsByTag() {
+      if (this.searchByQuestion === false) {
+        DeckService.getCardsByTag(this.searchTerms)
             .then((response) => {
-                this.flashcards = response.data;
+              this.flashcards = response.data;
             })
             .catch((error) => {
-                this.errorHandler(error, "fetching for searched flashcards");
+              this.errorHandler(error, "fetching for searched flashcards");
             })
-        },
+      } else {
+        DeckService.getCardsByQuestion(this.searchTerms)
+            .then((response) => {
+              this.flashcards = response.data;
+            })
+            .catch((error) => {
+              this.errorHandler(error, "fetching for searched flashcards");
+            })
+      }
+    },
 
-     errorHandler(error, verb) {
-        console.log(`There was an error ${verb}. The error was: ${error}`);
-        },
-    }
+    errorHandler(error, verb) {
+      console.log(`There was an error ${verb}. The error was: ${error}`);
+    },
+  }
 }
 </script>
 
@@ -69,6 +87,15 @@ export default {
   flex-wrap: wrap;
 
   gap: 20px;
+}
+
+.radioButtons {
+  display: flex;
+  justify-content: center;
+}
+
+.radioButtons input[id="question"] {
+  margin-right: 5%;
 }
 
 .search-field label {

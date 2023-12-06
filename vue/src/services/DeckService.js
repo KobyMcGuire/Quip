@@ -28,6 +28,10 @@ export default{
         return http.get('/flashcards', {params : {tag : tag}})
     },
 
+    getCardsByQuestion(question) {
+        return http.get('/flashcards', {params: {question : question}})
+    },
+
     getCardsByDeckId(deckId) {
         return http.get(`/flashcards/decks/${deckId}`)
     },
