@@ -1,46 +1,45 @@
 <template>
   <div v-if="isLoaded">
     <div class="deck-info">
-      <h1>{{ deck.title }}</h1>
-      <h2>{{ deck.description }}</h2>
+      <h1 id="deck-header-title" v-bind:contenteditable="showEditDeck" @keydown.enter.prevent>{{ deck.title }}</h1>
+      <h2 id="deck-header-description" v-bind:contenteditable="showEditDeck" @keydown.enter.prevent>{{ deck.description }}</h2>
     </div>
 
-    <div class="form-action-buttons">
-      <button
-        v-on:click="this.showCreateFlashcard = !this.showCreateFlashcard"
-        v-if="!this.showEditDeck"
-      >
-        Create Flashcard
-      </button>
-      <button
-        v-on:click="this.showEditDeck = !this.showEditDeck"
-        v-if="!this.showCreateFlashcard"
-      >
-        Edit Deck
-      </button>
-    </div>
+    <div class="edit-deck-info" v-if="showEditDeck">
+      <div class="error-message" v-if="editDeckError">
+        <p>You must enter a new title or a new description</p>
+      </div>
 
-    <div class="form-container">
-      <div class="edit-deck-info" v-if="showEditDeck">
+
+
+      <div class="form-buttons">
+        <label for="submitEditedDeck"></label>
+        <input type="submit" id="submitEditedDeck" v-on:click="
+          editDeck();
+        this.showEditDeck = false;
+        " />
+
+        <button v-on:click="this.showEditDeck = false" class="cancel-button">
+          Cancel
+        </button>
+      </div>
+      </div>
+      <div class="form-action-buttons">
+        <button v-on:click="this.showCreateFlashcard = !this.showCreateFlashcard" v-if="!this.showEditDeck">
+          Create Flashcard
+        </button>
+        <button v-on:click="this.showEditDeck = !this.showEditDeck" v-if="!this.showCreateFlashcard">
+          Edit Deck
+        </button>
+      </div>
+
+      <div class="form-container">
+        <!-- <div class="edit-deck-info" v-if="showEditDeck">
         <div class="error-message" v-if="editDeckError">
           <p>You must enter a new title or a new description</p>
         </div>
 
-        <label for="deckTitle">Title: </label>
-        <input
-          type="text"
-          id="deckTitle"
-          name="deckTitle"
-          v-model="editedDeck.title"
-        />
-
-        <label for="deckDescription">Description: </label>
-        <input
-          type="text"
-          id="deckDescription"
-          name="deckDescription"
-          v-model="editedDeck.description"
-        />
+        
 
         <div class="form-buttons">
           <label for="submitEditedDeck"></label>
@@ -56,7 +55,7 @@
           <button v-on:click="this.showEditDeck = false" class="cancel-button">
             Cancel
           </button>
-        </div>
+        </div> -->
       </div>
 
       <div class="new-flashcard-card" v-if="showCreateFlashcard">
@@ -65,48 +64,27 @@
         </div>
 
         <label for="newFlashcardQuestion">Question: </label>
-        <input
-          type="text"
-          id="newFlashcardQuestion"
-          name="newFlashcardQuestion"
-          v-model="newFlashcard.question"
-        />
+        <input type="text" id="newFlashcardQuestion" name="newFlashcardQuestion" v-model="newFlashcard.question" />
 
         <label for="newFlashcardAnswer">Answer: </label>
-        <input
-          type="text"
-          id="newFlashcardAnswer"
-          name="newFlashcardAnswer"
-          v-model="newFlashcard.answer"
-        />
+        <input type="text" id="newFlashcardAnswer" name="newFlashcardAnswer" v-model="newFlashcard.answer" />
 
         <div class="form-buttons">
           <label for="submitNewFlashcard"></label>
-          <input
-            type="submit"
-            id="submitNewFlashcard"
-            v-on:click="
-              addFlashcard();
-              this.showCreateFlashcard = false;
-            "
-          />
+          <input type="submit" id="submitNewFlashcard" v-on:click="
+            addFlashcard();
+          this.showCreateFlashcard = false;
+          " />
 
-          <button
-            v-on:click="this.showCreateFlashcard = false"
-            class="cancel-button"
-          >
+          <button v-on:click="this.showCreateFlashcard = false" class="cancel-button">
             Cancel
           </button>
         </div>
       </div>
-    </div>
+    <!-- </div> -->
 
     <div class="flash-cards-container">
-      <flash-card
-        v-for="flashcard in flashcards"
-        v-bind:key="flashcard.cardId"
-        v-bind:flashcard="flashcard"
-      />
+      <flash-card v-for="flashcard in flashcards" v-bind:key="flashcard.cardId" v-bind:flashcard="flashcard" />
     </div>
     <search-bar></search-bar>
   </div>
@@ -145,18 +123,23 @@ export default {
 
   methods: {
     editDeck() {
-      if (this.editedDeck.title === "" && this.editedDeck.description === "") {
+      let editedTitle = document.getElementById('deck-header-title').innerText;
+      let editedDescription = document.getElementById('deck-header-description').innerText;
+      console.log(editedTitle)
+
+      if (editedTitle === "" && editedDescription === "") {
         this.editDeckError = true;
         return;
       }
 
-      if (this.editedDeck.title === "") {
-        this.editedDeck.title = this.deck.title;
+      if (editedTitle === "") {
+        editedTitle = this.deck.title;
       }
 
-      if (this.editedDeck.description === "") {
-        this.editedDeck.description = this.deck.description;
+      if (editedDescription === "") {
+        editedDescription = this.deck.description;
       }
+      this.editedDeck = {title : editedTitle, description : editedDescription };
 
       this.editDeckError = false;
       DeckService.editDeck(this.$route.params.id, this.editedDeck)

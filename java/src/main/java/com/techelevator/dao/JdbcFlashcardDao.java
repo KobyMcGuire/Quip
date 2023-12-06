@@ -67,7 +67,8 @@ public class JdbcFlashcardDao implements FlashcardDao {
         String sql = "SELECT flashcards.flashcard_id, flashcards.question, flashcards.answer, flashcards.tags, flashcards.creator FROM flashcards\n" +
                 "JOIN decks_flashcards ON flashcards.flashcard_id = decks_flashcards.flashcard_id\n" +
                 "JOIN flashcard_decks ON decks_flashcards.deck_id = flashcard_decks.deck_id\n" +
-                "WHERE decks_flashcards.deck_id = ?;";
+                "WHERE decks_flashcards.deck_id = ?\n" +
+                "ORDER BY flashcards.flashcard_id;";
         try {
             SqlRowSet results = jdbcTemplate.queryForRowSet(sql, deckId);
             while (results.next()){

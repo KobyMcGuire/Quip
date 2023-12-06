@@ -59,6 +59,10 @@ export default {
     DeckService.getCard(this.$route.params.id)
       .then((response) => {
         this.flashcard = response.data;
+        this.editedFlashcard.question = this.flashcard.question
+        this.editedFlashcard.answer = this.flashcard.answer
+        this.editedFlashcard.tag = this.flashcard.tag
+
       })
       .catch((error) => {
         this.errorHandler(error, "fetching flashcard");

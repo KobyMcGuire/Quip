@@ -16,6 +16,7 @@
           id="question"
           name="SearchByQuestionOrTag"
           v-on:click="searchByQuestion = true"
+          checked="true"
         />
         <label for="tag">Tag </label>
         <input
