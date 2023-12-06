@@ -2,7 +2,7 @@
   <div>
     <h1>Pick a deck and begin study session</h1>
 
-    <select class="dropDown" v-model="selectedDeck">
+    <select class="dropDownButton" v-model="selectedDeck">
       <option v-for="deck in decks" :key="deck.deckId" :value="deck">
         {{ deck.title }}
       </option>
@@ -18,7 +18,7 @@
         </div>
       </div>
 
-      <div>
+      <div class="viewedQuestion">
         {{ cards[currentCardIndex].question }}
       </div>
 
@@ -48,16 +48,16 @@ export default {
 
   methods: {
     nextCard() {
-      if (this.currentCardIndex < this.cards.length -1) {
-        this.currentCardIndex ++
+      if (this.currentCardIndex < this.cards.length - 1) {
+        this.currentCardIndex++
         this.randomAnswers = this.getRandomAnswers();
       }
     },
 
     previousCard() {
-      if (this.currentCardIndex < this.cards.length -1) {
-      this.currentCardIndex --;
-        }
+      if (this.currentCardIndex < this.cards.length - 1) {
+        this.currentCardIndex--;
+      }
       this.randomAnswers = this.getRandomAnswers();
     },
 
@@ -73,12 +73,12 @@ export default {
     this.randomAnswers = this.getRandomAnswers();
 
     DeckService.getDecks()
-        .then((response) => {
-          this.decks = response.data;
-        })
-        .catch((error) => {
-          console.log(error, "Deck selection");
-        });
+      .then((response) => {
+        this.decks = response.data;
+      })
+      .catch((error) => {
+        console.log(error, "Deck selection");
+      });
 
   },
 
@@ -106,5 +106,23 @@ export default {
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 2px;
+}
+
+.viewedQuestion {
+  width: 250px;
+  height: 250px;
+  min-width: 25%;
+  max-width: 30%;
+  min-height: 25%;
+  max-height: 30%;
+  margin-left: 35%;
+
+  border: 3px solid black;
+  border-radius: 10px;
+
+  text-align: center;
+  justify-content: center;
+
+  padding: 10px;
 }
 </style>
