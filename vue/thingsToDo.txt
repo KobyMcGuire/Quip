@@ -7,3 +7,11 @@
  - search by tags or content (words in question)
     - only display cards
     - add to deck once you can see other peoples cards
+
+
+- For the study sessions:
+    - Have users pick a deck from a list of decks.
+    - Just show a single card on the screen
+    - Have multiple answers (pulled from answers of other questions)
+        - 3 wrong, 1 right
+    - Display correct, and incorrect answers
