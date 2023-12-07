@@ -33,6 +33,9 @@
           </button>
         </div>
       </div>
+      <div class="study-submit-button">
+          <input type="submit" v-on:click="checkAnswer">
+      </div>
     </div>
 
   </div>
@@ -77,12 +80,15 @@ export default {
           .map(card => card.answer)
           .slice(0, 4);
     },
-    // checkAnswer(index){
-    //   const userAnswer = this.selectedAnswer[index];
-    //   const correctAnswer = this.cards[this.currentCardIndex].answer;
-    //   if(userAnswer === correctAnswer){
-    //     this.correctAnswers++;
-    //     this.moveToNextCard();
+    checkAnswer(index){
+      const userAnswer = this.selectedAnswer[index];
+      const correctAnswer = this.cards[this.currentCardIndex].answer;
+      console.log(userAnswer);
+      if(userAnswer === correctAnswer){
+        this.correctAnswers++;
+        this.moveToNextCard();
+      }
+    }
     //   }
     // else {
     //   // The answer is incorrect
