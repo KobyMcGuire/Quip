@@ -36,7 +36,7 @@
         <span class="material-symbols-outlined"> delete </span>
       </button>
       <!-- TO DO -->
-      <button v-else>
+      <button v-else v-on:click="addFlashcardToDeck">
         <span class="material-symbols-outlined"> add </span>
       </button>
     </div>
@@ -66,6 +66,20 @@ export default {
   methods: {
     flipCard() {
       this.showFront = !this.showFront;
+    },
+
+    // Add flashcard to new deck
+    addFlashcardToDeck() {
+      DeckService.addFlashcardToDeck(this.$route.params.id, this.flashcard.flashCardId)
+      .then((response) => {
+
+      })
+      .catch((error) => {
+        this.errorHandler(error, 'putting card in to new deck.')
+      })      
+
+
+
     },
 
     // Delete Flashcard

@@ -40,10 +40,12 @@ export default{
         return http.get('/flashcards')
     },
 
-
-
     addFlashcard(flashCard) {
         return http.post('/flashcards', flashCard)
+    },
+
+    addFlashcardToDeck(deckId, flashcardId) {
+        return http.post('/flashcards/decks', {params : {deckId : deckId , flashcardId : flashcardId}})
     },
 
     getCard(cardId) {

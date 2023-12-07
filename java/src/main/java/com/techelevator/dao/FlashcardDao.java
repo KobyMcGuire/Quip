@@ -13,6 +13,8 @@ public interface FlashcardDao {
 
     List<Flashcard> getFlashcardsByDeckId(int deckId);
 
+    int putFlashcardInNewDeck(int deckId, int flashcardId);
+
     List<Flashcard> getFlashcardsByTag(String tag, int deckId, boolean useWildcard);
 
     List<Flashcard> getFlashcardsByQuestion(String question, int deckId, boolean useWildcard);

@@ -84,6 +84,23 @@ public class JdbcFlashcardDao implements FlashcardDao {
     }
 
     @Override
+    public int putFlashcardInNewDeck(int deckId, int flashcardId) {
+        int rowsAffected;
+        String sql = "INSERT INTO decks_flashcards(deck_id, flashcard_id) VALUES(? , ?);";
+
+        try {
+            rowsAffected = jdbcTemplate.update(sql, deckId, flashcardId);
+        }
+        catch (CannotGetJdbcConnectionException e){
+            throw new DaoException("Unable to connect to server or database", e);
+        }catch(DataIntegrityViolationException e) {
+            throw new DaoException("Data integrity violation", e);
+        }
+
+        return rowsAffected;
+    }
+
+    @Override
     public List<Flashcard> getFlashcardsByTag(String tag, int deckId, boolean useWildcard){
         List<Flashcard> flashcards = new ArrayList<>();
         String sql = "SELECT flashcards.flashcard_id, flashcards.question, flashcards.answer, flashcards.tags, flashcards.creator FROM flashcards\n" +
