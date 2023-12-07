@@ -226,12 +226,13 @@ public class JdbcFlashcardDao implements FlashcardDao {
         String sql = "DELETE FROM decks_flashcards WHERE deck_id = ? AND flashcard_id = ?;";
 
         try{
-            numberOfRows = jdbcTemplate.update(sql, flashcardId, deckId);
+            numberOfRows = jdbcTemplate.update(sql, deckId, flashcardId);
         }catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to server or database", e);
         } catch (DataIntegrityViolationException e) {
             throw new DaoException("Data integrity violation", e);
         }
+
         return numberOfRows;
     }
 
