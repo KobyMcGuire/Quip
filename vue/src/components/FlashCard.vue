@@ -79,6 +79,7 @@ export default {
 
       DeckService.addFlashcardToDeck(this.decksFlashcards)
       .then((response) => {
+        this.$router.go();
       })
       .catch((error) => {
         this.errorHandler(error, 'putting card in to new deck')
