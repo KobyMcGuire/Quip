@@ -7,12 +7,14 @@
         {{ deck.title }}
       </option>
     </select>
-    <button class="resetButton" v-if="selectedDeck" @click="resetStudySession">
-      Cancel Study Session
+    <router-link v-bind:correctAnswers="correctAnswers" :to="{name: 'completed-study-session'}">
+    <button class="resetButton" v-if="selectedDeck">
+      Complete Study Session
     </button>
+  </router-link>
 
     <div v-if="selectedDeck">
-      <h5>Correct Answers: {{ correctAnswers }} / {{cards.length}}</h5>
+      <h5>Correct Answers: {{ this.$store.state.correctAnswers }} / {{cards.length}}</h5>
 
       <div class="viewedQuestion">
         {{ cards[currentCardIndex] && cards[currentCardIndex].question }}
@@ -28,8 +30,12 @@
       </div>
     </div>
 
-    <div class="study-submit-button" v-if="selectedDeck">
+    <div class="study-submit-button" v-if="selectedDeck" >
+      <router-link :to="{name: 'completed-study-session'}" v-if="currentCardIndex === cards.length - 1" >
       <input type="submit" @click="submitAndMoveNext">
+    </router-link>
+
+    <input type="submit" v-else @click="submitAndMoveNext">
     </div>
 
   </div>
@@ -89,7 +95,7 @@ export default {
     checkAnswer(index) {
       const correctAnswer = this.cards[index].answer;
       if (this.selectedAnswer === correctAnswer) {
-        this.correctAnswers++;
+        this.$store.state.correctAnswers++;
       }
     },
 
@@ -97,9 +103,8 @@ export default {
       this.selectedAnswer = event.target.innerText;
     },
 
-    resetStudySession() {
-      this.selectedDeck = null;
-      this.correctAnswers = 0;
+    completeStudySession() {
+      
 
     }
 

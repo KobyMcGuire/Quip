@@ -8,6 +8,8 @@ export function createStore(currentToken, currentUser) {
       token: currentToken || '',
       user: currentUser || {},
 
+      correctAnswers: 0,
+
       /* Dummy Deck Data to test with */
       decks : [
 
