@@ -2,7 +2,7 @@
   <button
     class="show-new-deck"
     v-on:click="showCreateNewDeck = !showCreateNewDeck"
-    v-if="!showCreateNewDeck">Create New Deck</button>
+    v-bind:disabled="showCreateNewDeck">Create New Deck</button>
 
   <div class="new-deck-card" v-if="showCreateNewDeck">
     <h1>Create A New Deck</h1>
@@ -33,7 +33,7 @@
 
       <button
         class="cancel-button"
-        v-on:click="showCreateNewDeck = !showCreateNewDeck"
+        v-on:click="clearNewDeck(), showCreateNewDeck = !showCreateNewDeck"
       >
         Cancel
       </button>
@@ -60,6 +60,13 @@ export default {
   },
 
   methods: {
+
+    clearNewDeck() {
+      this.error = false;
+      this.newDeck.title = "";
+      this.newDeck.description = "";
+    },
+
     // API call to add deck to DB
     addDeck() {
       // Check to make sure that the title and description fields are not empty.
@@ -118,7 +125,7 @@ export default {
 }
 .deck-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   flex-wrap: wrap;
   gap: 15px;
 }
