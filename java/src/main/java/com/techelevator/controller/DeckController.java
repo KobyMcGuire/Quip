@@ -81,7 +81,7 @@ public class DeckController {
             return flashcardDao.getFlashcardsByDeckId(deckId);
     }
 
-    @RequestMapping(path= "/flashcards/decks", method = RequestMethod.PUT)
+    @RequestMapping(path= "/flashcards/decks", method = RequestMethod.POST)
     public int putFlashcardInNewDeck(@RequestParam int deckId, @RequestParam int flashcardId) {
         return flashcardDao.putFlashcardInNewDeck(deckId, flashcardId);
     }
