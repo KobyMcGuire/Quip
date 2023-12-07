@@ -44,8 +44,8 @@ export default{
         return http.post('/flashcards', flashCard)
     },
 
-    addFlashcardToDeck(deckId, flashcardId) {
-        return http.post('/flashcards/decks', {params : {deckId : deckId , flashcardId : flashcardId}})
+    addFlashcardToDeck(decksFlashcards) {
+        return http.post('/flashcards/decks', decksFlashcards)
     },
 
     getCard(cardId) {

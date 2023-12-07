@@ -1,5 +1,6 @@
 package com.techelevator.dao;
 
+import com.techelevator.model.DecksFlashcardsDto;
 import com.techelevator.model.Flashcard;
 import com.techelevator.model.FlashcardDto;
 
@@ -13,7 +14,7 @@ public interface FlashcardDao {
 
     List<Flashcard> getFlashcardsByDeckId(int deckId);
 
-    int putFlashcardInNewDeck(int deckId, int flashcardId);
+    int putFlashcardInNewDeck(DecksFlashcardsDto decksFlashcards);
 
     List<Flashcard> getFlashcardsByTag(String tag, int deckId, boolean useWildcard);
 

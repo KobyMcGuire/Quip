@@ -59,6 +59,10 @@ export default {
       },
       editFlashcardError: false,
       displayTags: false,
+      decksFlashcards: {
+        deckId: "",
+        flashcardId: ""
+      }
     };
   },
   computed: {},
@@ -70,8 +74,12 @@ export default {
 
     // Add flashcard to new deck
     addFlashcardToDeck() {
-      DeckService.addFlashcardToDeck(this.$route.params.id, this.flashcard.flashCardId)
+      this.decksFlashcards.deckId = this.$route.params.id;
+      this.decksFlashcards.flashcardId = this.flashcard.flashCardId;
+
+      DeckService.addFlashcardToDeck(this.decksFlashcards)
       .then((response) => {
+        
 
       })
       .catch((error) => {

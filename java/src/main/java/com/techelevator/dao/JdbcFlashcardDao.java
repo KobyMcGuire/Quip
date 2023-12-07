@@ -2,6 +2,7 @@ package com.techelevator.dao;
 
 import com.techelevator.exception.DaoException;
 import com.techelevator.model.Deck;
+import com.techelevator.model.DecksFlashcardsDto;
 import com.techelevator.model.Flashcard;
 import com.techelevator.model.FlashcardDto;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -84,12 +85,12 @@ public class JdbcFlashcardDao implements FlashcardDao {
     }
 
     @Override
-    public int putFlashcardInNewDeck(int deckId, int flashcardId) {
+    public int putFlashcardInNewDeck(DecksFlashcardsDto decksFlashcards) {
         int rowsAffected;
         String sql = "INSERT INTO decks_flashcards(deck_id, flashcard_id) VALUES(? , ?);";
 
         try {
-            rowsAffected = jdbcTemplate.update(sql, deckId, flashcardId);
+            rowsAffected = jdbcTemplate.update(sql, decksFlashcards.getDeckId(), decksFlashcards.getFlashcardId());
         }
         catch (CannotGetJdbcConnectionException e){
             throw new DaoException("Unable to connect to server or database", e);

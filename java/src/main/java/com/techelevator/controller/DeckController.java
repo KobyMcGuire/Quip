@@ -2,10 +2,7 @@ package com.techelevator.controller;
 
 import com.techelevator.dao.DeckDao;
 import com.techelevator.dao.FlashcardDao;
-import com.techelevator.model.Deck;
-import com.techelevator.model.DeckDto;
-import com.techelevator.model.Flashcard;
-import com.techelevator.model.FlashcardDto;
+import com.techelevator.model.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -82,8 +79,8 @@ public class DeckController {
     }
 
     @RequestMapping(path= "/flashcards/decks", method = RequestMethod.POST)
-    public int putFlashcardInNewDeck(@RequestParam int deckId, @RequestParam int flashcardId) {
-        return flashcardDao.putFlashcardInNewDeck(deckId, flashcardId);
+    public int putFlashcardInNewDeck(@RequestBody DecksFlashcardsDto decksFlashcards) {
+        return flashcardDao.putFlashcardInNewDeck(decksFlashcards);
     }
 
     @RequestMapping(path = "/flashcards", method = RequestMethod.POST)
