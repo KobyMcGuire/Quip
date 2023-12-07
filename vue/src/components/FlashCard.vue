@@ -1,6 +1,6 @@
 <template>
-  <div class="flashcard-card">
-    <div v-on:click="flipCard">
+  <div class="flashcard-container">
+    <div class="flashcard-text-content" v-on:click="flipCard">
       <div class="question" v-if="showFront">
         <h1>Question:</h1>
         <p>{{ flashcard.question }}</p>
@@ -18,17 +18,27 @@
 
     <div class="flashcard-buttons">
       <button v-on:click="this.displayTags = !this.displayTags">
-        View Tags
+        <span class="material-symbols-outlined"> visibility </span>
       </button>
+
       <router-link
         v-bind:to="{
           name: 'edit-card',
           params: { id: this.flashcard.flashCardId },
         }"
       >
-        <button>Edit Card</button>
+        <button>
+          <span class="material-symbols-outlined"> edit </span>
+        </button>
       </router-link>
-      <button v-on:click="deleteFlashcard">Delete Card</button>
+
+      <button v-if="deleteButton" v-on:click="deleteFlashcard">
+        <span class="material-symbols-outlined"> delete </span>
+      </button>
+      <!-- TO DO -->
+      <button v-else>
+        <span class="material-symbols-outlined"> add </span>
+      </button>
     </div>
   </div>
 </template>
@@ -37,7 +47,7 @@
 import DeckService from "@/services/DeckService";
 
 export default {
-  props: ["flashcard"],
+  props: ["flashcard", "deleteButton"],
 
   data() {
     return {
@@ -69,7 +79,6 @@ export default {
         });
     },
 
-    
     errorHandler(error, verb) {
       console.log(`There was an error ${verb}. The error was: ${error}`);
     },
@@ -78,55 +87,7 @@ export default {
 </script>
 
 <style scoped>
-/* The Modal */
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgb(0, 0, 0);
-  background-color: rgba(0, 0, 0, 0.4);
-}
-
-/* Modal Content/Box */
-.modal-content {
-  background-color: #fefefe;
-  margin: 15% auto; /* 15% from the top and centered */
-  padding: 20px;
-  border: 1px solid #888;
-  width: 30%; /* Could be more or less, depending on screen size */
-}
-
-.inner-modal-content {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.inner-modal-content label {
-  margin-top: 10px;
-}
-
-/* The Close Button */
-.close {
-  color: #aaa;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.flashcard-card {
+.flashcard-container {
   min-width: 25%;
   min-height: 30%;
 
@@ -138,7 +99,7 @@ export default {
   padding: 10px;
 }
 
-.flashcard-card:hover {
+.flashcard-container:hover {
   cursor: pointer;
 }
 

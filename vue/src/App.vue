@@ -3,7 +3,6 @@
     <div id="nav">
       <router-link v-bind:to="{ name: 'home' }">Home</router-link>&nbsp;|&nbsp;
       <router-link v-bind:to="{ name: 'decks' }">Decks</router-link>&nbsp;|&nbsp;
-<!--      <router-link v-bind:to="{ name: 'search' }">Search</router-link>&nbsp;|&nbsp;-->
       <router-link v-bind:to="{name: 'study-session'}">Study</router-link>
       <router-link
         v-bind:to="{ name: 'logout' }"
@@ -71,7 +70,7 @@ input[type="submit"]:hover {
 
   padding: 5px;
 
-  border-radius: 5px;
+  border-radius: 25px;
 
   background-color: rgb(234, 105, 105);
 }
@@ -79,4 +78,13 @@ input[type="submit"]:hover {
 .cancel-button {
   background-color: rgb(234, 105, 105);
 }
+
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24
+}
+
 </style>

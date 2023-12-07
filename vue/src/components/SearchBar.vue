@@ -34,6 +34,7 @@
         v-for="flashcard in flashcards"
         v-bind:key="flashcard.cardId"
         v-bind:flashcard="flashcard"
+        v-bind:deleteButton="deleteButton"
       />
     </div>
   </div>
@@ -51,6 +52,7 @@ export default {
       searchTerms: "",
       flashcards: [],
       searchByQuestion: "",
+      deleteButton: false,
     };
   },
   methods: {

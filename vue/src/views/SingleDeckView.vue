@@ -1,92 +1,106 @@
 <template>
   <div v-if="isLoaded">
     <div class="deck-info">
-      <h1 id="deck-header-title" v-bind:contenteditable="showEditDeck" @keydown.enter.prevent>{{ deck.title }}</h1>
-      <h2 id="deck-header-description" v-bind:contenteditable="showEditDeck" @keydown.enter.prevent>{{ deck.description }}</h2>
+      <h1
+        id="deck-header-title"
+        v-bind:contenteditable="showEditDeck"
+        @keydown.enter.prevent
+      >
+        {{ deck.title }}
+      </h1>
+      <h2
+        id="deck-header-description"
+        v-bind:contenteditable="showEditDeck"
+        @keydown.enter.prevent
+      >
+        {{ deck.description }}
+      </h2>
     </div>
 
     <div class="edit-deck-info" v-if="showEditDeck">
-      <div class="error-message" v-if="editDeckError">
-        <p>You must enter a new title or a new description</p>
-      </div>
-
-
-
       <div class="form-buttons">
         <label for="submitEditedDeck"></label>
-        <input type="submit" id="submitEditedDeck" v-on:click="
-          editDeck();
-        this.showEditDeck = false;
-        " />
+        <input
+          type="submit"
+          id="submitEditedDeck"
+          v-on:click="
+            editDeck();
+            this.showEditDeck = false;
+          "
+        />
 
         <button v-on:click="this.showEditDeck = false" class="cancel-button">
           Cancel
         </button>
       </div>
+    </div>
+
+    <div class="form-action-buttons">
+      <button
+        v-on:click="this.showCreateFlashcard = !this.showCreateFlashcard"
+        v-bind:disabled="showCreateFlashcard || showEditDeck"
+      >
+        Create Flashcard
+      </button>
+      <button
+        v-on:click="this.showEditDeck = !this.showEditDeck"
+        v-bind:disabled="showCreateFlashcard || showEditDeck"
+      >
+        Edit Deck
+      </button>
+    </div>
+
+    <div class="new-flashcard-card" v-if="showCreateFlashcard">
+      <div class="error-message" v-if="newCardError">
+        <p>You must enter a question and an answer</p>
       </div>
-      <div class="form-action-buttons">
-        <button v-on:click="this.showCreateFlashcard = !this.showCreateFlashcard" v-if="!this.showEditDeck">
-          Create Flashcard
+
+      <label for="newFlashcardQuestion">Question: </label>
+      <input
+        type="text"
+        id="newFlashcardQuestion"
+        name="newFlashcardQuestion"
+        v-model="newFlashcard.question"
+      />
+
+      <label for="newFlashcardAnswer">Answer: </label>
+      <input
+        type="text"
+        id="newFlashcardAnswer"
+        name="newFlashcardAnswer"
+        v-model="newFlashcard.answer"
+      />
+
+      <div class="form-buttons">
+        <label for="submitNewFlashcard"></label>
+        <input
+          type="submit"
+          id="submitNewFlashcard"
+          v-on:click="addFlashcard()"
+        />
+
+        <button
+          v-on:click="clearNewFlashcard(), (showCreateFlashcard = false)"
+          class="cancel-button"
+        >
+          Cancel
         </button>
-        <button v-on:click="this.showEditDeck = !this.showEditDeck" v-if="!this.showCreateFlashcard">
-          Edit Deck
-        </button>
       </div>
-
-      <div class="form-container">
-        <!-- <div class="edit-deck-info" v-if="showEditDeck">
-        <div class="error-message" v-if="editDeckError">
-          <p>You must enter a new title or a new description</p>
-        </div>
-
-        
-
-        <div class="form-buttons">
-          <label for="submitEditedDeck"></label>
-          <input
-            type="submit"
-            id="submitEditedDeck"
-            v-on:click="
-              editDeck();
-              this.showEditDeck = false;
-            "
-          />
-
-          <button v-on:click="this.showEditDeck = false" class="cancel-button">
-            Cancel
-          </button>
-        </div> -->
-      </div>
-
-      <div class="new-flashcard-card" v-if="showCreateFlashcard">
-        <div class="error-message" v-if="newCardError">
-          <p>You must enter a question and an answer</p>
-        </div>
-
-        <label for="newFlashcardQuestion">Question: </label>
-        <input type="text" id="newFlashcardQuestion" name="newFlashcardQuestion" v-model="newFlashcard.question" />
-
-        <label for="newFlashcardAnswer">Answer: </label>
-        <input type="text" id="newFlashcardAnswer" name="newFlashcardAnswer" v-model="newFlashcard.answer" />
-
-        <div class="form-buttons">
-          <label for="submitNewFlashcard"></label>
-          <input type="submit" id="submitNewFlashcard" v-on:click="
-            addFlashcard();
-          this.showCreateFlashcard = false;
-          " />
-
-          <button v-on:click="this.showCreateFlashcard = false" class="cancel-button">
-            Cancel
-          </button>
-        </div>
-      </div>
-    <!-- </div> -->
+    </div>
 
     <div class="flash-cards-container">
-      <flash-card v-for="flashcard in flashcards" v-bind:key="flashcard.cardId" v-bind:flashcard="flashcard" />
+      <flash-card
+        v-for="flashcard in flashcards"
+        v-bind:key="flashcard.cardId"
+        v-bind:flashcard="flashcard"
+        v-bind:deleteButton="deleteButton"
+      />
     </div>
+
+    <hr class="rounded">
+
     <search-bar></search-bar>
+
   </div>
 </template>
 
@@ -115,35 +129,44 @@ export default {
         creator: "",
       },
       newCardError: false,
-      editDeckError: false,
       showCreateFlashcard: false,
       isLoaded: false,
+
+      deleteButton: true,
     };
   },
 
   methods: {
+    clearNewFlashcard() {
+      // Clear new flashcard
+      this.newFlashcard.question = "";
+      this.newFlashcard.answer = "";
+
+      // Reset any errors
+      this.newCardError = false;
+    },
+
     editDeck() {
-      let editedTitle = document.getElementById('deck-header-title').innerText;
-      let editedDescription = document.getElementById('deck-header-description').innerText;
-      console.log(editedTitle)
+      // Grab User input 
+      let editedTitle = document.getElementById("deck-header-title").innerText;
+      let editedDescription = document.getElementById(
+        "deck-header-description"
+      ).innerText;
 
-      if (editedTitle === "" && editedDescription === "") {
-        this.editDeckError = true;
-        return;
-      }
-
+      // If either fields are empty, set the empty field to whatever the current deck value is
       if (editedTitle === "") {
         editedTitle = this.deck.title;
       }
-
       if (editedDescription === "") {
         editedDescription = this.deck.description;
       }
-      this.editedDeck = {title : editedTitle, description : editedDescription };
 
-      this.editDeckError = false;
+      // Put values in to an object to send back to DB
+      this.editedDeck = { title: editedTitle, description: editedDescription };
+
       DeckService.editDeck(this.$route.params.id, this.editedDeck)
         .then((response) => {
+
           // Force reactivity without refreshing
           this.deck.title = this.editedDeck.title;
           this.deck.description = this.editedDeck.description;
@@ -153,6 +176,7 @@ export default {
             title: "",
             description: "",
           };
+
         })
         .catch((error) => {
           this.errorHandler(error, "Edited Deck");
@@ -162,7 +186,7 @@ export default {
     addFlashcard() {
       this.newFlashcard.deckId = this.$route.params.id;
 
-      // TO DO: FINISH CREATING TAGS FOR FLASHCARDS
+      // Creating tags for card
       this.newFlashcard.tag =
         this.deck.title.split(" ")[0] +
         " " +
@@ -178,7 +202,10 @@ export default {
         this.newFlashcard.answer !== "" &&
         this.newFlashcard.question !== ""
       ) {
+        // Make form disappear and clear new card error
+        this.showCreateFlashcard = false;
         this.newCardError = false;
+
         DeckService.addFlashcard(this.newFlashcard)
           .then((response) => {
             this.newFlashcard = {
@@ -300,4 +327,16 @@ export default {
 .cancel-button {
   margin-left: 10px;
 }
+
+.rounded {
+  border-top: 3px solid #bbb;
+  border-radius: 5px;
+
+  width: 70%;
+
+  margin-top: 3%;
+  margin-bottom: 3%;
+}
+
+
 </style>
