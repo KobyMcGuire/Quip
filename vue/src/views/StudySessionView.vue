@@ -51,7 +51,8 @@ export default {
       cards: [],
       randomAnswers: [],
       currentCardIndex: 0,
-      correctAnswers: 0
+      correctAnswers: 0,
+      incorrectAnswers: 0
     };
   },
 
@@ -76,12 +77,30 @@ export default {
           .map(card => card.answer)
           .slice(0, 4);
     },
-    checkAnswer(index){
-      const userAnswer = this.selectedAnswer[index];
-      if(userAnswer === this.cards.currentCardIndex.answer){
-        this.correctAnswers++;
-      }
-    }
+    // checkAnswer(index){
+    //   const userAnswer = this.selectedAnswer[index];
+    //   const correctAnswer = this.cards[this.currentCardIndex].answer;
+    //   if(userAnswer === correctAnswer){
+    //     this.correctAnswers++;
+    //     this.moveToNextCard();
+    //   }
+    // else {
+    //   // The answer is incorrect
+    //   this.handleIncorrectAnswer();
+    // }
+
+    // handleIncorrectAnswer(){
+    // this.incorrectAnswers++;
+    // this.feedbackMessage = `Sorry, that is incorrect. The correct answer is: ${this.cards[this.currentCardIndex].answer}`;
+    // },
+    // moveToNextCard(){
+      // if (this.currentCardIndex < this.cards.length - 1) {
+      //   this.currentCardIndex++;
+      //   this.selectedAnswer = [];
+    // }else{
+      // showSessionSummary() {
+    // Implement logic to show a summary of the session
+    // For example, display the number of correct answers
   },
 
   created() {
