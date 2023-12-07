@@ -9,19 +9,19 @@
     </select>
 
     <div v-if="selectedDeck">
-      <div class="cardMovementButtons">
-        <div class="previousButton" @click="previousCard">
-          <button> Previous Card</button>
-        </div>
-        <div class="nextButton" @click="nextCard">
-          <button>Next Card</button>
-        </div>
-      </div>
+<!--      <div class="cardMovementButtons">-->
+<!--        <div class="previousButton" @click="previousCard">-->
+<!--          <button> Previous Card</button>-->
+<!--        </div>-->
+<!--        <div class="nextButton" @click="nextCard">-->
+<!--          <button>Next Card</button>-->
+<!--        </div>-->
+<!--      </div>-->
 
-      <h5>Correct Answers: {{ correctAnswers }} </h5>
+      <h5>Correct Answers: {{ correctAnswers }}</h5>
 
       <div class="viewedQuestion">
-        {{ cards[currentCardIndex].question }}
+        {{ cards[currentCardIndex] && cards[currentCardIndex].question }}
       </div>
 
       <div class="answer-container">
@@ -29,12 +29,12 @@
             v-for="(answer, index) in randomAnswers" :key="index" class="answer-item">
           {{ answer }}
           <button>
-            <input type="radio" :name="'answerButton'">
+            <input type="radio" :name="'answerButton'" v-model="selectedAnswer">
           </button>
         </div>
       </div>
       <div class="study-submit-button">
-          <input type="submit" v-on:click="checkAnswer">
+        <input type="submit" @click="submitAndMoveNext">
       </div>
     </div>
 
@@ -50,16 +50,25 @@ export default {
   data() {
     return {
       selectedDeck: null,
+      selectedAnswer: null,
       decks: [],
       cards: [],
       randomAnswers: [],
       currentCardIndex: 0,
       correctAnswers: 0,
-      incorrectAnswers: 0
+      incorrectAnswers: 0,
     };
   },
 
   methods: {
+    submitAndMoveNext() {
+      if (this.selectedAnswer !== null) {
+        this.checkAnswer(this.currentCardIndex);
+        this.nextCard();
+        this.selectedAnswer = null;
+      }
+    },
+
     nextCard() {
       if (this.currentCardIndex < this.cards.length - 1) {
         this.currentCardIndex++
@@ -80,13 +89,12 @@ export default {
           .map(card => card.answer)
           .slice(0, 4);
     },
+
     checkAnswer(index){
-      const userAnswer = this.selectedAnswer[index];
-      const correctAnswer = this.cards[this.currentCardIndex].answer;
-      console.log(userAnswer);
+      const userAnswer = this.selectedAnswer;
+      const correctAnswer = this.cards[index].answer;
       if(userAnswer === correctAnswer){
         this.correctAnswers++;
-        this.moveToNextCard();
       }
     }
     //   }
@@ -159,9 +167,11 @@ export default {
 
   border: 3px solid black;
   border-radius: 10px;
+  display: flex;
 
   text-align: center;
   justify-content: center;
+  align-items: center;
 
   padding: 10px;
 }
