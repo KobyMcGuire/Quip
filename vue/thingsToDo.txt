@@ -2,8 +2,6 @@
 
  - Fix input fields so labels are side by side with them
 
- - hide create a deck form behind a button
-
  - search by tags or content (words in question)
     - only display cards
     - add to deck once you can see other peoples cards
@@ -14,7 +12,14 @@
     - Just show a single card on the screen
     - Have multiple answers (pulled from answers of other questions)
         - 3 wrong, 1 right
-    - Display correct, and incorrect answers
+    - Display correct, and incorrect answers"
+
+- Fix search trying to load the cards too fast and messing up?
+
+
+
+
+
 
 
 
