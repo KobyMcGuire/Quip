@@ -93,10 +93,10 @@ public class DeckController {
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @RequestMapping(path = "/flashcards/{id}", method = RequestMethod.DELETE)
-    public void deleteFlashcard(@PathVariable int id){
+    @RequestMapping(path = "/flashcards/decks/{flashcardId}", method = RequestMethod.DELETE)
+    public void deleteFlashcard(@PathVariable int flashcardId, @RequestParam int deckId){
         try{
-            int numRowsDeleted = flashcardDao.deleteFlashcard(id);
+            int numRowsDeleted = flashcardDao.deleteFlashcard(flashcardId, deckId);
 
         }catch(ResourceAccessException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
