@@ -221,12 +221,12 @@ public class JdbcFlashcardDao implements FlashcardDao {
 
 
     @Override
-    public int deleteFlashcard(int id) {
+    public int deleteFlashcard(int flashcardId, int deckId) {
         int numberOfRows = 0;
-        String sql = "DELETE FROM decks_flashcards WHERE flashcard_id= ?;";
+        String sql = "DELETE FROM decks_flashcards WHERE deck_id = ? AND flashcard_id = ?;";
 
         try{
-            numberOfRows = jdbcTemplate.update(sql, id);
+            numberOfRows = jdbcTemplate.update(sql, flashcardId, deckId);
         }catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to server or database", e);
         } catch (DataIntegrityViolationException e) {
