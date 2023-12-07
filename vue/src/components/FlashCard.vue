@@ -79,20 +79,18 @@ export default {
 
       DeckService.addFlashcardToDeck(this.decksFlashcards)
       .then((response) => {
-        
+
 
       })
       .catch((error) => {
-        this.errorHandler(error, 'putting card in to new deck.')
+        this.errorHandler(error, 'putting card in to new deck')
       })      
-
-
 
     },
 
     // Delete Flashcard
     deleteFlashcard() {
-      DeckService.deleteFlashcard(this.flashcard.flashCardId)
+      DeckService.deleteFlashcard(this.flashcard.flashCardId, this.$route.params.id)
         .then((response) => {
           this.$router.go();
         })

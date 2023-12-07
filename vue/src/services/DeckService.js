@@ -52,8 +52,8 @@ export default{
         return http.get(`/flashcards/${cardId}`);
     },
 
-    deleteFlashcard(cardId) {
-        return http.delete(`/flashcards/${cardId}`)
+    deleteFlashcard(cardId, deckId) {
+        return http.delete(`/flashcards/decks/${cardId}`, {params : {deckId : deckId}});
     },
 
     updateFlashcard(cardId, flashCard) {
