@@ -2,43 +2,38 @@
   <div>
     <h1>Pick a deck and begin study session</h1>
 
-    <select class="dropDownButton" v-model="selectedDeck">
+    <select class="dropDownButton" v-model="selectedDeck" v-bind:disabled="selectedDeck">
       <option v-for="deck in decks" :key="deck.deckId" :value="deck">
         {{ deck.title }}
       </option>
     </select>
+    <button class="resetButton" v-if="selectedDeck" @click="resetStudySession">
+      Cancel Study Session
+    </button>
 
     <div v-if="selectedDeck">
-<!--      <div class="cardMovementButtons">-->
-<!--        <div class="previousButton" @click="previousCard">-->
-<!--          <button> Previous Card</button>-->
-<!--        </div>-->
-<!--        <div class="nextButton" @click="nextCard">-->
-<!--          <button>Next Card</button>-->
-<!--        </div>-->
-<!--      </div>-->
-
-      <h5>Correct Answers: {{ correctAnswers }}</h5>
+      <h5>Correct Answers: {{ correctAnswers }} / {{cards.length}}</h5>
 
       <div class="viewedQuestion">
         {{ cards[currentCardIndex] && cards[currentCardIndex].question }}
       </div>
 
       <div class="answer-container">
-        <div
-            v-for="(answer, index) in randomAnswers" :key="index" class="answer-item">
-          {{ answer }}
-          <button>
-            <input type="radio" :name="'answerButton'" v-model="selectedAnswer">
-          </button>
-        </div>
-      </div>
-      <div class="study-submit-button">
-        <input type="submit" @click="submitAndMoveNext">
+        <button
+            v-for="(answer, index) in randomAnswers" :key="index" class="answer-item" @click="changeUserAnswer($event)">
+          <div>
+            {{ answer }}
+          </div>
+        </button>
       </div>
     </div>
 
+    <div class="study-submit-button">
+      <input type="submit" @click="submitAndMoveNext">
+    </div>
+
   </div>
+
 </template>
 
 <script>
@@ -56,7 +51,7 @@ export default {
       randomAnswers: [],
       currentCardIndex: 0,
       correctAnswers: 0,
-      incorrectAnswers: 0,
+      wrongAnswers: 0,
     };
   },
 
@@ -76,57 +71,49 @@ export default {
       }
     },
 
-    previousCard() {
-      if (this.currentCardIndex < this.cards.length - 1) {
-        this.currentCardIndex--;
-      }
-      this.randomAnswers = this.getRandomAnswers();
-    },
-
     getRandomAnswers() {
-      return this.cards
-          .sort(() => Math.random() - 0.5)
-          .map(card => card.answer)
-          .slice(0, 4);
+      console.log(this.cards[this.currentCardIndex].answer)
+      const correctAnswer = this.cards[this.currentCardIndex].answer;
+
+      const wrongAnswers = this.cards
+          .filter(card => card.answer !== correctAnswer)
+          .map(card => card.answer);
+
+      const shuffleWrongAnswers = wrongAnswers.sort(() => Math.random() - 0.5);
+      const selectedWrongAnswers = shuffleWrongAnswers.slice(0, 3);
+
+      const allAnswers = [correctAnswer, ...selectedWrongAnswers];
+      return allAnswers.sort(() => Math.random() - 0.5);
     },
 
-    checkAnswer(index){
-      const userAnswer = this.selectedAnswer;
+    checkAnswer(index) {
       const correctAnswer = this.cards[index].answer;
-      if(userAnswer === correctAnswer){
+      if (this.selectedAnswer === correctAnswer) {
         this.correctAnswers++;
       }
-    }
-    //   }
-    // else {
-    //   // The answer is incorrect
-    //   this.handleIncorrectAnswer();
-    // }
+    },
 
-    // handleIncorrectAnswer(){
-    // this.incorrectAnswers++;
-    // this.feedbackMessage = `Sorry, that is incorrect. The correct answer is: ${this.cards[this.currentCardIndex].answer}`;
-    // },
-    // moveToNextCard(){
-      // if (this.currentCardIndex < this.cards.length - 1) {
-      //   this.currentCardIndex++;
-      //   this.selectedAnswer = [];
-    // }else{
-      // showSessionSummary() {
-    // Implement logic to show a summary of the session
-    // For example, display the number of correct answers
+    changeUserAnswer(event) {
+      this.selectedAnswer = event.target.innerText;
+    },
+
+    resetStudySession() {
+      this.selectedDeck = null;
+      this.correctAnswers = 0;
+
+    }
+
   },
 
   created() {
-    this.randomAnswers = this.getRandomAnswers();
 
     DeckService.getDecks()
-      .then((response) => {
-        this.decks = response.data;
-      })
-      .catch((error) => {
-        console.log(error, "Deck selection");
-      });
+        .then((response) => {
+          this.decks = response.data;
+        })
+        .catch((error) => {
+          console.log(error, "Deck selection");
+        });
 
   },
 
@@ -136,6 +123,7 @@ export default {
         DeckService.getCardsByDeckId(newDeck.deckId)
             .then((response) => {
               this.cards = response.data;
+              console.log(response.data)
               this.currentCardIndex = 0;
               this.randomAnswers = this.getRandomAnswers();
             })
@@ -145,7 +133,8 @@ export default {
       }
     }
   }
-};
+}
+
 </script>
 
 <style scoped>
@@ -188,4 +177,5 @@ export default {
   padding: 10px;
   text-align: center;
 }
+
 </style>
