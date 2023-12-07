@@ -138,6 +138,9 @@ export default {
 </script>
 
 <style scoped>
+.dropDownButton {
+  width: 20%;
+}
 .cardMovementButtons {
   display: flex;
   justify-content: space-between;
