@@ -18,6 +18,8 @@
         </div>
       </div>
 
+      <h5>Correct Answers: {{ correctAnswers }} </h5>
+
       <div class="viewedQuestion">
         {{ cards[currentCardIndex].question }}
       </div>
@@ -49,6 +51,7 @@ export default {
       cards: [],
       randomAnswers: [],
       currentCardIndex: 0,
+      correctAnswers: 0
     };
   },
 
@@ -72,6 +75,12 @@ export default {
           .sort(() => Math.random() - 0.5)
           .map(card => card.answer)
           .slice(0, 4);
+    },
+    checkAnswer(index){
+      const userAnswer = this.selectedAnswer[index];
+      if(userAnswer === this.cards.currentCardIndex.answer){
+        this.correctAnswers++;
+      }
     }
   },
 
