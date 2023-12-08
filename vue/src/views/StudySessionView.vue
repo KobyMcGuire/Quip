@@ -22,7 +22,7 @@
       </router-link>
     </div>
 
-    <div v-if="selectedDeck">
+    <div v-if="selectedDeck" class="selected-deck-content">
       <h5>
         Correct Answers: {{ this.$store.state.correctAnswers }} /
         {{ cards.length }}
@@ -37,7 +37,7 @@
           v-for="(answer, index) in randomAnswers"
           :key="index"
           class="answer-item"
-          @click="changeUserAnswer($event), markAnswerSelected($event)"
+          @click="changeUserAnswer($event); markAnswerSelected($event)"
         >
           {{ answer }}
         </button>
@@ -51,11 +51,11 @@
       >
         <input
           type="submit"
-          @click="submitAndMoveNext, clearSelectedAnswer()"
+          @click="submitAndMoveNext(); clearSelectedAnswer()"
         />
       </router-link>
 
-      <button class="submit-button" v-else @click="submitAndMoveNext">
+      <button class="submit-button" v-else @click="submitAndMoveNext(); clearSelectedAnswer()">
         Check Answer
       </button>
     </div>
@@ -115,6 +115,10 @@ export default {
       const correctAnswer = this.cards[index].answer;
       if (this.selectedAnswer === correctAnswer) {
         this.$store.state.correctAnswers++;
+      }
+      // Push incorrect question to the store
+      else {
+        this.$store.state.incorrectQuestions.push(this.cards[index].question);
       }
     },
 
@@ -181,6 +185,10 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+}
+
+.selected-deck-content {
 
 }
 
