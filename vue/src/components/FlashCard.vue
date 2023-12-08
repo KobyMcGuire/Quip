@@ -91,7 +91,13 @@ export default {
     deleteFlashcard() {
       DeckService.deleteFlashcard(this.flashcard.flashCardId, this.$route.params.id)
         .then((response) => {
-          this.$router.go();
+          let indexOfRemovedCard = this.$store.state.currentDeckFlashcards.indexOf(this.flashcard)
+
+          // Update search store flashcards array to include deleted card
+          this.$store.state.currentSearchFlashcards.push(this.$store.state.currentDeckFlashcards[indexOfRemovedCard]);
+
+          // Remove card from the stores current deck flashcards array 
+          this.$store.state.currentDeckFlashcards.splice(indexOfRemovedCard, 1);
         })
         .catch((error) => {
           this.errorHandler(error, "deleting flashcard");

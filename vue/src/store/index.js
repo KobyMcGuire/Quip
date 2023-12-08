@@ -9,8 +9,10 @@ export function createStore(currentToken, currentUser) {
       user: currentUser || {},
 
       correctAnswers: 0,
-
       incorrectQuestions : [],
+
+      currentDeckFlashcards: [],
+      currentSearchFlashcards: []
     },
 
     mutations: {

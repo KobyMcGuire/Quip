@@ -54,13 +54,20 @@ input[type="submit"]:hover {
 }
 
 #nav {
-  margin-left: auto;
-  margin-right: auto;
+  display: flex;
+  justify-content: center;
 
   margin-bottom: 3%;
 
   font-size: large;
 }
+
+#nav > a {
+  text-decoration: none;
+
+  color: black;
+}
+
 
 #main-container {
   padding-left: 5%;

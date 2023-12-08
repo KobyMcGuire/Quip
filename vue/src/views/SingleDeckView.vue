@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isLoaded">
+  <div>
     <div class="deck-info">
       <h1
         id="deck-header-title"
@@ -90,7 +90,7 @@
 
     <div class="flash-cards-container">
       <flash-card
-        v-for="flashcard in flashcards"
+        v-for="flashcard in this.$store.state.currentDeckFlashcards"
         v-bind:key="flashcard.cardId"
         v-bind:flashcard="flashcard"
         v-bind:deleteButton="deleteButton"
@@ -114,7 +114,6 @@ export default {
 
   data() {
     return {
-      flashcards: [],
       deck: {},
       showEditDeck: false,
       editedDeck: {
@@ -215,7 +214,7 @@ export default {
               tag: "",
               creator: "",
             };
-            this.flashcards.push(response.data);
+            this.$store.state.currentDeckFlashcards.push(response.data);
           })
           .catch((error) => {
             this.errorHandler(error, "Adding flashcard");
@@ -223,7 +222,6 @@ export default {
       } else {
         this.newCardError = true;
       }
-      //TODO add creator info (principle)
     },
 
     // Make error handler display message to site.
@@ -247,8 +245,7 @@ export default {
     // API Call to grab all flashcards associated with deck
     DeckService.getCardsByDeckId(this.$route.params.id)
       .then((response) => {
-        this.flashcards = response.data;
-        this.isLoaded = true;
+        this.$store.state.currentDeckFlashcards = response.data;
       })
       .catch((error) => {
         this.errorHandler(

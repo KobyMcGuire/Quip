@@ -31,7 +31,7 @@
 
     <div class="flashcard-results-container">
       <flash-card
-        v-for="flashcard in flashcards"
+        v-for="flashcard in this.$store.state.currentSearchFlashcards"
         v-bind:key="flashcard.cardId"
         v-bind:flashcard="flashcard"
         v-bind:deleteButton="deleteButton"
@@ -50,7 +50,6 @@ export default {
     data() {
     return {
       searchTerms: "",
-      flashcards: [],
       searchByQuestion: "",
       deleteButton: false,
     };
@@ -60,7 +59,7 @@ export default {
       if (this.searchByQuestion === false) {
         DeckService.getCardsByTag(this.searchTerms, this.$route.params.id)
           .then((response) => {
-            this.flashcards = response.data;
+            this.$store.state.currentSearchFlashcards = response.data;
           })
           .catch((error) => {
             this.errorHandler(error, "fetching for searched flashcards");
@@ -68,7 +67,7 @@ export default {
       } else {
         DeckService.getCardsByQuestion(this.searchTerms, this.$route.params.id)
           .then((response) => {
-            this.flashcards = response.data;
+            this.$store.state.currentSearchFlashcards = response.data;
           })
           .catch((error) => {
             this.errorHandler(error, "fetching for searched flashcards");

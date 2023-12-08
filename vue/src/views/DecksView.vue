@@ -122,6 +122,7 @@ export default {
 <style scoped>
 .show-new-deck {
   margin-bottom: 10px;
+  margin-left: 17px;
 }
 .deck-container {
   display: flex;
