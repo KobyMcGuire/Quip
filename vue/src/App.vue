@@ -5,7 +5,10 @@
       <router-link v-bind:to="{ name: 'decks' }">Decks</router-link>&nbsp;|&nbsp;
       <router-link v-bind:to="{name: 'study-session'}">Study</router-link>&nbsp;|&nbsp;
       <router-link v-bind:to="{name:'lightning-round-study-session'}">Lightning Round</router-link>
-      <router-link v-bind:to="{ name: 'logout' }" v-if="this.$store.state.token != ''">Logout</router-link
+      <router-link
+        v-bind:to="{ name: 'logout' }"
+        v-if="this.$store.state.token != ''"
+        >Logout</router-link
       >
     </div>
 
@@ -14,6 +17,7 @@
     </div>
   </div>
 </template>
+
 
 <style>
 * {
