@@ -10,6 +10,8 @@ import DecksView from '../views/DecksView.vue';
 import SingleDeckView from '../views/SingleDeckView.vue';
 import EditCardView from '../views/EditCardView.vue';
 import StudySessionView from '../views/StudySessionView.vue';
+import CompletedView from '../views/CompletedView.vue';
+import LightningRoundView from '../views/LightningRoundView.vue';
 
 /**
  * The Vue Router is used to "direct" the browser to render a specific view component
@@ -57,6 +59,23 @@ const routes = [
     path: '/study',
     name: 'study-session',
     component: StudySessionView,
+    meta: {
+      requiresAuth: false
+    }
+  },
+
+  {
+    path: "/completed",
+    name: "completed-study-session",
+    component: CompletedView,
+    meta: {
+      requiresAuth: false
+    }
+  },
+  {
+    path: "/lightning",
+    name: "lightning-round-study-session",
+    component: LightningRoundView,
     meta: {
       requiresAuth: false
     }

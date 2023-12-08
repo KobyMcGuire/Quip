@@ -1,18 +1,32 @@
 <template>
   <div>
-    <h1>Pick a deck and begin study session</h1>
+    <div class="header-content">
+      <h1>Pick a Deck to Begin a Study Session</h1>
 
-    <select class="dropDownButton" v-model="selectedDeck" v-bind:disabled="selectedDeck">
-      <option v-for="deck in decks" :key="deck.deckId" :value="deck">
-        {{ deck.title }}
-      </option>
-    </select>
-    <button class="resetButton" v-if="selectedDeck" @click="resetStudySession">
-      Cancel Study Session
-    </button>
+      <select
+        class="dropDownButton"
+        v-model="selectedDeck"
+        v-bind:disabled="selectedDeck"
+      >
+        <option v-for="deck in decks" :key="deck.deckId" :value="deck">
+          {{ deck.title }}
+        </option>
+      </select>
+      <router-link
+        v-bind:correctAnswers="correctAnswers"
+        :to="{ name: 'completed-study-session' }"
+      >
+        <button class="cancel-button" v-if="selectedDeck">
+          Leave Study Session
+        </button>
+      </router-link>
+    </div>
 
     <div v-if="selectedDeck">
-      <h5>Correct Answers: {{ correctAnswers }} / {{cards.length}}</h5>
+      <h5>
+        Correct Answers: {{ this.$store.state.correctAnswers }} /
+        {{ cards.length }}
+      </h5>
 
       <div class="viewedQuestion">
         {{ cards[currentCardIndex] && cards[currentCardIndex].question }}
@@ -20,20 +34,33 @@
 
       <div class="answer-container">
         <button
-            v-for="(answer, index) in randomAnswers" :key="index" class="answer-item" @click="changeUserAnswer($event)">
-          <div>
-            {{ answer }}
-          </div>
+          v-for="(answer, index) in randomAnswers"
+          :key="index"
+          class="answer-item"
+          @click="changeUserAnswer($event), markAnswerSelected($event)"
+        >
+          {{ answer }}
         </button>
       </div>
     </div>
 
-    <div class="study-submit-button">
-      <input type="submit" @click="submitAndMoveNext">
+    <div class="study-submit-button" v-if="selectedDeck">
+      <router-link
+        :to="{ name: 'completed-study-session' }"
+        v-if="currentCardIndex === cards.length - 1"
+      >
+        <input
+          type="submit"
+          @click="submitAndMoveNext, clearSelectedAnswer()"
+        />
+      </router-link>
+
+      <button class="submit-button" v-else @click="submitAndMoveNext">
+        Check Answer
+      </button>
+
     </div>
-
   </div>
-
 </template>
 
 <script>
@@ -66,18 +93,17 @@ export default {
 
     nextCard() {
       if (this.currentCardIndex < this.cards.length - 1) {
-        this.currentCardIndex++
+        this.currentCardIndex++;
         this.randomAnswers = this.getRandomAnswers();
       }
     },
 
     getRandomAnswers() {
-      console.log(this.cards[this.currentCardIndex].answer)
       const correctAnswer = this.cards[this.currentCardIndex].answer;
 
       const wrongAnswers = this.cards
-          .filter(card => card.answer !== correctAnswer)
-          .map(card => card.answer);
+        .filter((card) => card.answer !== correctAnswer)
+        .map((card) => card.answer);
 
       const shuffleWrongAnswers = wrongAnswers.sort(() => Math.random() - 0.5);
       const selectedWrongAnswers = shuffleWrongAnswers.slice(0, 3);
@@ -89,7 +115,7 @@ export default {
     checkAnswer(index) {
       const correctAnswer = this.cards[index].answer;
       if (this.selectedAnswer === correctAnswer) {
-        this.correctAnswers++;
+        this.$store.state.correctAnswers++;
       }
     },
 
@@ -97,47 +123,74 @@ export default {
       this.selectedAnswer = event.target.innerText;
     },
 
-    resetStudySession() {
-      this.selectedDeck = null;
-      this.correctAnswers = 0;
+    markAnswerSelected(event) {
+      // Clear previous selection
+      let allButtons = document.querySelectorAll(".answer-item");
+      allButtons.forEach((button) => {
+        button.classList.remove("selected-answer");
+      });
 
-    }
+      let targetButton = event.target;
 
+      // Add selected class to target button
+      targetButton.classList.add("selected-answer");
+    },
+
+    clearSelectedAnswer() {
+      // Clear previous selection
+      let allButtons = document.querySelectorAll(".answer-item");
+      allButtons.forEach((button) => {
+        button.classList.remove("selected-answer");
+      });
+    },
+
+    completeStudySession() {},
   },
 
   created() {
-
     DeckService.getDecks()
-        .then((response) => {
-          this.decks = response.data;
-        })
-        .catch((error) => {
-          console.log(error, "Deck selection");
-        });
-
+      .then((response) => {
+        this.decks = response.data;
+      })
+      .catch((error) => {
+        console.log(error, "Deck selection");
+      });
   },
 
   watch: {
     selectedDeck(newDeck) {
       if (newDeck) {
         DeckService.getCardsByDeckId(newDeck.deckId)
-            .then((response) => {
-              this.cards = response.data;
-              console.log(response.data)
-              this.currentCardIndex = 0;
-              this.randomAnswers = this.getRandomAnswers();
-            })
-            .catch((error) => {
-              console.log(error, "Card selection");
-            });
+          .then((response) => {
+            this.cards = response.data;
+            this.currentCardIndex = 0;
+            this.randomAnswers = this.getRandomAnswers();
+          })
+          .catch((error) => {
+            console.log(error, "Card selection");
+          });
       }
-    }
-  }
-}
-
+    },
+  },
+};
 </script>
 
 <style scoped>
+
+.header-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.header-content > h1 {
+  margin-top: 0;
+}
+.dropDownButton {
+  width: 20%;
+}
 .cardMovementButtons {
   display: flex;
   justify-content: space-between;
@@ -176,6 +229,25 @@ export default {
   border: 1px solid black;
   padding: 10px;
   text-align: center;
+
 }
 
+.selected-answer {
+  background-color: rgb(159, 159, 159);
+}
+
+.study-submit-button {
+  margin-top: 10px;
+
+  display: flex;
+  justify-content: center;
+}
+
+.submit-button {
+  background-color: #a7f3d0;
+}
+
+.cancel-button {
+  margin-top: 10px;
+}
 </style>
