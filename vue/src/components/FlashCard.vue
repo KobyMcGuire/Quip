@@ -79,7 +79,13 @@ export default {
 
       DeckService.addFlashcardToDeck(this.decksFlashcards)
       .then((response) => {
-        this.$router.go();
+        let indexOfRemovedCard = this.$store.state.currentSearchFlashcards.indexOf(this.flashcard);
+
+        // Add flashcard to current decks flashcards
+        this.$store.state.currentDeckFlashcards.push(this.$store.state.currentSearchFlashcards[indexOfRemovedCard]);
+
+        // Remove the flashcard from the current search flashcards array
+        this.$store.state.currentSearchFlashcards.splice(indexOfRemovedCard, 1);
       })
       .catch((error) => {
         this.errorHandler(error, 'putting card in to new deck')

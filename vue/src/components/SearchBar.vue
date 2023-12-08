@@ -54,6 +54,7 @@ export default {
       deleteButton: false,
     };
   },
+  
   methods: {
     searchFlashCardsByTag() {
       if (this.searchByQuestion === false) {
@@ -78,6 +79,11 @@ export default {
     errorHandler(error, verb) {
       console.log(`There was an error ${verb}. The error was: ${error}`);
     },
+  },
+
+  created() {
+    // Reset current search flashcards array in store
+    this.$store.state.currentSearchFlashcards = [];
   }
 
 }
