@@ -39,7 +39,8 @@
           class="answer-item"
           @click="changeUserAnswer($event); markAnswerSelected($event)"
         >
-          {{ answer }}'
+          {{ answer }}
+          
         </button>
       </div>
     </div>
