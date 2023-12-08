@@ -13,6 +13,7 @@ export default {
 
     created(){
         this.correctAnswers = this.$store.state.correctAnswers;
+        this.$store.state.correctAnswers = 0;
     }
     
 
