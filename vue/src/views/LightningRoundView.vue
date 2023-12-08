@@ -57,6 +57,7 @@ export default {
     };
   },
   methods: {
+
     submitAndMoveNext() {
       if (this.selectedAnswer !== null) {
         this.checkAnswer(this.currentCardIndex);

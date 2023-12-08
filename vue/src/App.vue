@@ -1,16 +1,44 @@
 <template>
   <div id="capstone-app">
-    <div id="nav">
-      <router-link v-bind:to="{ name: 'home' }">Home</router-link>&nbsp;|&nbsp;
-      <router-link v-bind:to="{ name: 'decks' }">Decks</router-link>&nbsp;|&nbsp;
-      <router-link v-bind:to="{name: 'study-session'}">Study</router-link>&nbsp;|&nbsp;
-      <router-link v-bind:to="{name:'lightning-round-study-session'}">Lightning Round</router-link>
-      <router-link v-bind:to="{ name: 'logout' }" v-if="this.$store.state.token != ''">Logout</router-link
-      >
-    </div>
+    <nav id="nav">
+      <ul>
+        <li>
+          <a href="#">
+            <img src="/logo.png" alt="">
+            <span class="nav-item">Quip</span>
+          </a>
+        </li>
+
+        <li><a href="#">
+          <i class="home"></i>
+          <router-link v-bind:to="{ name: 'home' }">Home</router-link>
+        </a></li>
+
+        <li><a href="#">
+          <i class="decks"></i>
+          <router-link v-bind:to="{ name: 'decks' }">Decks</router-link>
+        </a></li>
+
+        <li><a href="#">
+          <i class="study-session"></i>
+          <router-link v-bind:to="{name: 'study-session'}">Study</router-link>
+        </a></li>
+
+        <li><a href="#">
+          <i class="lightning-round-study-session"></i>
+          <router-link v-bind:to="{name:'lightning-round-study-session'}">Lightning Round</router-link>
+        </a></li>
+
+        <li><a href="#">
+          <i class="logout"></i>
+          <router-link v-bind:to="{ name: 'logout' }" v-if="this.$store.state.token != ''">Logout</router-link>
+        </a></li>
+
+      </ul>
+    </nav>
 
     <div id="main-container">
-      <router-view />
+      <router-view/>
     </div>
   </div>
 </template>
@@ -55,6 +83,7 @@ input[type="submit"]:hover {
   justify-content: center;
 
   margin-bottom: 3%;
+  font-family: "Roboto Light";
 
   font-size: large;
 }
@@ -85,12 +114,14 @@ input[type="submit"]:hover {
   background-color: rgb(234, 105, 105);
 }
 
+
 .material-symbols-outlined {
-  font-variation-settings:
-  'FILL' 0,
+  font-variation-settings: 'FILL' 0,
   'wght' 400,
   'GRAD' 0,
   'opsz' 24
 }
 
 </style>
+<script setup>
+</script>
