@@ -1,11 +1,13 @@
 <template>
   <div>
-    <h1>Pick a deck and begin lightning Round</h1>
+    <h1>Pick a Deck and Begin Lightning Round</h1>
+    <div class="dropDownContainer">
     <select class="dropDownButton" v-model="selectedDeck" v-bind:disabled="selectedDeck">
       <option v-for="deck in decks" :key="deck.deckId" :value="deck">
         {{ deck.title }}
       </option>
     </select>
+    </div>
     <div v-if="selectedDeck">
       <h5>Correct Answers: {{ this.$store.state.correctAnswers }} / {{ cards.length }}</h5>
       <div v-if="timerVisible">
@@ -216,8 +218,20 @@ export default {
 }
 
 .dropDownButton {
-  width: 20%;
+  width: 100%;
+  
 }
+
+.dropDownContainer{
+    width: 20%;
+  margin: auto;
+}
+
+h1{
+    text-align: center;
+}
+
+
 
 .cardMovementButtons {
   display: flex;
