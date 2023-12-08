@@ -39,7 +39,7 @@
           class="answer-item"
           @click="changeUserAnswer($event); markAnswerSelected($event)"
         >
-          {{ answer }}
+          {{ answer }}'
         </button>
       </div>
     </div>
@@ -58,6 +58,7 @@
       <button class="submit-button" v-else @click="submitAndMoveNext(); clearSelectedAnswer()">
         Check Answer
       </button>
+
     </div>
   </div>
 </template>
