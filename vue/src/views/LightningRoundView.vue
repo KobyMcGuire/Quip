@@ -50,7 +50,7 @@ export default {
             currentCardIndex: 0,
             correctAnswers: 0,
             wrongAnswers: 0,
-            roundDuration: 2,
+            roundDuration: 5,
             timerId: null,
             remainingTime: 0,
             timerVisible: false
@@ -88,6 +88,17 @@ export default {
             return allAnswers.sort(() => Math.random() - 0.5);
         },
 
+        shuffleCards(array) {
+            let cardLength = array.length,
+            currentIndex;
+            for (currentIndex = cardLength - 1; currentIndex > 0; currentIndex--) {
+                let randomIndex = Math.floor(Math.random() * (currentIndex + 1) );
+                let temp = array[currentIndex];
+                array[currentIndex] = array[randomIndex];
+                array[randomIndex] = temp;
+            }
+        },
+
         checkAnswer(index) {
             const correctAnswer = this.cards[index].answer;
             if (this.selectedAnswer === correctAnswer) {
@@ -110,7 +121,7 @@ export default {
                     this.nextCard();
                     // Check if the lightning round is completed
                     if (this.currentCardIndex >= this.cards.length) {
-                        this.navigateToCompletedView();
+                        this.navigateToCompletedView(true);
                     } else {
                         this.startTimer(); // Continue to the next card after the duration
                     }
@@ -118,8 +129,8 @@ export default {
             }, 1000); // Update the timer every second
         },
 
-        navigateToCompletedView() {
-            this.$router.push({ name: 'completed-study-session' });
+        navigateToCompletedView(timeRanOut) {
+            this.$router.push({ name: 'completed-study-session', params: { timeRanOut } });
 
         }
     },
@@ -140,9 +151,10 @@ export default {
                 DeckService.getCardsByDeckId(newDeck.deckId)
                     .then((response) => {
                         this.cards = response.data;
-                        console.log(response.data)
+                        this.shuffleCards(this.cards);
                         this.currentCardIndex = 0;
                         this.randomAnswers = this.getRandomAnswers();
+                        this.startTimer();
                     })
                     .catch((error) => {
                         console.log(error, "Card selection");
