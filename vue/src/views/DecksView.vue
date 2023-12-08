@@ -125,7 +125,7 @@ export default {
 }
 .deck-container {
   display: flex;
-  justify-content: start;
+  justify-content:space-around;
   flex-wrap: wrap;
   gap: 15px;
 }
