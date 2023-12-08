@@ -8,6 +8,9 @@
     </select>
     <div v-if="selectedDeck">
       <h5>Correct Answers: {{ this.$store.state.correctAnswers }} / {{ cards.length }}</h5>
+      <div v-if="timerVisible">
+        <p>Time remaining: {{ remainingTime }} seconds</p>
+      </div>
 
       <div class="viewedQuestion">
         {{ cards[currentCardIndex] && cards[currentCardIndex].question }}
@@ -16,9 +19,7 @@
       <div class="answer-container">
         <button v-for="(answer, index) in randomAnswers" :key="index" class="answer-item"
                 @click="changeUserAnswer($event); markAnswerSelected($event)">
-
           {{ answer }}
-
         </button>
       </div>
     </div>
@@ -28,9 +29,6 @@
       </router-link>
 
       <input type="submit" v-else @click="submitAndMoveNext(); clearSelectedAnswer()">
-    </div>
-    <div v-if="timerVisible">
-      <p>Time remaining: {{ remainingTime }} seconds</p>
     </div>
   </div>
 </template>
@@ -50,7 +48,7 @@ export default {
       currentCardIndex: 0,
       correctAnswers: 0,
       wrongAnswers: 0,
-      roundDuration: 1,
+      roundDuration: 5,
       timerId: null,
       remainingTime: 0,
       timerVisible: false
@@ -120,7 +118,7 @@ export default {
       this.timerVisible = true; // Show the timer
       this.timerId = setInterval(() => {
         this.remainingTime--;
-        
+
         if (this.remainingTime <= 0) {
           this.timerVisible = false; // Hide the timer
           this.pushIncorrectQuestions();
@@ -201,7 +199,83 @@ export default {
 
 </script>
 <style scoped>
+.header-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.selected-deck-content {
+
+}
+
+.header-content > h1 {
+  margin-top: 0;
+}
+
+.dropDownButton {
+  width: 20%;
+}
+
+.cardMovementButtons {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 2px;
+}
+
+.viewedQuestion {
+  width: 250px;
+  height: 250px;
+  min-width: 25%;
+  max-width: 30%;
+  min-height: 25%;
+  max-height: 30%;
+  margin-left: 35%;
+
+  border: 3px solid black;
+  border-radius: 10px;
+  display: flex;
+
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+
+  padding: 10px;
+}
+
+.answer-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  padding-top: 20px;
+}
+
+.answer-item {
+  border: 1px solid black;
+  padding: 10px;
+  text-align: center;
+
+}
+
 .selected-answer {
   background-color: rgb(159, 159, 159);
+}
+
+.study-submit-button {
+  margin-top: 10px;
+
+  display: flex;
+  justify-content: center;
+}
+
+.submit-button {
+  background-color: #a7f3d0;
+}
+
+.cancel-button {
+  margin-top: 10px;
 }
 </style>
