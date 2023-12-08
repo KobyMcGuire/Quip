@@ -54,7 +54,7 @@ export default {
       deleteButton: false,
     };
   },
-  
+
   methods: {
     searchFlashCardsByTag() {
       if (this.searchByQuestion === false) {
