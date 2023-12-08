@@ -28,7 +28,7 @@
       </div>
     </div>
 
-    <div class="study-submit-button" v-if="selectedDeck">
+    <div class="study-submit-button">
       <input type="submit" @click="submitAndMoveNext">
     </div>
 
