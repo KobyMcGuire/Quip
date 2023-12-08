@@ -15,19 +15,19 @@
 
             <div class="answer-container">
                 <button v-for="(answer, index) in randomAnswers" :key="index" class="answer-item"
-                    @click="changeUserAnswer($event)">
-                    <div>
-                        {{ answer }}
-                    </div>
+                    @click="changeUserAnswer($event); markAnswerSelected($event)">
+
+                    {{ answer }}
+
                 </button>
             </div>
         </div>
         <div class="study-submit-button" v-if="selectedDeck">
             <router-link :to="{ name: 'completed-study-session' }" v-if="currentCardIndex === cards.length - 1">
-                <input type="submit" @click="submitAndMoveNext">
+                <input type="submit" @click="submitAndMoveNext(); clearSelectedAnswer()">
             </router-link>
 
-            <input type="submit" v-else @click="submitAndMoveNext">
+            <input type="submit" v-else @click="submitAndMoveNext(); clearSelectedAnswer()">
         </div>
         <div v-if="timerVisible">
             <p>Time remaining: {{ remainingTime }} seconds</p>
@@ -50,7 +50,7 @@ export default {
             currentCardIndex: 0,
             correctAnswers: 0,
             wrongAnswers: 0,
-            roundDuration: 5,
+            roundDuration: 1,
             timerId: null,
             remainingTime: 0,
             timerVisible: false
@@ -90,9 +90,9 @@ export default {
 
         shuffleCards(array) {
             let cardLength = array.length,
-            currentIndex;
+                currentIndex;
             for (currentIndex = cardLength - 1; currentIndex > 0; currentIndex--) {
-                let randomIndex = Math.floor(Math.random() * (currentIndex + 1) );
+                let randomIndex = Math.floor(Math.random() * (currentIndex + 1));
                 let temp = array[currentIndex];
                 array[currentIndex] = array[randomIndex];
                 array[randomIndex] = temp;
@@ -103,6 +103,10 @@ export default {
             const correctAnswer = this.cards[index].answer;
             if (this.selectedAnswer === correctAnswer) {
                 this.$store.state.correctAnswers++;
+            }
+            // Push incorrect question to the store
+            else {
+                this.$store.state.incorrectQuestions.push(this.cards[index].question);
             }
         },
 
@@ -118,7 +122,9 @@ export default {
                 this.remainingTime--;
                 if (this.remainingTime <= 0) {
                     this.timerVisible = false; // Hide the timer
+                    this.$store.state.incorrectQuestions.push(this.cards[this.currentCardIndex].question)
                     this.nextCard();
+
                     // Check if the lightning round is completed
                     if (this.currentCardIndex >= this.cards.length) {
                         this.navigateToCompletedView();
@@ -130,9 +136,26 @@ export default {
         },
 
         navigateToCompletedView() {
-            this.$router.push({ name: 'completed-study-session'});
+            this.$router.push({ name: 'completed-study-session' });
 
-        }
+        },
+        markAnswerSelected(event) {
+            // Clear previous selection
+            let allButtons = document.querySelectorAll(".answer-item");
+            allButtons.forEach((button) => {
+                button.classList.remove("selected-answer");
+            });
+            let targetButton = event.target;
+            // Add selected class to target button
+            targetButton.classList.add("selected-answer");
+        },
+        clearSelectedAnswer() {
+            // Clear previous selection
+            let allButtons = document.querySelectorAll(".answer-item");
+            allButtons.forEach((button) => {
+                button.classList.remove("selected-answer");
+            });
+        },
     },
     created() {
 
@@ -165,4 +188,8 @@ export default {
 }
 
 </script>
-<style></style>
+<style scoped>
+.selected-answer {
+    background-color: rgb(159, 159, 159);
+}
+</style>
