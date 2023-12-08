@@ -121,7 +121,7 @@ export default {
                     this.nextCard();
                     // Check if the lightning round is completed
                     if (this.currentCardIndex >= this.cards.length) {
-                        this.navigateToCompletedView(true);
+                        this.navigateToCompletedView();
                     } else {
                         this.startTimer(); // Continue to the next card after the duration
                     }
@@ -129,8 +129,8 @@ export default {
             }, 1000); // Update the timer every second
         },
 
-        navigateToCompletedView(timeRanOut) {
-            this.$router.push({ name: 'completed-study-session', params: { timeRanOut } });
+        navigateToCompletedView() {
+            this.$router.push({ name: 'completed-study-session'});
 
         }
     },
