@@ -48,8 +48,8 @@
 
         <ul class="sub-menu">
           <li><a href="#" class="link-name">Studies</a></li>
-          <li><a href="#">Study Session</a></li>
-          <li><a href="#"><router-link v-bind:to="{name: 'study-session'}">Study</router-link></a></li>
+          <li><a href="#"><router-link v-bind:to="{name: 'single-card-view'}">Study</router-link></a></li>
+          <li><a href="#"><router-link v-bind:to="{name: 'study-session'}">Quiz</router-link></a></li>
           <li><a href="#"><router-link v-bind:to="{name:'lightning-round-study-session'}">Lightning Round</router-link></a></li>
         </ul>
       </li>
