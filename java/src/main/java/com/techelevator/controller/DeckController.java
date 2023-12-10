@@ -2,6 +2,7 @@ package com.techelevator.controller;
 
 import com.techelevator.dao.DeckDao;
 import com.techelevator.dao.FlashcardDao;
+import com.techelevator.dao.UserDao;
 import com.techelevator.model.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,16 +13,26 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 
 @RestController
-// @PreAuthorize("isAuthenticated()")
+@PreAuthorize("isAuthenticated()")
 @CrossOrigin
 public class DeckController {
-
+    private UserDao userDao;
     private DeckDao deckDao;
     private FlashcardDao flashcardDao;
 
-    public DeckController(DeckDao deckDao, FlashcardDao flashcardDao) {
+    public DeckController(DeckDao deckDao, FlashcardDao flashcardDao, UserDao userDao) {
         this.deckDao = deckDao;
         this.flashcardDao = flashcardDao;
+        this.userDao = userDao;
+    }
+
+    @RequestMapping(path = "/user", method = RequestMethod.GET)
+    public List<User> getUsers(){
+        return userDao.getUsers();
+    }
+    @RequestMapping(path = "/user", method = RequestMethod.POST)
+    public User createUser(RegisterUserDto user){
+        return userDao.createUser(user);
     }
 
     @RequestMapping(path = "/decks", method = RequestMethod.GET)
