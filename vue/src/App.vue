@@ -1,7 +1,7 @@
 
 <template>
   <head>
-    <title>Final Capstone</title>
+    <title>Quip</title>
     <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
@@ -19,7 +19,7 @@
       <li>
         <a href="#">
           <i class="fa fa-home"></i>
-          <span class="link-name"><router-link v-bind:to="{ name: 'home' }">Home</router-link></span>
+          <router-link v-bind:to="{ name: 'home' }"><span class="link-name">Home</span></router-link>
         </a>
 
         <ul class="sub-menu blank">
@@ -82,7 +82,6 @@
 </template>
 
 <style>
-
 .sidebar {
   position: fixed;
   top: 0;
@@ -323,7 +322,7 @@
   height: 100vh;
   width: calc(100% - 260px);
   left: 260px;
-  background-color: lightgrey;
+  /* background-color: #76737e; */
   transition: all 0.5s ease;
 }
 
