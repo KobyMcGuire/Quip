@@ -12,6 +12,7 @@ import EditCardView from '../views/EditCardView.vue';
 import StudySessionView from '../views/StudySessionView.vue';
 import CompletedView from '../views/CompletedView.vue';
 import LightningRoundView from '../views/LightningRoundView.vue';
+import SingleStudyCardView from '../views/SingleStudyCardView.vue';
 
 /**
  * The Vue Router is used to "direct" the browser to render a specific view component
@@ -63,7 +64,14 @@ const routes = [
       requiresAuth: false
     }
   },
-
+  {
+    path: '/card',
+    name: 'single-card-view',
+    component: SingleStudyCardView,
+    meta: {
+      requiresAuth: false
+    }
+  },
   {
     path: "/completed",
     name: "completed-study-session",
