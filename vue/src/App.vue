@@ -62,8 +62,7 @@
             </router-link>
 
             <div class="name-job">
-              <div class="firstName">First Name</div>
-              <div class="lastName">Last Name</div>
+              <div class="firstName">{{this.$store.state.user.username}}</div>
             </div>
             <router-link v-if="!$store.state.token" v-bind:to="{ name: 'login' }"><i class="fas fa-right-to-bracket"></i></router-link>
             <router-link v-if="$store.state.token" v-bind:to="{name: 'logout'}"><i class="fas fa-right-from-bracket"></i></router-link>
