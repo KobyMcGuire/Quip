@@ -2,13 +2,15 @@
   <div class="flashcard-container">
     <div class="flashcard-text-content" v-on:click="flipCard">
       <div class="question" v-if="showFront">
-        <h1>Question:</h1>
-        <p>{{ flashcard.question }}</p>
-        
+
+        <p v-if="image && image.length">
+          <img :src="image" alt="">
+        </p>
+        <p v-else>{{ flashcard.question }}</p>
+
       </div>
 
       <div class="answer" v-if="!showFront">
-        <h1>Answer:</h1>
         <p>{{ flashcard.answer }}</p>
       </div>
 
@@ -33,9 +35,18 @@
         </button>
       </router-link>
 
+        <div class="image-upload">
+          <label for="image">
+            <i class="fas fa-upload"></i> <!-- This is the upload icon -->
+          </label>
+          <input id="image" type="file" accept="image/*" @change="handleImageUpload">
+        </div>
+
+
       <button v-if="deleteButton" v-on:click="deleteFlashcard">
         <span class="material-symbols-outlined"> delete </span>
       </button>
+
       <!-- TO DO -->
       <button v-else v-on:click="addFlashcardToDeck">
         <span class="material-symbols-outlined"> add </span>
@@ -61,11 +72,12 @@ export default {
   data() {
     return {
       showFront: true,
+      image: null,
       editedFlashcard: {
         question: this.flashcard.question,
         answer: this.flashcard.answer,
         tag: this.flashcard.tag,
-        
+
       },
       editFlashcardError: false,
       displayTags: false,
@@ -80,6 +92,18 @@ export default {
   methods: {
     flipCard() {
       this.showFront = !this.showFront;
+    },
+    handleImageUpload(event) {
+      const file = event.target.files[0];
+      if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.image = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      } else {
+        console.error('Invalid file type or no file selected');
+      }
     },
 
     // Add flashcard to new deck
@@ -134,6 +158,17 @@ export default {
 </script>
 
 <style scoped>
+
+.image-upload input[type="file"]{
+  margin-bottom: 10px;
+  display: none;
+}
+.viewedQuestion img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 .flashcard-container {
   min-width: 25%;
   min-height: 30%;

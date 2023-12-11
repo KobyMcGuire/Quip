@@ -90,6 +90,9 @@
 
     <div class="flash-cards-container">
       <flash-card
+        draggable="true"
+        v-on:dragstart="handleDragStart($event)"
+        v-on:dragend="handleDragEnd($event)"
         v-for="flashcard in this.$store.state.currentDeckFlashcards"
         v-bind:key="flashcard.cardId"
         v-bind:flashcard="flashcard"
@@ -143,6 +146,14 @@ export default {
 
       // Reset any errors
       this.newCardError = false;
+    },
+
+    handleDragStart(event) {
+      event.target.style.opacity = '0.4';
+    },
+
+    handleDragEnd(event) {
+      event.target.style.opacity = '1';
     },
 
     editDeck() {

@@ -31,6 +31,9 @@
 
     <div class="flashcard-results-container">
       <flash-card
+        draggable="true"
+        v-on:dragstart="handleDragStart($event)"
+        v-on:dragend="handleDragEnd($event)"
         v-for="flashcard in this.$store.state.currentSearchFlashcards"
         v-bind:key="flashcard.cardId"
         v-bind:flashcard="flashcard"
@@ -87,6 +90,21 @@ export default {
           });
       }
     },
+
+    handleDragStart(event) {
+      event.target.style.opacity = '0.4';
+
+      let flashcardsContainer = document.querySelector(".flash-cards-container")
+      flashcardsContainer.style.border = '1px solid black'
+    },
+
+    handleDragEnd(event) {
+      event.target.style.opacity = '1';
+
+      let flashcardsContainer = document.querySelector(".flash-cards-container")
+      flashcardsContainer.style.border = 'none'
+    },
+
 
     errorHandler(error, verb) {
       console.log(`There was an error ${verb}. The error was: ${error}`);

@@ -2,90 +2,90 @@
 <template>
   <head>
     <title>Quip</title>
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
   </head>
 
   <nav>
-  <div class="sidebar close">
-    <div class="logo">
-      <i class="fab fa-quora"></i>
-      <span class="logo-name">Quip</span>
-    </div>
+    <div class="sidebar close">
+      <div class="logo">
+        <i class="fab fa-quora"></i>
+        <span class="logo-name">Quip</span>
+      </div>
 
-    <ul class="nav-list">
-      <li>
-        <a href="/">
-          <i class="fa fa-home"></i>
-          <router-link v-bind:to="{ name: 'home' }"><span class="link-name">Home</span></router-link>
-        </a>
-
-        <ul class="sub-menu blank">
-          <li><a href="#" class="link-name"><router-link v-bind:to="{ name: 'home' }">Home</router-link></a></li>
-        </ul>
-      </li>
-
-      <li>
-        <a href="/decks">
-          <i class="fas fa-spinner"></i>
-          <span class="link-name"><router-link v-bind:to="{ name: 'decks' }">Decks</router-link></span>
-        </a>
-        <ul class="sub-menu blank">
-          <li><a href="#" class="link-name"><router-link v-bind:to="{ name: 'decks' }">Decks</router-link></a></li>
-        </ul>
-      </li>
-
-      <li>
-        <div class="icon-link">
-          <a href="#">
-            <i class="fa fa-book"></i>
-            <span class="link-name">Studies</span>
+      <ul class="nav-list">
+        <li>
+          <a href="/">
+            <i class="fa fa-home"></i>
+            <router-link v-bind:to="{ name: 'home' }"><span class="link-name">Home</span></router-link>
           </a>
-          <i class="fas fa-caret-down arrow"></i>
-        </div>
 
-        <ul class="sub-menu">
-          <li><a href="#" class="link-name">Studies</a></li>
-          <li><a href="#"><router-link v-bind:to="{name: 'single-card-view'}">Study</router-link></a></li>
-          <li><a href="#"><router-link v-bind:to="{name: 'study-session'}">Quiz</router-link></a></li>
-          <li><a href="#"><router-link v-bind:to="{name:'lightning-round-study-session'}">Lightning Round</router-link></a></li>
-        </ul>
-      </li>
+          <ul class="sub-menu blank">
+            <li><a href="#" class="link-name"><router-link v-bind:to="{ name: 'home' }">Home</router-link></a></li>
+          </ul>
+        </li>
 
-      <li>
-        <div class="profile-details">
-          <div class="profile-content">
-            <img src="../src/assets/pfp.jpg" alt=""/>
+        <li>
+          <a href="/decks">
+            <i class="fas fa-spinner"></i>
+            <span class="link-name"><router-link v-bind:to="{ name: 'decks' }">Decks</router-link></span>
+          </a>
+          <ul class="sub-menu blank">
+            <li><a href="#" class="link-name"><router-link v-bind:to="{ name: 'decks' }">Decks</router-link></a></li>
+          </ul>
+        </li>
+
+        <li>
+          <div class="icon-link">
+            <a href="#">
+              <i class="fa fa-book"></i>
+              <span class="link-name">Studies</span>
+            </a>
+            <i class="fas fa-caret-down arrow"></i>
           </div>
 
-          <div class="name-job">
-            <div class="firstName">First Name</div>
-            <div class="lastName">Last Name</div>
+          <ul class="sub-menu">
+            <li><a href="#" class="link-name">Studies</a></li>
+            <li><a href="#"><router-link v-bind:to="{ name: 'single-card-view' }">Study</router-link></a></li>
+            <li><a href="#"><router-link v-bind:to="{ name: 'study-session' }">Quiz</router-link></a></li>
+            <li><a href="#"><router-link v-bind:to="{ name: 'lightning-round-study-session' }">Lightning
+                  Round</router-link></a></li>
+          </ul>
+        </li>
+
+        <li>
+          <div class="profile-details">
+
+            <router-link v-bind:to="{ name: 'user' }">
+              <div class="profile-content">
+                <img src="../src/assets/pfp.jpg" alt="" />
+              </div>
+            </router-link>
+
+            <div class="name-job">
+              <div class="firstName">{{this.$store.state.user.username}}</div>
+            </div>
+            <router-link v-if="!$store.state.token" v-bind:to="{ name: 'login' }"><i class="fas fa-right-to-bracket"></i></router-link>
+            <router-link v-if="$store.state.token" v-bind:to="{name: 'logout'}"><i class="fas fa-right-from-bracket"></i></router-link>
+            <!-- Logout button -->
+
+
           </div>
-          <router-link v-bind:to="{ name: 'login' }"><i class="fas fa-right-to-bracket" ></i></router-link> <!-- Logout button -->
-          <!-- <span class="link-name"><router-link v-bind:to="{ name: 'login' }"></router-link></span> -->
-
-
-        </div>
-      </li>
-    </ul>
-  </div>
-
-  <div class="home-section">
-    <div class="home-content">
-      <i class="fas fa-bars"></i>
-      <span class="text"></span> <!-- Drop Down Menu Name here -->
+        </li>
+      </ul>
     </div>
-    <router-view/>
-  </div>
+
+    <div class="home-section">
+      <div class="home-content">
+        <i class="fas fa-bars"></i>
+        <span class="text"></span> <!-- Drop Down Menu Name here -->
+      </div>
+      <router-view />
+    </div>
 
   </nav>
 </template>
 
 <style>
-
 .sidebar {
   position: fixed;
   top: 0;
@@ -330,7 +330,7 @@
   transition: all 0.5s ease;
 }
 
-.sidebar.close ~ .home-section {
+.sidebar.close~.home-section {
   left: 78px;
   width: calc(100% - 78px);
 }
@@ -359,44 +359,45 @@
 }
 
 button {
-    border: none;
-    border-radius: 15px;
+  border: none;
+  border-radius: 15px;
 
-    padding: 5px;
-  }
+  padding: 5px;
+}
 
-  button:hover {
-    cursor: pointer;
-    border: 1px solid black;
-  }
+button:hover {
+  cursor: pointer;
+  border: 1px solid black;
+}
 
-  .cancel-button {
-    background-color: #fca5a5;
-  }
+.cancel-button {
+  background-color: #fca5a5;
+}
 
-  .error-message {
-    background-color: #f87171;
-  }
+.error-message {
+  background-color: #f87171;
+}
 
-  input[type="submit"] {
-    border: none;
-    border-radius: 15px;
+input[type="submit"] {
+  border: none;
+  border-radius: 15px;
 
-    padding: 5px;
+  padding: 5px;
 
-    background-color: #bbf7d0;
-  }
+  background-color: #bbf7d0;
+}
 
-  input[type="submit"]:hover {
-    cursor: pointer;
-    border: 1px solid black;
-  }
+input[type="submit"]:hover {
+  cursor: pointer;
+  border: 1px solid black;
+}
 
-  * {
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  }
-  @media (max-width: 400px) {
+* {
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+@media (max-width: 400px) {
   .sidebar.close .nav-list li .sub-menu {
     display: none;
   }
@@ -415,7 +416,7 @@ button {
     z-index: 100;
   }
 
-  .sidebar.close ~ .home-section {
+  .sidebar.close~.home-section {
     width: 100%;
     left: 0;
   }
