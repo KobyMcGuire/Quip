@@ -13,6 +13,7 @@ import StudySessionView from '../views/StudySessionView.vue';
 import CompletedView from '../views/CompletedView.vue';
 import LightningRoundView from '../views/LightningRoundView.vue';
 import SingleStudyCardView from '../views/SingleStudyCardView.vue';
+import UserAccountView from '../views/UserAccountView.vue';
 
 /**
  * The Vue Router is used to "direct" the browser to render a specific view component
@@ -112,7 +113,17 @@ const routes = [
     meta: {
       requiresAuth: false
     }
-  }
+  },
+
+  {
+    path: "/user",
+    name: "user",
+    component: UserAccountView,
+    meta: {
+      requiresAuth: false
+    }
+  },
+
 ];
 
 // Create the router
