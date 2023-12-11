@@ -354,6 +354,45 @@
   font-weight: 600;
 }
 
+button {
+    border: none;
+    border-radius: 15px;
+
+    padding: 5px;
+  }
+
+  button:hover {
+    cursor: pointer;
+    border: 1px solid black;
+  }
+
+  .cancel-button {
+    background-color: #fca5a5;
+  }
+
+  .error-message {
+    background-color: #f87171;
+  }
+
+  input[type="submit"] {
+    border: none;
+    border-radius: 15px;
+
+    padding: 5px;
+
+    background-color: #bbf7d0;
+  }
+
+  input[type="submit"]:hover {
+    cursor: pointer;
+    border: 1px solid black;
+  }
+
+  * {
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
 @media (max-width: 400px) {
   .sidebar.close .nav-list li .sub-menu {
     display: none;
