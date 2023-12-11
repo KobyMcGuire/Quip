@@ -12,9 +12,9 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Component
 public class JdbcFlashcardDao implements FlashcardDao {
@@ -102,12 +102,15 @@ public class JdbcFlashcardDao implements FlashcardDao {
     }
 
     @Override
-    public List<Flashcard> getFlashcardsByTag(String tag, int deckId, boolean useWildcard){
+    public List<Flashcard> getFlashcardsByTag(String tag, String flashcardIds, boolean useWildcard){
         List<Flashcard> flashcards = new ArrayList<>();
+
+        // TODO Fix flashcardIds so that there is not chance of sql injection
+
         String sql = "SELECT flashcards.flashcard_id, flashcards.question, flashcards.answer, flashcards.tags, flashcards.creator FROM flashcards\n" +
                 "JOIN decks_flashcards ON flashcards.flashcard_id = decks_flashcards.flashcard_id\n" +
                 "JOIN flashcard_decks ON decks_flashcards.deck_id = flashcard_decks.deck_id\n" +
-                "WHERE flashcards.tags ILIKE ? AND flashcard_decks.deck_id != ?;";
+                "WHERE NOT (decks_flashcards.flashcard_id = ANY('{"+ flashcardIds +"}')) AND flashcards.tags ILIKE ?;";
 
         String sqlForNoHomeFlashcards = "SELECT flashcards.flashcard_id, flashcards.question, flashcards.answer, flashcards.tags, flashcards.creator\n" +
                 "FROM flashcards\n" +
@@ -118,7 +121,7 @@ public class JdbcFlashcardDao implements FlashcardDao {
             tag = "%" + tag + "%";
         }
         try{
-            SqlRowSet results = jdbcTemplate.queryForRowSet(sql, tag, deckId);
+            SqlRowSet results = jdbcTemplate.queryForRowSet(sql, tag);
             while(results.next()){
                 Flashcard flashcard = mapRowToFlashcard(results);
                 flashcards.add(flashcard);
@@ -139,12 +142,15 @@ public class JdbcFlashcardDao implements FlashcardDao {
     }
 
     @Override
-    public List<Flashcard> getFlashcardsByQuestion(String question, int deckId, boolean useWildcard){
+    public List<Flashcard> getFlashcardsByQuestion(String question, String flashcardIds, boolean useWildcard){
         List<Flashcard> flashcards = new ArrayList<>();
+
+        // TODO Fix flashcardIds so that there is not chance of sql injection
+
         String sql = "SELECT flashcards.flashcard_id, flashcards.question, flashcards.answer, flashcards.tags, flashcards.creator FROM flashcards\n" +
                 "JOIN decks_flashcards ON flashcards.flashcard_id = decks_flashcards.flashcard_id\n" +
                 "JOIN flashcard_decks ON decks_flashcards.deck_id = flashcard_decks.deck_id\n" +
-                "WHERE flashcards.question ILIKE ? AND flashcard_decks.deck_id != ?;";
+                "WHERE NOT (decks_flashcards.flashcard_id = ANY('{"+ flashcardIds +"}')) AND flashcards.question ILIKE ?;";
 
         String sqlForNoHomeFlashcards = "SELECT flashcards.flashcard_id, flashcards.question, flashcards.answer, flashcards.tags, flashcards.creator\n" +
                 "FROM flashcards \n" +
@@ -157,7 +163,7 @@ public class JdbcFlashcardDao implements FlashcardDao {
 
         try{
             // Adding flashcards that have a connection to other decks
-            SqlRowSet results = jdbcTemplate.queryForRowSet(sql, question, deckId);
+            SqlRowSet results = jdbcTemplate.queryForRowSet(sql, question);
             while(results.next()){
                 Flashcard flashcard = mapRowToFlashcard(results);
                 flashcards.add(flashcard);
