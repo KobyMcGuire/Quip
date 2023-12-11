@@ -25,11 +25,11 @@
       </h5>
 
       <div class="viewedQuestion">
-        {{ cards[currentCardIndex] && cards[currentCardIndex].question }}
+        <p>{{ cards[currentCardIndex] && cards[currentCardIndex].question }}</p>
 
-        <button v-on:click="startVoiceAnswer">
-        <span class="material-symbols-outlined"> mic </span>
-      </button>
+        <button class="voice-button" v-on:click="startVoiceAnswer">
+          <span class="material-symbols-outlined"> mic </span>
+        </button>
       </div>
 
       <div class="answer-container">
@@ -266,15 +266,13 @@ export default {
   max-width: 30%;
   min-height: 25%;
   max-height: 30%;
-  margin-left: 35%;
+  margin-left: auto;
+  margin-right: auto;
+
+  text-align: center;
 
   border: 3px solid black;
   border-radius: 10px;
-  display: flex;
-
-  text-align: center;
-  justify-content: center;
-  align-items: center;
 
   padding: 10px;
 }
@@ -355,5 +353,10 @@ input:checked + .slider {
 
 input:checked + .slider:before {
   transform: translateX(26px);
+}
+
+.voice-button {  
+  position: relative;
+  bottom: 0;
 }
 </style>
