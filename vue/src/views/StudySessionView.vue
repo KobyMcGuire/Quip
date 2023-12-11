@@ -26,6 +26,10 @@
 
       <div class="viewedQuestion">
         {{ cards[currentCardIndex] && cards[currentCardIndex].question }}
+
+        <button v-on:click="startVoiceAnswer">
+        <span class="material-symbols-outlined"> mic </span>
+      </button>
       </div>
 
       <div class="answer-container">
@@ -147,6 +151,34 @@ export default {
         button.classList.remove("selected-answer");
       });
     },
+
+    startVoiceAnswer() {
+      
+      if('SpeechRecognition' in window || 'webkitSpeechRecognition' in window){
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+
+        recognition.onresult = (event)=>{
+          if(event.results && event.results[0]){
+            const voiceAnswer = event.results[0][0].transcript;
+            
+            if(voiceAnswer !== undefined){
+              console.log('Voice Answer:', voiceAnswer);
+              this.selectedAnswer = voiceAnswer;
+              this.markAnswerSelected({target: {innerText: voiceAnswer} });
+            }else{
+              console.error('Unable to retrieve voice answer.');
+            }
+          }else{
+            console.error('Unexpected format of speech recognition results.');
+          }
+        };
+        recognition.start();
+      }else{
+        console.error('Speech Recognition API not supported in this browser.');
+      }
+      
+    }
 
   },
 
