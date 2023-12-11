@@ -14,7 +14,7 @@
         <p>Time remaining: {{ remainingTime }} seconds</p>
       </div>
 
-      <div class="viewedQuestion">
+      <div class="viewedQuestion" v-touch="swipeHandler">
         {{ cards[currentCardIndex] && cards[currentCardIndex].question }}
       </div>
 
@@ -57,6 +57,10 @@ export default {
     };
   },
   methods: {
+
+      swipeHandler() {
+        console.log("Swipe!");
+      },
 
     submitAndMoveNext() {
       if (this.selectedAnswer !== null) {
@@ -164,6 +168,7 @@ export default {
       });
     },
   },
+
   created() {
 
     DeckService.getDecks()
