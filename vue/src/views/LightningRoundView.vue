@@ -13,8 +13,7 @@
       <div v-if="timerVisible">
         <p>Time remaining: {{ remainingTime }} seconds</p>
       </div>
-
-      <div class="viewedQuestion" v-touch="swipeHandler">
+      <div class="viewedQuestion">
         {{ cards[currentCardIndex] && cards[currentCardIndex].question }}
       </div>
 

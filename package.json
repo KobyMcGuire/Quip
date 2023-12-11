@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "vue-swing": "^0.0.10"
+    "vue-swing": "^0.0.10",
+    "vue3-touch-events": "^4.1.8"
   }
 }

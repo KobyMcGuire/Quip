@@ -12,7 +12,8 @@ export function createStore(currentToken, currentUser) {
       incorrectQuestions : [],
 
       currentDeckFlashcards: [],
-      currentSearchFlashcards: []
+      currentSearchFlashcards: [],
+
     },
 
     mutations: {
