@@ -70,7 +70,7 @@ export default {
   data() {
     return {
       showFront: true,
-      image: null,
+      image: "",
       editedFlashcard: {
         question: this.flashcard.question,
         answer: this.flashcard.answer,
@@ -91,12 +91,17 @@ export default {
     flipCard() {
       this.showFront = !this.showFront;
     },
+
     handleImageUpload(event) {
+      console.log(event.target.files)
       const file = event.target.files[0];
+      console.log(file);
+
       if (file && file.type.startsWith('image/')) {
         const reader = new FileReader();
         reader.onload = (e) => {
           this.image = e.target.result;
+          console.log(e.target.result);
         };
         reader.readAsDataURL(file);
       } else {
