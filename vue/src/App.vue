@@ -17,7 +17,7 @@
 
     <ul class="nav-list">
       <li>
-        <a href="#">
+        <a href="/">
           <i class="fa fa-home"></i>
           <router-link v-bind:to="{ name: 'home' }"><span class="link-name">Home</span></router-link>
         </a>
@@ -28,7 +28,7 @@
       </li>
 
       <li>
-        <a href="#">
+        <a href="/decks">
           <i class="fas fa-spinner"></i>
           <span class="link-name"><router-link v-bind:to="{ name: 'decks' }">Decks</router-link></span>
         </a>
