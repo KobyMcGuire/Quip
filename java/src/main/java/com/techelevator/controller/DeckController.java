@@ -30,6 +30,7 @@ public class DeckController {
     public List<User> getUsers(){
         return userDao.getUsers();
     }
+
     @RequestMapping(path = "/user", method = RequestMethod.POST)
     public User createUser(RegisterUserDto user){
         return userDao.createUser(user);
