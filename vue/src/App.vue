@@ -64,7 +64,10 @@
             <div class="firstName">First Name</div>
             <div class="lastName">Last Name</div>
           </div>
-          <i class="fas fa-right-to-bracket"></i> <!-- Logout button -->
+          <router-link v-bind:to="{ name: 'login' }"><i class="fas fa-right-to-bracket" ></i></router-link> <!-- Logout button -->
+          <!-- <span class="link-name"><router-link v-bind:to="{ name: 'login' }"></router-link></span> -->
+
+
         </div>
       </li>
     </ul>
@@ -82,6 +85,7 @@
 </template>
 
 <style>
+
 .sidebar {
   position: fixed;
   top: 0;
@@ -392,8 +396,7 @@ button {
     box-sizing: border-box;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
-
-@media (max-width: 400px) {
+  @media (max-width: 400px) {
   .sidebar.close .nav-list li .sub-menu {
     display: none;
   }
