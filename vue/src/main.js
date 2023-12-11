@@ -3,6 +3,7 @@ import CapstoneApp from './App.vue'
 import { createStore } from './store'
 import router from './router'
 import axios from 'axios'
+import Vue3TouchEvents from "vue3-touch-events";
 
 /* sets the base url for server API communication with axios */
 axios.defaults.baseURL = import.meta.env.VITE_REMOTE_API;
@@ -19,12 +20,14 @@ let currentUser = JSON.parse(localStorage.getItem('user'));
 if (currentToken) {
   // Set token axios requests
   axios.defaults.headers.common['Authorization'] = `Bearer ${currentToken}`;
-}
 
+}
 // Create the Vuex store passing in the stored credentials
 const store = createStore(currentToken, currentUser);
 
 const app = createApp(CapstoneApp);
+
+app.use(Vue3TouchEvents);
 app.use(store);
 app.use(router);
 app.mount('#app');
