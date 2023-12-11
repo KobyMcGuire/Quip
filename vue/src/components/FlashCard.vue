@@ -2,10 +2,12 @@
   <div class="flashcard-container">
     <div class="flashcard-text-content" v-on:click="flipCard">
       <div class="question" v-if="showFront">
+
         <p v-if="image && image.length">
           <img :src="image" alt="">
         </p>
         <p v-else>{{ flashcard.question }}</p>
+
       </div>
 
       <div class="answer" v-if="!showFront">

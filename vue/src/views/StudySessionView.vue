@@ -25,11 +25,11 @@
       </h5>
 
       <div class="viewedQuestion">
-        {{ cards[currentCardIndex] && cards[currentCardIndex].question }}
+        <p>{{ cards[currentCardIndex] && cards[currentCardIndex].question }}</p>
 
-        <button v-on:click="startVoiceAnswer">
-        <span class="material-symbols-outlined"> mic </span>
-      </button>
+        <button class="voice-button" v-on:click="startVoiceAnswer">
+          <span class="material-symbols-outlined"> mic </span>
+        </button>
       </div>
 
       <div class="answer-container">
@@ -142,6 +142,8 @@ export default {
 
       // Add selected class to target button
       targetButton.classList.add("selected-answer");
+
+      this.selectedAnswer = targetButton.innerText;
     },
 
     clearSelectedAnswer() {
@@ -161,11 +163,12 @@ export default {
         recognition.onresult = (event)=>{
           if(event.results && event.results[0]){
             const voiceAnswer = event.results[0][0].transcript;
+            console.log(event);
             
             if(voiceAnswer !== undefined){
               console.log('Voice Answer:', voiceAnswer);
-              this.selectedAnswer = voiceAnswer;
-              this.markAnswerSelected({target: {innerText: voiceAnswer} });
+              
+              this.markVoiceAnswerSelected(voiceAnswer);
             }else{
               console.error('Unable to retrieve voice answer.');
             }
@@ -178,7 +181,26 @@ export default {
         console.error('Speech Recognition API not supported in this browser.');
       }
       
-    }
+    },
+    markVoiceAnswerSelected(voiceAnswer){
+      console.log("mark voice answer selected:", voiceAnswer);
+      this.randomAnswers.forEach(answer => {
+        
+        if (voiceAnswer == answer) {
+          
+          this.selectedAnswer = answer;
+          
+          let allButtons = document.querySelectorAll(".answer-item");
+          allButtons.forEach((button) =>{
+            if(button.innerText == this.selectedAnswer){
+              button.classList.add("selected-answer");
+            }
+            console.log(button.innerText);
+          })
+          
+        }
+      })
+    },
 
   },
 
@@ -244,15 +266,13 @@ export default {
   max-width: 30%;
   min-height: 25%;
   max-height: 30%;
-  margin-left: 35%;
+  margin-left: auto;
+  margin-right: auto;
+
+  text-align: center;
 
   border: 3px solid black;
   border-radius: 10px;
-  display: flex;
-
-  text-align: center;
-  justify-content: center;
-  align-items: center;
 
   padding: 10px;
 }
@@ -333,5 +353,10 @@ input:checked + .slider {
 
 input:checked + .slider:before {
   transform: translateX(26px);
+}
+
+.voice-button {  
+  position: relative;
+  bottom: 0;
 }
 </style>
