@@ -142,6 +142,8 @@ export default {
 
       // Add selected class to target button
       targetButton.classList.add("selected-answer");
+
+      this.selectedAnswer = targetButton.innerText;
     },
 
     clearSelectedAnswer() {
@@ -161,11 +163,12 @@ export default {
         recognition.onresult = (event)=>{
           if(event.results && event.results[0]){
             const voiceAnswer = event.results[0][0].transcript;
+            console.log(event);
             
             if(voiceAnswer !== undefined){
               console.log('Voice Answer:', voiceAnswer);
-              this.selectedAnswer = voiceAnswer;
-              this.markAnswerSelected({target: {innerText: voiceAnswer} });
+              
+              this.markVoiceAnswerSelected(voiceAnswer);
             }else{
               console.error('Unable to retrieve voice answer.');
             }
@@ -178,7 +181,26 @@ export default {
         console.error('Speech Recognition API not supported in this browser.');
       }
       
-    }
+    },
+    markVoiceAnswerSelected(voiceAnswer){
+      console.log("mark voice answer selected:", voiceAnswer);
+      this.randomAnswers.forEach(answer => {
+        
+        if (voiceAnswer == answer) {
+          
+          this.selectedAnswer = answer;
+          
+          let allButtons = document.querySelectorAll(".answer-item");
+          allButtons.forEach((button) =>{
+            if(button.innerText == this.selectedAnswer){
+              button.classList.add("selected-answer");
+            }
+            console.log(button.innerText);
+          })
+          
+        }
+      })
+    },
 
   },
 

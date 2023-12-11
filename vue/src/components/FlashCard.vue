@@ -4,6 +4,7 @@
       <div class="question" v-if="showFront">
         <h1>Question:</h1>
         <p>{{ flashcard.question }}</p>
+        
       </div>
 
       <div class="answer" v-if="!showFront">
@@ -64,6 +65,7 @@ export default {
         question: this.flashcard.question,
         answer: this.flashcard.answer,
         tag: this.flashcard.tag,
+        
       },
       editFlashcardError: false,
       displayTags: false,
