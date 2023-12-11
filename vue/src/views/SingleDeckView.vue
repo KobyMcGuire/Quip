@@ -228,6 +228,7 @@ export default {
     errorHandler(error, verb) {
       console.log(`There was an error ${verb}. The error was: ${error}`);
     },
+    
   },
 
   computed: {},

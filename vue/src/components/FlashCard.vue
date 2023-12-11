@@ -39,6 +39,14 @@
       <button v-else v-on:click="addFlashcardToDeck">
         <span class="material-symbols-outlined"> add </span>
       </button>
+
+      <button v-on:click="textToSpeech(flashcard.question)">
+      <span class="material-symbols-outlined"> volume_up </span>
+    </button>
+    
+    <button v-on:click="textToSpeech(flashcard.answer)">
+      <span class="material-symbols-outlined"> volume_up </span>
+    </button>
     </div>
   </div>
 </template>
@@ -112,6 +120,12 @@ export default {
 
     errorHandler(error, verb) {
       console.log(`There was an error ${verb}. The error was: ${error}`);
+    },
+
+    textToSpeech(text) {
+      const speechSynthesis = window.speechSynthesis;
+      const utterance = new SpeechSynthesisUtterance(text);
+      speechSynthesis.speak(utterance);
     },
   },
 };
