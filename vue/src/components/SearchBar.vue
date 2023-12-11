@@ -31,6 +31,9 @@
 
     <div class="flashcard-results-container">
       <flash-card
+        draggable="true"
+        v-on:dragstart="handleDragStart($event)"
+        v-on:dragend="handleDragEnd($event)"
         v-for="flashcard in this.$store.state.currentSearchFlashcards"
         v-bind:key="flashcard.cardId"
         v-bind:flashcard="flashcard"
@@ -42,12 +45,11 @@
 
 <script>
 import FlashCard from "../components/FlashCard.vue";
-import DeckService from '../services/DeckService';
+import DeckService from "../services/DeckService";
 export default {
-    components:{ FlashCard
-    },
+  components: { FlashCard },
 
-    data() {
+  data() {
     return {
       searchTerms: "",
       searchByQuestion: "",
@@ -57,8 +59,21 @@ export default {
 
   methods: {
     searchFlashCards() {
+      // Grab an array of current flashcard ids
+      let currentFlashcardIds = "";
+      for (let i = 0; i < this.$store.state.currentDeckFlashcards.length; i++) {
+        if (i === this.$store.state.currentDeckFlashcards.length - 1) {
+          currentFlashcardIds =
+            currentFlashcardIds + `${this.$store.state.currentDeckFlashcards[i].flashCardId}`;
+        } else {
+          currentFlashcardIds =
+            currentFlashcardIds = currentFlashcardIds + `${this.$store.state.currentDeckFlashcards[i].flashCardId}` + ",";
+        }
+      }
+
+
       if (this.searchByQuestion === false) {
-        DeckService.getCardsByTag(this.searchTerms, this.$route.params.id)
+        DeckService.getCardsByTag(this.searchTerms, currentFlashcardIds)
           .then((response) => {
             this.$store.state.currentSearchFlashcards = response.data;
           })
@@ -66,7 +81,7 @@ export default {
             this.errorHandler(error, "fetching for searched flashcards");
           });
       } else {
-        DeckService.getCardsByQuestion(this.searchTerms, this.$route.params.id)
+        DeckService.getCardsByQuestion(this.searchTerms, currentFlashcardIds)
           .then((response) => {
             this.$store.state.currentSearchFlashcards = response.data;
           })
@@ -76,6 +91,21 @@ export default {
       }
     },
 
+    handleDragStart(event) {
+      event.target.style.opacity = '0.4';
+
+      let flashcardsContainer = document.querySelector(".flash-cards-container")
+      flashcardsContainer.style.border = '1px solid black'
+    },
+
+    handleDragEnd(event) {
+      event.target.style.opacity = '1';
+
+      let flashcardsContainer = document.querySelector(".flash-cards-container")
+      flashcardsContainer.style.border = 'none'
+    },
+
+
     errorHandler(error, verb) {
       console.log(`There was an error ${verb}. The error was: ${error}`);
     },
@@ -84,9 +114,8 @@ export default {
   created() {
     // Reset current search flashcards array in store
     this.$store.state.currentSearchFlashcards = [];
-  }
-
-}
+  },
+};
 </script>
 
 <style scoped>
