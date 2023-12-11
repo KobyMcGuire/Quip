@@ -1,7 +1,7 @@
 
 <template>
   <head>
-    <title>Final Capstone</title>
+    <title>Quip</title>
     <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
@@ -17,9 +17,9 @@
 
     <ul class="nav-list">
       <li>
-        <a href="#">
+        <a href="/">
           <i class="fa fa-home"></i>
-          <span class="link-name"><router-link v-bind:to="{ name: 'home' }">Home</router-link></span>
+          <router-link v-bind:to="{ name: 'home' }"><span class="link-name">Home</span></router-link>
         </a>
 
         <ul class="sub-menu blank">
@@ -28,7 +28,7 @@
       </li>
 
       <li>
-        <a href="#">
+        <a href="/decks">
           <i class="fas fa-spinner"></i>
           <span class="link-name"><router-link v-bind:to="{ name: 'decks' }">Decks</router-link></span>
         </a>
@@ -82,7 +82,6 @@
 </template>
 
 <style>
-
 .sidebar {
   position: fixed;
   top: 0;
@@ -323,7 +322,7 @@
   height: 100vh;
   width: calc(100% - 260px);
   left: 260px;
-  background-color: lightgrey;
+  /* background-color: #76737e; */
   transition: all 0.5s ease;
 }
 
@@ -354,6 +353,45 @@
   font-size: 20px;
   font-weight: 600;
 }
+
+button {
+    border: none;
+    border-radius: 15px;
+
+    padding: 5px;
+  }
+
+  button:hover {
+    cursor: pointer;
+    border: 1px solid black;
+  }
+
+  .cancel-button {
+    background-color: #fca5a5;
+  }
+
+  .error-message {
+    background-color: #f87171;
+  }
+
+  input[type="submit"] {
+    border: none;
+    border-radius: 15px;
+
+    padding: 5px;
+
+    background-color: #bbf7d0;
+  }
+
+  input[type="submit"]:hover {
+    cursor: pointer;
+    border: 1px solid black;
+  }
+
+  * {
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
 
 @media (max-width: 400px) {
   .sidebar.close .nav-list li .sub-menu {

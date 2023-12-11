@@ -26,7 +26,7 @@
           v-on:click="searchByQuestion = false"
         />
       </div>
-      <input type="submit" v-on:click="searchFlashCardsByTag" />
+      <input type="submit" v-on:click="searchFlashCards" />
     </div>
 
     <div class="flashcard-results-container">
@@ -56,7 +56,7 @@ export default {
   },
 
   methods: {
-    searchFlashCardsByTag() {
+    searchFlashCards() {
       if (this.searchByQuestion === false) {
         DeckService.getCardsByTag(this.searchTerms, this.$route.params.id)
           .then((response) => {
