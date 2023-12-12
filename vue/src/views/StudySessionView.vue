@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="header-content">
-      <h1>Pick a Deck to Begin a Study Session</h1>
+      <h1>Pick a Deck to Begin Quiz</h1>
 
       <select
         class="dropDownButton"
@@ -12,6 +12,8 @@
           {{ deck.title }}
         </option>
       </select>
+
+      <h3>Randomize:</h3>
       <div class="toggle-switch" v-if="selectedDeck">
         <input
           type="checkbox"
@@ -27,7 +29,7 @@
         :to="{ name: 'completed-study-session' }"
       >
         <button class="cancel-button" v-if="selectedDeck">
-          Leave Study Session
+          Leave Quiz
         </button>
       </router-link>
     </div>

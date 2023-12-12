@@ -6,13 +6,13 @@
     <div class="profile-picture">
         <img src="../assets/pfp.jpg" alt="" />
     </div>
-    <div class="username">
-        <label for="username">Username </label>
-        <input type="text" id="username" v-model="user.username" required autofocus />
+    <div class="firstname">
+        <label for="firstname">FirstName: </label>
+        <input type="text" id="firstname" v-model="user.username" required autofocus />
     </div>
-    <div class="password">
-        <label for="password">Password </label>
-        <input type="text" id="password" v-model="user.password" required autofocus />
+    <div class="lastname">
+        <label for="lastname">Lastname: </label>
+        <input type="text" id="lastname" v-model="user.password" required autofocus />
     </div>
 </template>
 <script>
@@ -35,7 +35,7 @@ export default {
 }
 
 </script>
-<style>
+<style scoped>
 .profile-picture img {
     height: 30%;
     /* width: 51px; */
@@ -45,5 +45,11 @@ export default {
     margin: 0 14px 0 12px;
     background-color: #1d1b31;
     transition: all 0.5s ease;
+}
+.form-input-group {
+  margin-bottom: 1rem;
+}
+label {
+  margin-right: 0.5rem;
 }
 </style>
