@@ -122,7 +122,7 @@ export default {
   data() {
     return {
       deck: {},
-      flashcard: {},
+      // flashcard: {},
       decksFlashcards: {
         deckId: "",
         flashcardId: "",
@@ -261,9 +261,6 @@ export default {
     addFlashcardToDeckByDragAndDrop() {
       this.decksFlashcards.deckId = this.$route.params.id;
       this.decksFlashcards.flashcardId = this.flashcard.flashCardId;
-
-      console.log(this.decksFlashcards);
-      
 
       DeckService.addFlashcardToDeck(this.decksFlashcards)
         .then((response) => {

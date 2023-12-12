@@ -69,12 +69,15 @@ export default {
           currentFlashcardIds =
             currentFlashcardIds = currentFlashcardIds + `${this.$store.state.currentDeckFlashcards[i].flashCardId}` + ",";
         }
+
+        console.log(this.$store.state.currentSearchFlashcards);
       }
 
 
       if (this.searchByQuestion === false) {
         DeckService.getCardsByTag(this.searchTerms, currentFlashcardIds)
           .then((response) => {
+            console.log("Data from search" , response.data)
             this.$store.state.currentSearchFlashcards = response.data;
           })
           .catch((error) => {
