@@ -277,6 +277,8 @@ export default {
   padding: 10px;
 }
 
+
+
 .answer-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
