@@ -311,6 +311,10 @@ export default {
   margin-top: 10px;
 }
 
+.deck-info {
+  margin-left: 15px;
+}
+
 .edit-deck-info {
   display: flex;
   flex-direction: column;
@@ -331,6 +335,8 @@ export default {
 .form-action-buttons {
   display: flex;
   gap: 10px;
+
+  margin-left: 15px;
 }
 
 .cancel-button {

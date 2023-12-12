@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Pick a Deck and Begin Lightning Round</h1>
+    <h1 class="lightning-round-header" >Pick a Deck and Begin Lightning Round</h1>
     <div class="dropDownContainer">
     <select class="dropDownButton" v-model="selectedDeck" v-bind:disabled="selectedDeck">
       <option v-for="deck in decks" :key="deck.deckId" :value="deck">
@@ -206,6 +206,10 @@ export default {
 
 </script>
 <style scoped>
+
+.lightning-round-header {
+  margin-top: 0;
+}
 .header-content {
   display: flex;
   flex-direction: column;
