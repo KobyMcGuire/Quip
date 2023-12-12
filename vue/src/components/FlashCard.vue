@@ -214,8 +214,8 @@ export default {
 }
 
 .flashcard-container {
-  min-width: 25%;
-  min-height: 30%;
+  min-width: 30%;
+  min-height: 10vh;
 
   border: 3px solid black;
   border-radius: 10px;
@@ -223,10 +223,18 @@ export default {
   text-align: center;
 
   padding: 10px;
+
+  transition: all .2s ease-in-out;
 }
 
 .flashcard-container:hover {
   cursor: pointer;
+
+  border: 4px solid black;
+
+  transform: scale(1.025);
+
+  box-shadow: 10px 5px 5px rgb(198, 196, 196);
 }
 
 h1 {

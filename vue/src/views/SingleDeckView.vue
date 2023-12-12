@@ -267,9 +267,6 @@ export default {
 
       DeckService.addFlashcardToDeck(this.decksFlashcards)
         .then((response) => {
-          console.log("Adding flashcard to deck in DB", this.flashcard);
-
-
           let indexOfRemovedCard = "";
           for (let i = 0; i < this.$store.state.currentSearchFlashcards.length; i++) {
             if (this.$store.state.currentSearchFlashcards[i].flashCardId === this.flashcard.flashCardId) {
@@ -287,9 +284,6 @@ export default {
             indexOfRemovedCard,
             1
           );
-
-          console.log("At the end of the adding api call, currentDeckFlashcards ", this.$store.state.currentDeckFlashcards);
-          console.log("At the end of the adding api call, currentSearchFlashcards ", this.$store.state.currentSearchFlashcards[0]);
         })
         .catch((error) => {
           this.errorHandler(error, "putting card in to new deck");
@@ -414,12 +408,12 @@ export default {
 }
 
 .edit-flashcard-button{
-  background-color: #a4a4a4;
+  background-color: #f3f6f4;
 
 }
 
 .create-flashcard-button{
-  background-color: #a4a4a4;
+  background-color: #f3f6f4;
 
 }
 

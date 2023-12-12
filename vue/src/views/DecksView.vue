@@ -123,7 +123,7 @@ export default {
 .show-new-deck {
   margin-bottom: 10px;
   margin-left: 17px;
-  background-color: #b5c1bb;
+  background-color: #f3f6f4;
 }
 .deck-container {
   display: flex;
@@ -138,11 +138,18 @@ export default {
   text-align: center;
 
   padding: 10px;
-  background-color: #5b595b;
+
+  border: 3px solid black;
+
+  transition: all .2s ease-in-out;
 }
 
 .deck-card:hover {
-  border: 1px solid black;
+  border: 4px solid black;
+
+  transform: scale(1.1);
+
+  box-shadow: 10px 5px 5px rgb(198, 196, 196);
 }
 
 .new-deck-card {

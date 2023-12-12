@@ -327,7 +327,6 @@
   height: 100vh;
   width: calc(100% - 260px);
   left: 260px;
-  background-color: #4b5563;
   transition: all 0.5s ease;
 }
 
