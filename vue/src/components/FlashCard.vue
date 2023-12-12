@@ -34,17 +34,17 @@
       </router-link>
 
       <div class="image-upload">
-        <button>
+        <button v-on:click="defineWidget()" id="upload_widget" class="cloudinary-button">
           <label for="image">
             <i class="fas fa-upload"></i>
             <!-- This is the upload icon -->
           </label>
-          <input
+          <!-- <input
             id="image"
             type="file"
             accept="image/*"
-            @change="handleImageUpload"
-          />
+            @click="handleImageUpload"
+          /> -->
         </button>
       </div>
 
@@ -89,6 +89,8 @@ export default {
         deckId: "",
         flashcardId: "",
       },
+      uploadedImage: null,
+      myWidget: {},
     };
   },
   computed: {},
@@ -172,6 +174,29 @@ export default {
       const speechSynthesis = window.speechSynthesis;
       const utterance = new SpeechSynthesisUtterance(text);
       speechSynthesis.speak(utterance);
+    },
+
+    defineWidget() {
+      const cloudName = "dz0w5cehu";
+      const uploadPreset = "gooah3bb";
+      const folder = "final-capstone";
+      this.myWidget = window.cloudinary.createUploadWidget(
+        {
+          cloudName: cloudName,
+          uploadPreset: uploadPreset,
+          folder: folder,
+          // ... other options
+        },
+        (error, result) => {
+          if (!error && result && result.event === "success") {
+            console.log("Done! Here is the image info: ", result.info);
+            // document
+            //   .getElementById("uploadedimage")
+            //   .setAttribute("src", result.info.secure_url);
+            this.$emit("image-uploaded", result.info.secure_url);
+          }
+        }
+      ).open();
     },
   },
 };
