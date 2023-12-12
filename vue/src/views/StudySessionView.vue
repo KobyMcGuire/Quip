@@ -1,53 +1,97 @@
 <template>
   <div>
     <div class="header-content">
-      <h1>Pick a Deck to Begin a Study Session</h1>
+      <h1>Pick a Deck to Begin Quiz</h1>
 
-      <select class="dropDownButton" v-model="selectedDeck" v-bind:disabled="selectedDeck">
+      <select
+        class="dropDownButton"
+        v-model="selectedDeck"
+        v-bind:disabled="selectedDeck"
+      >
         <option v-for="deck in decks" :key="deck.deckId" :value="deck">
           {{ deck.title }}
         </option>
       </select>
+
+      <h3>Randomize:</h3>
       <div class="toggle-switch" v-if="selectedDeck">
-        <input type="checkbox" id="shuffleToggle" v-model="shuffle" @change="shuffleCards(cards)" :disabled="!cards.length"/>
+        <input
+          type="checkbox"
+          id="shuffleToggle"
+          v-model="shuffle"
+          :disabled="!cards.length"
+        />
         <label for="shuffleToggle" class="slider"></label>
       </div>
-      <router-link v-bind:correctAnswers="correctAnswers" :to="{ name: 'completed-study-session' }">
+      <router-link
+        v-bind:correctAnswers="correctAnswers"
+        :to="{ name: 'completed-study-session' }"
+      >
         <button class="cancel-button" v-if="selectedDeck">
-          Leave Study Session
+          Leave Quiz
         </button>
       </router-link>
     </div>
 
     <div v-if="selectedDeck" class="selected-deck-content">
       <h5>
-        Correct Answers: {{ this.$store.state.correctAnswers }} / {{ cards.length }}
+        Correct Answers: {{ this.$store.state.correctAnswers }} /
+        {{ cards.length }}
       </h5>
 
       <div class="viewedQuestion">
         <p>{{ cards[currentCardIndex] && cards[currentCardIndex].question }}</p>
 
-        <button class="voice-button" v-on:click="startVoiceAnswer">
-          <span class="material-symbols-outlined"> mic </span>
-        </button>
+        <div class="voice-buttons">
+          <button class="question-to-speech" v-on:click="textToSpeech(cards[currentCardIndex].question)">
+            <span class="material-symbols-outlined"> volume_up </span>
+          </button>
+
+          <button class="intake-speech"  v-on:click="startVoiceAnswer">
+            <span class="material-symbols-outlined"> mic </span>
+          </button>
+        </div>
       </div>
 
       <div class="answer-container">
-        <button v-for="(answer, index) in randomAnswers" :key="index" class="answer-item" @click="changeUserAnswer($event); markAnswerSelected($event)">
+        <button
+          v-for="(answer, index) in randomAnswers"
+          :key="index"
+          class="answer-item"
+          @click="
+            changeUserAnswer($event);
+            markAnswerSelected($event);
+          "
+        >
           {{ answer }}
         </button>
       </div>
     </div>
 
     <div class="study-submit-button" v-if="selectedDeck">
-      <router-link :to="{ name: 'completed-study-session' }" v-if="currentCardIndex === cards.length - 1">
-        <input type="submit" @click="submitAndMoveNext(); clearSelectedAnswer()"/>
+      <router-link
+        :to="{ name: 'completed-study-session' }"
+        v-if="currentCardIndex === cards.length - 1"
+      >
+        <input
+          type="submit"
+          @click="
+            submitAndMoveNext();
+            clearSelectedAnswer();
+          "
+        />
       </router-link>
 
-      <button class="submit-button" v-else @click="submitAndMoveNext(); clearSelectedAnswer()">
+      <button
+        class="submit-button"
+        v-else
+        @click="
+          submitAndMoveNext();
+          clearSelectedAnswer();
+        "
+      >
         Check Answer
       </button>
-
     </div>
   </div>
 </template>
@@ -73,16 +117,15 @@ export default {
   },
 
   methods: {
-
     shuffleCards(array) {
       let cardLength = array.length,
-          currentIndex = array.length;
+        currentIndex = array.length;
       for (currentIndex = cardLength - 1; currentIndex > 0; currentIndex--) {
         let randomIndex = Math.floor(Math.random() * (currentIndex + 1));
         let temp = array[currentIndex];
         array[currentIndex] = array[randomIndex];
         array[randomIndex] = temp;
-        localStorage.setItem('shuffle', JSON.stringify(this.shuffle));
+        localStorage.setItem("shuffle", JSON.stringify(this.shuffle));
       }
       this.randomAnswers = this.getRandomAnswers();
     },
@@ -106,8 +149,8 @@ export default {
       const correctAnswer = this.cards[this.currentCardIndex].answer;
 
       const wrongAnswers = this.cards
-          .filter((card) => card.answer !== correctAnswer)
-          .map((card) => card.answer);
+        .filter((card) => card.answer !== correctAnswer)
+        .map((card) => card.answer);
 
       const shuffleWrongAnswers = wrongAnswers.sort(() => Math.random() - 0.5);
       const selectedWrongAnswers = shuffleWrongAnswers.slice(0, 3);
@@ -154,101 +197,107 @@ export default {
       });
     },
 
+    textToSpeech(text) {
+      const speechSynthesis = window.speechSynthesis;
+      const utterance = new SpeechSynthesisUtterance(text);
+      speechSynthesis.speak(utterance);
+    },
+
     startVoiceAnswer() {
-      
-      if('SpeechRecognition' in window || 'webkitSpeechRecognition' in window){
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (
+        "SpeechRecognition" in window ||
+        "webkitSpeechRecognition" in window
+      ) {
+        const SpeechRecognition =
+          window.SpeechRecognition || window.webkitSpeechRecognition;
         const recognition = new SpeechRecognition();
 
-        recognition.onresult = (event)=>{
-          if(event.results && event.results[0]){
+        recognition.onresult = (event) => {
+          if (event.results && event.results[0]) {
             const voiceAnswer = event.results[0][0].transcript;
             console.log(event);
-            
-            if(voiceAnswer !== undefined){
-              console.log('Voice Answer:', voiceAnswer);
-              
+
+            if (voiceAnswer !== undefined) {
+              console.log("Voice Answer:", voiceAnswer);
+
               this.markVoiceAnswerSelected(voiceAnswer);
-            }else{
-              console.error('Unable to retrieve voice answer.');
+            } else {
+              console.error("Unable to retrieve voice answer.");
             }
-          }else{
-            console.error('Unexpected format of speech recognition results.');
+          } else {
+            console.error("Unexpected format of speech recognition results.");
           }
         };
         recognition.start();
-      }else{
-        console.error('Speech Recognition API not supported in this browser.');
+      } else {
+        console.error("Speech Recognition API not supported in this browser.");
       }
-      
     },
-    markVoiceAnswerSelected(voiceAnswer){
+    markVoiceAnswerSelected(voiceAnswer) {
       console.log("mark voice answer selected:", voiceAnswer);
-      this.randomAnswers.forEach(answer => {
-        
+      this.randomAnswers.forEach((answer) => {
         if (voiceAnswer == answer) {
-          
           this.selectedAnswer = answer;
-          
+
           let allButtons = document.querySelectorAll(".answer-item");
-          allButtons.forEach((button) =>{
-            if(button.innerText == this.selectedAnswer){
+          allButtons.forEach((button) => {
+            if (button.innerText == this.selectedAnswer) {
               button.classList.add("selected-answer");
             }
             console.log(button.innerText);
-          })
-          
+          });
         }
-      })
+      });
     },
-
   },
 
   created() {
     DeckService.getDecks()
-        .then((response) => {
-          this.decks = response.data;
-        })
-        .catch((error) => {
-          console.log(error, "Deck selection");
-        });
+      .then((response) => {
+        this.decks = response.data;
+      })
+      .catch((error) => {
+        console.log(error, "Deck selection");
+      });
 
-    const savedState = localStorage.getItem('shuffle');
-    if (savedState !== null) {
-      this.shuffle = JSON.parse(savedState);
-    }
+    // const savedState = localStorage.getItem("shuffle");
+    // if (savedState !== null) {
+    //   this.shuffle = JSON.parse(savedState);
+    // }
   },
 
   watch: {
     selectedDeck(newDeck) {
       if (newDeck) {
         DeckService.getCardsByDeckId(newDeck.deckId)
-            .then((response) => {
-              this.cards = response.data;
-              this.currentCardIndex = 0;
-              this.randomAnswers = this.getRandomAnswers();
-            })
-            .catch((error) => {
-              console.log(error, "Card selection");
-            });
+          .then((response) => {
+            this.cards = response.data;
+            this.currentCardIndex = 0;
+            this.randomAnswers = this.getRandomAnswers();
+          })
+          .catch((error) => {
+            console.log(error, "Card selection");
+          });
       }
     },
-  },
-};
+    shuffle(newShuffleState){
+      if(newShuffleState){
+        this.shuffleCards(this.cards)
+      }
+  }
+  }
+  }
 </script>
 
 <style scoped>
-
 .header-content {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
 }
 
 .selected-deck-content {
-
 }
 
 .header-content > h1 {
@@ -257,6 +306,8 @@ export default {
 
 .dropDownButton {
   width: 20%;
+  background-color: #a4a4a4;
+
 }
 
 .viewedQuestion {
@@ -269,11 +320,16 @@ export default {
   margin-left: auto;
   margin-right: auto;
 
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 
-  border: 3px solid black;
+  position: relative;
+
+  /* border: 3px solid black; */
   border-radius: 10px;
-
+background-color: #6b7280;
   padding: 10px;
 }
 
@@ -282,28 +338,31 @@ export default {
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
   padding-top: 20px;
+  background-color: #4b5563;
 }
 
 .answer-item {
-  border: 1px solid black;
+  /* border: 1px solid black; */
   padding: 10px;
   text-align: center;
+  background-color: #6b7280;
 
 }
 
 .study-submit-button {
   margin-top: 10px;
-
+  background-color: #4b5563;
   display: flex;
   justify-content: center;
 }
 
 .submit-button {
-  background-color: #a7f3d0;
+  background-color: #a4a4a4;
 }
 
 .cancel-button {
   margin-top: 10px;
+  background-color: rgb(94, 48, 57);
 }
 
 .toggle-switch {
@@ -327,7 +386,7 @@ export default {
   right: 0;
   bottom: 0;
   background-color: #ccc;
-  transition: .4s;
+  transition: 0.4s;
   border-radius: 34px;
 }
 
@@ -343,20 +402,29 @@ export default {
   left: 4px;
   bottom: 4px;
   background-color: white;
-  transition: .4s;
+  transition: 0.4s;
   border-radius: 50%;
 }
 
 input:checked + .slider {
-  background-color: #2196F3;
+  background-color: #2196f3;
 }
 
 input:checked + .slider:before {
   transform: translateX(26px);
 }
 
-.voice-button {  
-  position: relative;
-  bottom: 0;
+.voice-buttons {
+  position: absolute;
+  bottom: 10px;
+}
+
+.question-to-speech {
+  margin-right: 10px;
+  background-color: #9ca3af;
+}
+
+.intake-speech{
+  background-color: #9ca3af;
 }
 </style>

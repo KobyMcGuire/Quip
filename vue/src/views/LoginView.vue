@@ -67,4 +67,16 @@ export default {
 label {
   margin-right: 0.5rem;
 }
+
+button[type="submit"]{
+  background-color: #a4a4a4;
+}
+
+input[type="text"] {
+  background-color: #a4a4a4;
+     }
+
+     input[type="password"] {
+  background-color: #a4a4a4;
+     }
 </style>

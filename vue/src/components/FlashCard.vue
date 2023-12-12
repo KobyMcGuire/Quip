@@ -2,12 +2,10 @@
   <div class="flashcard-container">
     <div class="flashcard-text-content" v-on:click="flipCard">
       <div class="question" v-if="showFront">
-
         <p v-if="image && image.length">
-          <img :src="image" alt="">
+          <img :src="image" alt="" />
         </p>
         <p v-else>{{ flashcard.question }}</p>
-
       </div>
 
       <div class="answer" v-if="!showFront">
@@ -35,13 +33,20 @@
         </button>
       </router-link>
 
-        <div class="image-upload">
+      <div class="image-upload">
+        <button v-on:click="defineWidget()" id="upload_widget" class="cloudinary-button">
           <label for="image">
-            <i class="fas fa-upload"></i> <!-- This is the upload icon -->
+            <i class="fas fa-upload"></i>
+            <!-- This is the upload icon -->
           </label>
-          <input id="image" type="file" accept="image/*" @change="handleImageUpload">
-        </div>
-
+          <!-- <input
+            id="image"
+            type="file"
+            accept="image/*"
+            @click="handleImageUpload"
+          /> -->
+        </button>
+      </div>
 
       <button v-if="deleteButton" v-on:click="deleteFlashcard">
         <span class="material-symbols-outlined"> delete </span>
@@ -52,13 +57,13 @@
         <span class="material-symbols-outlined"> add </span>
       </button>
 
-      <button v-on:click="textToSpeech(flashcard.question)">
-      <span class="material-symbols-outlined"> volume_up </span>
-    </button>
-    
-    <button v-on:click="textToSpeech(flashcard.answer)">
-      <span class="material-symbols-outlined"> volume_up </span>
-    </button>
+      <button v-if="showFront" v-on:click="textToSpeech(flashcard.question)">
+        <span class="material-symbols-outlined"> volume_up </span>
+      </button>
+
+      <button v-if="!showFront" v-on:click="textToSpeech(flashcard.answer)">
+        <span class="material-symbols-outlined"> volume_up </span>
+      </button>
     </div>
   </div>
 </template>
@@ -77,14 +82,15 @@ export default {
         question: this.flashcard.question,
         answer: this.flashcard.answer,
         tag: this.flashcard.tag,
-
       },
       editFlashcardError: false,
       displayTags: false,
       decksFlashcards: {
         deckId: "",
-        flashcardId: ""
-      }
+        flashcardId: "",
+      },
+      uploadedImage: null,
+      myWidget: {},
     };
   },
   computed: {},
@@ -95,11 +101,11 @@ export default {
     },
 
     handleImageUpload(event) {
-      console.log(event.target.files)
+      console.log(event.target.files);
       const file = event.target.files[0];
       console.log(file);
 
-      if (file && file.type.startsWith('image/')) {
+      if (file && file.type.startsWith("image/")) {
         const reader = new FileReader();
         reader.onload = (e) => {
           this.image = e.target.result;
@@ -107,7 +113,7 @@ export default {
         };
         reader.readAsDataURL(file);
       } else {
-        console.error('Invalid file type or no file selected');
+        console.error("Invalid file type or no file selected");
       }
     },
 
@@ -117,31 +123,42 @@ export default {
       this.decksFlashcards.flashcardId = this.flashcard.flashCardId;
 
       DeckService.addFlashcardToDeck(this.decksFlashcards)
-      .then((response) => {
-        let indexOfRemovedCard = this.$store.state.currentSearchFlashcards.indexOf(this.flashcard);
+        .then((response) => {
+          let indexOfRemovedCard =
+            this.$store.state.currentSearchFlashcards.indexOf(this.flashcard);
 
-        // Add flashcard to current decks flashcards
-        this.$store.state.currentDeckFlashcards.push(this.$store.state.currentSearchFlashcards[indexOfRemovedCard]);
+          // Add flashcard to current decks flashcards
+          this.$store.state.currentDeckFlashcards.push(
+            this.$store.state.currentSearchFlashcards[indexOfRemovedCard]
+          );
 
-        // Remove the flashcard from the current search flashcards array
-        this.$store.state.currentSearchFlashcards.splice(indexOfRemovedCard, 1);
-      })
-      .catch((error) => {
-        this.errorHandler(error, 'putting card in to new deck')
-      })      
-
+          // Remove the flashcard from the current search flashcards array
+          this.$store.state.currentSearchFlashcards.splice(
+            indexOfRemovedCard,
+            1
+          );
+        })
+        .catch((error) => {
+          this.errorHandler(error, "putting card in to new deck");
+        });
     },
 
     // Delete Flashcard
     deleteFlashcard() {
-      DeckService.deleteFlashcard(this.flashcard.flashCardId, this.$route.params.id)
+      DeckService.deleteFlashcard(
+        this.flashcard.flashCardId,
+        this.$route.params.id
+      )
         .then((response) => {
-          let indexOfRemovedCard = this.$store.state.currentDeckFlashcards.indexOf(this.flashcard)
+          let indexOfRemovedCard =
+            this.$store.state.currentDeckFlashcards.indexOf(this.flashcard);
 
           // Update search store flashcards array to include deleted card
-          this.$store.state.currentSearchFlashcards.push(this.$store.state.currentDeckFlashcards[indexOfRemovedCard]);
+          this.$store.state.currentSearchFlashcards.push(
+            this.$store.state.currentDeckFlashcards[indexOfRemovedCard]
+          );
 
-          // Remove card from the stores current deck flashcards array 
+          // Remove card from the stores current deck flashcards array
           this.$store.state.currentDeckFlashcards.splice(indexOfRemovedCard, 1);
         })
         .catch((error) => {
@@ -158,13 +175,35 @@ export default {
       const utterance = new SpeechSynthesisUtterance(text);
       speechSynthesis.speak(utterance);
     },
+
+    defineWidget() {
+      const cloudName = "dz0w5cehu";
+      const uploadPreset = "gooah3bb";
+      const folder = "final-capstone";
+      this.myWidget = window.cloudinary.createUploadWidget(
+        {
+          cloudName: cloudName,
+          uploadPreset: uploadPreset,
+          folder: folder,
+          // ... other options
+        },
+        (error, result) => {
+          if (!error && result && result.event === "success") {
+            console.log("Done! Here is the image info: ", result.info);
+            // document
+            //   .getElementById("uploadedimage")
+            //   .setAttribute("src", result.info.secure_url);
+            this.$emit("image-uploaded", result.info.secure_url);
+          }
+        }
+      ).open();
+    },
   },
 };
 </script>
 
 <style scoped>
-
-.image-upload input[type="file"]{
+.image-upload input[type="file"] {
   margin-bottom: 10px;
   display: none;
 }

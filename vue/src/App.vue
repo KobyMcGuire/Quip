@@ -86,6 +86,7 @@
 </template>
 
 <style>
+
 .sidebar {
   position: fixed;
   top: 0;
@@ -326,7 +327,7 @@
   height: 100vh;
   width: calc(100% - 260px);
   left: 260px;
-  /* background-color: #76737e; */
+  background-color: #4b5563;
   transition: all 0.5s ease;
 }
 
@@ -362,7 +363,7 @@ button {
   border: none;
   border-radius: 15px;
 
-  padding: 5px;
+  padding: 8px;
 }
 
 button:hover {
@@ -376,13 +377,15 @@ button:hover {
 
 .error-message {
   background-color: #f87171;
+  padding: 5px;
+  border-radius: 10px;
 }
 
 input[type="submit"] {
   border: none;
   border-radius: 15px;
 
-  padding: 5px;
+  padding: 8px;
 
   background-color: #bbf7d0;
 }

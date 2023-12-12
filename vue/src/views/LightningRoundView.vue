@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Pick a Deck and Begin Lightning Round</h1>
+    <h1 class="lightning-round-header" >Pick a Deck and Begin Lightning Round</h1>
     <div class="dropDownContainer">
       <select class="dropDownButton" v-model="selectedDeck" v-bind:disabled="selectedDeck">
         <option v-for="deck in decks" :key="deck.deckId" :value="deck">
@@ -276,11 +276,15 @@ export default {
 
 </script>
 <style scoped>
+
 .viewedQuestion[draggable="true"]:active {
   cursor: move;
   opacity: 0.5;
 }
 
+.lightning-round-header {
+  margin-top: 0;
+}
 .header-content {
   display: flex;
   flex-direction: column;
@@ -294,7 +298,12 @@ export default {
 
 .dropDownButton {
   width: 100%;
+<<<<<<< HEAD
 
+=======
+  background-color: #a4a4a4;
+  
+>>>>>>> 1d27cb942e90863d9ff3323ab995edb23a023f52
 }
 
 .dropDownContainer {
@@ -322,13 +331,14 @@ h1 {
   max-height: 30%;
   margin-left: 35%;
 
-  border: 3px solid black;
+  /* border: 3px solid black; */
   border-radius: 10px;
   display: flex;
 
   text-align: center;
   justify-content: center;
   align-items: center;
+  background-color: #6b7280;
 
   padding: 10px;
 }
@@ -341,9 +351,10 @@ h1 {
 }
 
 .answer-item {
-  border: 1px solid black;
+  /* border: 1px solid black; */
   padding: 10px;
   text-align: center;
+  background-color: #6b7280;
 
 }
 
@@ -353,16 +364,20 @@ h1 {
 
 .study-submit-button {
   margin-top: 10px;
-
+  background-color: #4b5563;
   display: flex;
   justify-content: center;
 }
 
 .submit-button {
-  background-color: #a7f3d0;
+  background-color: #a4a4a4;
 }
 
 .cancel-button {
   margin-top: 10px;
+}
+
+input[type="submit"] {
+  background-color: #a4a4a4;
 }
 </style>
