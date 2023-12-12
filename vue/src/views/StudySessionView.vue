@@ -19,7 +19,6 @@
           type="checkbox"
           id="shuffleToggle"
           v-model="shuffle"
-          @change="shuffleCards(cards)"
           :disabled="!cards.length"
         />
         <label for="shuffleToggle" class="slider"></label>
@@ -261,10 +260,10 @@ export default {
         console.log(error, "Deck selection");
       });
 
-    const savedState = localStorage.getItem("shuffle");
-    if (savedState !== null) {
-      this.shuffle = JSON.parse(savedState);
-    }
+    // const savedState = localStorage.getItem("shuffle");
+    // if (savedState !== null) {
+    //   this.shuffle = JSON.parse(savedState);
+    // }
   },
 
   watch: {
@@ -281,8 +280,13 @@ export default {
           });
       }
     },
-  },
-};
+    shuffle(newShuffleState){
+      if(newShuffleState){
+        this.shuffleCards(this.cards)
+      }
+  }
+  }
+  }
 </script>
 
 <style scoped>
