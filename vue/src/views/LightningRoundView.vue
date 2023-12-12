@@ -228,6 +228,7 @@ export default {
 
 .dropDownButton {
   width: 100%;
+  background-color: #a4a4a4;
   
 }
 
@@ -258,13 +259,14 @@ h1{
   max-height: 30%;
   margin-left: 35%;
 
-  border: 3px solid black;
+  /* border: 3px solid black; */
   border-radius: 10px;
   display: flex;
 
   text-align: center;
   justify-content: center;
   align-items: center;
+  background-color: #6b7280;
 
   padding: 10px;
 }
@@ -277,9 +279,10 @@ h1{
 }
 
 .answer-item {
-  border: 1px solid black;
+  /* border: 1px solid black; */
   padding: 10px;
   text-align: center;
+  background-color: #6b7280;
 
 }
 
@@ -289,16 +292,20 @@ h1{
 
 .study-submit-button {
   margin-top: 10px;
-
+  background-color: #4b5563;
   display: flex;
   justify-content: center;
 }
 
 .submit-button {
-  background-color: #a7f3d0;
+  background-color: #a4a4a4;
 }
 
 .cancel-button {
   margin-top: 10px;
 }
+
+input[type="submit"] {
+  background-color: #a4a4a4;
+     }
 </style>

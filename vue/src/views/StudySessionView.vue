@@ -47,7 +47,7 @@
             <span class="material-symbols-outlined"> volume_up </span>
           </button>
 
-          <button  v-on:click="startVoiceAnswer">
+          <button class="intake-speech"  v-on:click="startVoiceAnswer">
             <span class="material-symbols-outlined"> mic </span>
           </button>
         </div>
@@ -306,6 +306,8 @@ export default {
 
 .dropDownButton {
   width: 20%;
+  background-color: #a4a4a4;
+
 }
 
 .viewedQuestion {
@@ -325,9 +327,9 @@ export default {
 
   position: relative;
 
-  border: 3px solid black;
+  /* border: 3px solid black; */
   border-radius: 10px;
-
+background-color: #6b7280;
   padding: 10px;
 }
 
@@ -336,27 +338,31 @@ export default {
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
   padding-top: 20px;
+  background-color: #4b5563;
 }
 
 .answer-item {
-  border: 1px solid black;
+  /* border: 1px solid black; */
   padding: 10px;
   text-align: center;
+  background-color: #6b7280;
+
 }
 
 .study-submit-button {
   margin-top: 10px;
-
+  background-color: #4b5563;
   display: flex;
   justify-content: center;
 }
 
 .submit-button {
-  background-color: #a7f3d0;
+  background-color: #a4a4a4;
 }
 
 .cancel-button {
   margin-top: 10px;
+  background-color: rgb(94, 48, 57);
 }
 
 .toggle-switch {
@@ -415,5 +421,10 @@ input:checked + .slider:before {
 
 .question-to-speech {
   margin-right: 10px;
+  background-color: #9ca3af;
+}
+
+.intake-speech{
+  background-color: #9ca3af;
 }
 </style>
