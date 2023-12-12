@@ -36,13 +36,13 @@
     </div>
 
     <div class="form-action-buttons">
-      <button
+      <button class="create-flashcard-button"
         v-on:click="this.showCreateFlashcard = !this.showCreateFlashcard"
         v-bind:disabled="showCreateFlashcard || showEditDeck"
       >
         Create Flashcard
       </button>
-      <button
+      <button class="edit-flashcard-button"
         v-on:click="this.showEditDeck = !this.showEditDeck"
         v-bind:disabled="showCreateFlashcard || showEditDeck"
       >
@@ -412,4 +412,15 @@ export default {
   margin-top: 3%;
   margin-bottom: 3%;
 }
+
+.edit-flashcard-button{
+  background-color: #a4a4a4;
+
+}
+
+.create-flashcard-button{
+  background-color: #a4a4a4;
+
+}
+
 </style>
