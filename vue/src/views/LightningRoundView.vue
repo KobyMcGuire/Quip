@@ -2,28 +2,30 @@
   <div>
     <h1>Pick a Deck and Begin Lightning Round</h1>
     <div class="dropDownContainer">
-    <select class="dropDownButton" v-model="selectedDeck" v-bind:disabled="selectedDeck">
-      <option v-for="deck in decks" :key="deck.deckId" :value="deck">
-        {{ deck.title }}
-      </option>
-    </select>
+      <select class="dropDownButton" v-model="selectedDeck" v-bind:disabled="selectedDeck">
+        <option v-for="deck in decks" :key="deck.deckId" :value="deck">
+          {{ deck.title }}
+        </option>
+      </select>
     </div>
     <div v-if="selectedDeck">
       <h5>Correct Answers: {{ this.$store.state.correctAnswers }} / {{ cards.length }}</h5>
       <div v-if="timerVisible">
         <p>Time remaining: {{ remainingTime }} seconds</p>
       </div>
-      <div class="viewedQuestion">
+
+      <div class="viewedQuestion" :draggable="!dragged" @dragstart="handleDragStart" @dragend="handleDragEnd">
         {{ cards[currentCardIndex] && cards[currentCardIndex].question }}
       </div>
 
       <div class="answer-container">
-        <button v-for="(answer, index) in randomAnswers" :key="index" class="answer-item"
-                @click="changeUserAnswer($event); markAnswerSelected($event)">
+        <button tabindex="0" v-for="(answer, index) in randomAnswers" :key="index" class="answer-item"
+                @click="changeUserAnswer($event); markAnswerSelected($event)" @keyup="handleKeyPress($event)" @drop="handleDrop" @dragover="handleDragOver">
           {{ answer }}
         </button>
       </div>
     </div>
+
     <div class="study-submit-button" v-if="selectedDeck">
       <router-link :to="{ name: 'completed-study-session' }" v-if="currentCardIndex === cards.length - 1">
         <input type="submit" @click="submitAndMoveNext(); clearSelectedAnswer()">
@@ -31,6 +33,7 @@
 
       <input type="submit" v-else @click="submitAndMoveNext(); clearSelectedAnswer()">
     </div>
+
   </div>
 </template>
 <script>
@@ -42,6 +45,7 @@ export default {
   data() {
     return {
       selectedDeck: null,
+      dragged: false,
       selectedAnswer: null,
       decks: [],
       cards: [],
@@ -56,15 +60,71 @@ export default {
     };
   },
   methods: {
+    handleDragStart(event) {
+      event.dataTransfer.setData('text/plain', 'question-card');
+      this.dragged = true;
+      console.log('HandleDragStart')
+    },
+    handleDragEnd() {
+      this.dragged = false;
+    },
 
-      swipeHandler() {
-        console.log("Swipe!");
-      },
+    handleDrop(event) {
+      event.preventDefault();
+      if (this.dragged) {
+        const data = event.dataTransfer.getData('text/plain');
+        if (data === 'question-card') {
+          this.submitAndMoveNext();
+          this.clearSelectedAnswer()
+        }
+      }
+    },
+    handleDragOver(event) {
+      event.preventDefault();
+      if (this.dragged) {
+        const rect = event.currentTarget.getBoundingClientRect();
+        const offsetX = event.clientX - rect.left;
+        const offsetY = event.clientY - rect.top;
+
+        const isOverAnswer = offsetX > 0 && offsetX < rect.width && offsetY > 0 && offsetY < rect.height;
+        if (isOverAnswer) {
+          this.selectedAnswer = event.currentTarget.innerText;
+          this.markAnswerSelected();
+
+        } else {
+          this.clearSelectedAnswer();
+        }
+      }
+    },
+
+    handleKeyPress(event) {
+      switch (event.key) {
+        case 'ArrowLeft':
+          this.selectedAnswer = this.randomAnswers[0];
+          this.markAnswerSelected();
+          this.submitAndMoveNext();
+          break;
+        case 'ArrowRight':
+          this.selectedAnswer = this.randomAnswers[1];
+          this.markAnswerSelected();
+          this.submitAndMoveNext();
+          break;
+      }
+      this.clearSelectedAnswer()
+    },
 
     submitAndMoveNext() {
       if (this.selectedAnswer !== null) {
         this.checkAnswer(this.currentCardIndex);
-        this.nextCard();
+
+        if (this.currentCardIndex < this.cards.length - 1) {
+          // Move to the next card
+          this.nextCard();
+        } else {
+          // Navigate to the CompletedView
+          this.navigateToCompletedView();
+        }
+
         this.selectedAnswer = null;
         this.startTimer();
       }
@@ -117,6 +177,7 @@ export default {
     changeUserAnswer(event) {
       this.selectedAnswer = event.target.innerText;
     },
+
     startTimer() {
       clearTimeout(this.timerId);
       // Set a new timer for the next card
@@ -149,18 +210,21 @@ export default {
       this.$store.state.incorrectQuestions.push(this.cards[this.currentCardIndex].question)
     },
 
-    markAnswerSelected(event) {
-      // Clear previous selection
-      let allButtons = document.querySelectorAll(".answer-item");
-      allButtons.forEach((button) => {
-        button.classList.remove("selected-answer");
-      });
-      let targetButton = event.target;
-      // Add selected class to target button
-      targetButton.classList.add("selected-answer");
+    markAnswerSelected() {
+      if (this.selectedAnswer) {
+        let allButtons = document.querySelectorAll(".answer-item");
+        allButtons.forEach((button) => {
+          button.classList.remove("selected-answer");
+        });
+
+        let targetButton = Array.from(allButtons).find(button => button.innerText === this.selectedAnswer);
+        if (targetButton) {
+          targetButton.classList.add("selected-answer");
+        }
+      }
     },
+
     clearSelectedAnswer() {
-      // Clear previous selection
       let allButtons = document.querySelectorAll(".answer-item");
       allButtons.forEach((button) => {
         button.classList.remove("selected-answer");
@@ -180,8 +244,14 @@ export default {
 
   },
 
+  mounted() {
+    document.addEventListener('keyup', this.handleKeyPress)
+  },
+
   beforeUnmount() {
     clearInterval(this.timerId);
+    document.removeEventListener('keyup', this.handleKeyPress);
+
   },
 
   watch: {
@@ -206,16 +276,16 @@ export default {
 
 </script>
 <style scoped>
+.viewedQuestion[draggable="true"]:active {
+  cursor: move;
+  opacity: 0.5;
+}
+
 .header-content {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-
-}
-
-.selected-deck-content {
-
 }
 
 .header-content > h1 {
@@ -224,19 +294,17 @@ export default {
 
 .dropDownButton {
   width: 100%;
-  
+
 }
 
-.dropDownContainer{
-    width: 20%;
+.dropDownContainer {
+  width: 20%;
   margin: auto;
 }
 
-h1{
-    text-align: center;
+h1 {
+  text-align: center;
 }
-
-
 
 .cardMovementButtons {
   display: flex;

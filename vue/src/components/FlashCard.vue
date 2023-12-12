@@ -103,7 +103,7 @@ export default {
         const reader = new FileReader();
         reader.onload = (e) => {
           this.image = e.target.result;
-          console.log(e.target.result);
+          // console.log(e.target.result);
         };
         reader.readAsDataURL(file);
       } else {
