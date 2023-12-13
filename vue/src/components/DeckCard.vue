@@ -16,6 +16,10 @@
 <script>
 export default {
   props: ["deck"],
+
+  created() {
+
+  }
 };
 </script>
 

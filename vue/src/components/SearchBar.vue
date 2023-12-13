@@ -29,7 +29,12 @@
       <input type="submit" v-on:click="searchFlashCards" />
     </div>
 
-    <div class="flashcard-results-container">
+    <div
+      class="flashcard-results-container"
+      v-on:drop="onDrop($event)"
+      @dragover.prevent
+      @dragenter.prevent
+    >
       <flash-card
         draggable="true"
         v-on:dragstart="handleDragStart($event, flashcard)"
@@ -64,20 +69,22 @@ export default {
       for (let i = 0; i < this.$store.state.currentDeckFlashcards.length; i++) {
         if (i === this.$store.state.currentDeckFlashcards.length - 1) {
           currentFlashcardIds =
-            currentFlashcardIds + `${this.$store.state.currentDeckFlashcards[i].flashCardId}`;
+            currentFlashcardIds +
+            `${this.$store.state.currentDeckFlashcards[i].flashCardId}`;
         } else {
-          currentFlashcardIds =
-            currentFlashcardIds = currentFlashcardIds + `${this.$store.state.currentDeckFlashcards[i].flashCardId}` + ",";
+          currentFlashcardIds = currentFlashcardIds =
+            currentFlashcardIds +
+            `${this.$store.state.currentDeckFlashcards[i].flashCardId}` +
+            ",";
         }
 
         console.log(this.$store.state.currentSearchFlashcards);
       }
 
-
       if (this.searchByQuestion === false) {
         DeckService.getCardsByTag(this.searchTerms, currentFlashcardIds)
           .then((response) => {
-            console.log("Data from search" , response.data)
+            console.log("Data from search", response.data);
             this.$store.state.currentSearchFlashcards = response.data;
           })
           .catch((error) => {
@@ -95,23 +102,69 @@ export default {
     },
 
     handleDragStart(event, flashcard) {
-      event.target.style.opacity = '0.4';
-      
-      event.dataTransfer.dropEffect = 'move';
-      event.dataTransfer.effectAllowed = 'move';
-      event.dataTransfer.setData('flashCardId', flashcard.flashCardId);
+      event.target.style.opacity = "0.4";
 
-      let flashcardsContainer = document.querySelector(".flash-cards-container")
-      flashcardsContainer.style.border = '1px solid black'
+      event.dataTransfer.dropEffect = "move";
+      event.dataTransfer.effectAllowed = "move";
+      event.dataTransfer.setData("flashCardId", flashcard.flashCardId);
+
+      let flashcardsContainer = document.querySelector(
+        ".flash-cards-container"
+      );
+      flashcardsContainer.style.border = "1px solid black";
     },
 
     handleDragEnd(event) {
-      event.target.style.opacity = '1';
+      event.target.style.opacity = "1";
 
-      let flashcardsContainer = document.querySelector(".flash-cards-container")
-      flashcardsContainer.style.border = 'none'
+      let flashcardsContainer = document.querySelector(
+        ".flash-cards-container"
+      );
+      flashcardsContainer.style.border = "none";
     },
 
+    onDrop(event) {
+      let flashcardId = event.dataTransfer.getData('flashCardId');
+      this.findFlashcard(flashcardId);
+    },
+
+    findFlashcard(flashcardId) {
+      DeckService.getCard(flashcardId)
+      .then((response) => {
+        this.flashcard = response.data;
+        // Delete card from current Deck
+        this.deleteFlashcardByDragAndDrop();
+      })
+      .catch((error) => {
+        this.errorHandler(error, "fetching card");
+      })
+    },
+
+    deleteFlashcardByDragAndDrop() {
+      DeckService.deleteFlashcard(
+        this.flashcard.flashCardId,
+        this.$route.params.id
+      )
+        .then((response) => {
+          let indexOfRemovedCard = "";
+          for (let i = 0; i < this.$store.state.currentDeckFlashcards.length; i++) {
+            if (this.$store.state.currentDeckFlashcards[i].flashCardId === this.flashcard.flashCardId) {
+              indexOfRemovedCard = i;
+            }
+          }
+
+          // Update search store flashcards array to include deleted card
+          this.$store.state.currentSearchFlashcards.push(
+            this.$store.state.currentDeckFlashcards[indexOfRemovedCard]
+          );
+
+          // Remove card from the stores current deck flashcards array
+          this.$store.state.currentDeckFlashcards.splice(indexOfRemovedCard, 1);
+        })
+        .catch((error) => {
+          this.errorHandler(error, "deleting flashcard");
+        });
+    },
 
     errorHandler(error, verb) {
       console.log(`There was an error ${verb}. The error was: ${error}`);

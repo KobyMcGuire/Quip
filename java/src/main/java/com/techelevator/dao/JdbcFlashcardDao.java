@@ -120,6 +120,7 @@ public class JdbcFlashcardDao implements FlashcardDao {
         if(useWildcard){
             tag = "%" + tag + "%";
         }
+
         try{
             SqlRowSet results = jdbcTemplate.queryForRowSet(sql, tag);
             while(results.next()){
