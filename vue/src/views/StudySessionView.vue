@@ -1,19 +1,19 @@
 <template>
   <div>
     <div class="header-content">
-      <h1>Pick a Deck to Begin Quiz</h1>
+      <h1 v-if="!selectedDeck">Select a Deck to Begin Quiz</h1>
 
       <select
         class="dropDownButton"
         v-model="selectedDeck"
-        v-bind:disabled="selectedDeck"
+        v-if = "!selectedDeck"
       >
         <option v-for="deck in decks" :key="deck.deckId" :value="deck">
           {{ deck.title }}
         </option>
       </select>
 
-      <h3>Randomize:</h3>
+      <h3 v-if="selectedDeck">Randomize:</h3>
       <div class="toggle-switch" v-if="selectedDeck">
         <input
           type="checkbox"
@@ -23,14 +23,6 @@
         />
         <label for="shuffleToggle" class="slider"></label>
       </div>
-      <router-link
-        v-bind:correctAnswers="correctAnswers"
-        :to="{ name: 'completed-study-session' }"
-      >
-        <button class="cancel-button" v-if="selectedDeck">
-          Leave Quiz
-        </button>
-      </router-link>
     </div>
 
     <div v-if="selectedDeck" class="selected-deck-content">
@@ -68,7 +60,7 @@
       </div>
     </div>
 
-    <div class="study-submit-button" v-if="selectedDeck">
+    <div class="study-quiz-buttons" v-if="selectedDeck">
       <router-link
         :to="{ name: 'completed-study-session' }"
         v-if="currentCardIndex === cards.length - 1"
@@ -92,6 +84,15 @@
       >
         Check Answer
       </button>
+
+      <router-link
+        v-bind:correctAnswers="correctAnswers"
+        :to="{ name: 'completed-study-session' }"
+      >
+        <button class="cancel-button" v-if="selectedDeck" v-on:click="handleLeaveEarly">
+          Leave Quiz
+        </button>
+      </router-link>
     </div>
   </div>
 </template>
@@ -197,6 +198,10 @@ export default {
       });
     },
 
+    handleLeaveEarly() {
+
+    },
+
     textToSpeech(text) {
       const speechSynthesis = window.speechSynthesis;
       const utterance = new SpeechSynthesisUtterance(text);
@@ -297,17 +302,18 @@ export default {
   align-items: center;
 }
 
-.selected-deck-content {
-}
-
 .header-content > h1 {
   margin-top: 0;
 }
 
 .dropDownButton {
   width: 20%;
-  background-color: #a4a4a4;
+  height: 30px;
+  border-radius: 15px;
+}
 
+.dropDownButton:focus {
+  border: 2px solid black;
 }
 
 .viewedQuestion {
@@ -327,9 +333,11 @@ export default {
 
   position: relative;
 
-  /* border: 3px solid black; */
+  border: 3px solid black;
   border-radius: 10px;
-background-color: #6b7280;
+
+  background-color: rgb(251, 249, 249);
+
   padding: 10px;
 }
 
@@ -338,31 +346,25 @@ background-color: #6b7280;
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
   padding-top: 20px;
-  background-color: #4b5563;
 }
 
 .answer-item {
-  /* border: 1px solid black; */
+  border: 1px solid black;
   padding: 10px;
   text-align: center;
-  background-color: #6b7280;
 
+  background-color: rgb(251, 249, 249);
 }
 
-.study-submit-button {
+.study-quiz-buttons {
   margin-top: 10px;
-  background-color: #4b5563;
   display: flex;
   justify-content: center;
+  gap: 20px;
 }
 
 .submit-button {
-  background-color: #a4a4a4;
-}
-
-.cancel-button {
-  margin-top: 10px;
-  background-color: rgb(94, 48, 57);
+  background-color: #86efac;
 }
 
 .toggle-switch {
@@ -391,8 +393,10 @@ background-color: #6b7280;
 }
 
 .selected-answer {
-  background-color: rgb(159, 159, 159);
+  background-color: #d4d4d8;
+  border: 2px solid black;
 }
+
 
 .slider:before {
   position: absolute;
@@ -421,10 +425,11 @@ input:checked + .slider:before {
 
 .question-to-speech {
   margin-right: 10px;
-  background-color: #9ca3af;
+  background-color: #d4d4d8;
+
 }
 
 .intake-speech{
-  background-color: #9ca3af;
+  background-color: #d4d4d8;
 }
 </style>
