@@ -1,8 +1,7 @@
-
 <template>
   <head>
     <title>Quip</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"/>
   </head>
 
   <nav>
@@ -20,17 +19,21 @@
           </a>
 
           <ul class="sub-menu blank">
-            <li><a href="#" class="link-name"><router-link v-bind:to="{ name: 'home' }">Home</router-link></a></li>
+            <li><a href="#" class="link-name">
+              <router-link v-bind:to="{ name: 'home' }">Home</router-link>
+            </a></li>
           </ul>
         </li>
 
         <li>
           <a href="/decks">
-            <i class="fas fa-spinner"></i>
+            <i class="fa fa-spinner"></i>
             <span class="link-name"><router-link v-bind:to="{ name: 'decks' }">Decks</router-link></span>
           </a>
           <ul class="sub-menu blank">
-            <li><a href="#" class="link-name"><router-link v-bind:to="{ name: 'decks' }">Decks</router-link></a></li>
+            <li><a href="#" class="link-name">
+              <router-link v-bind:to="{ name: 'decks' }">Decks</router-link>
+            </a></li>
           </ul>
         </li>
 
@@ -40,34 +43,40 @@
               <i class="fa fa-book"></i>
               <span class="link-name">Studies</span>
             </a>
-            <i class="fas fa-caret-down arrow"></i>
+            <i class="fa fa-caret-down arrow"></i>
           </div>
 
           <ul class="sub-menu">
             <li><a href="#" class="link-name">Studies</a></li>
-            <li><a href="#"><router-link v-bind:to="{ name: 'single-card-view' }">Study</router-link></a></li>
-            <li><a href="#"><router-link v-bind:to="{ name: 'study-session' }">Quiz</router-link></a></li>
-            <li><a href="#"><router-link v-bind:to="{ name: 'lightning-round-study-session' }">Lightning
-                  Round</router-link></a></li>
+            <li><a href="#">
+              <router-link v-bind:to="{ name: 'single-card-view' }">Study</router-link>
+            </a></li>
+            <li><a href="#">
+              <router-link v-bind:to="{ name: 'study-session' }">Quiz</router-link>
+            </a></li>
+            <li><a href="#">
+              <router-link v-bind:to="{ name: 'lightning-round-study-session' }">Lightning Round</router-link>
+            </a></li>
           </ul>
         </li>
 
         <li>
           <div class="profile-details">
 
-            <router-link v-bind:to="{ name: 'user' }">
+            <router-link v-if="$store.state.token" v-bind:to="{ name: 'user' }">
               <div class="profile-content">
-                <img src="../src/assets/pfp.jpg" alt="" />
+                <img src="../src/assets/pfp.jpg" alt=""/>
               </div>
             </router-link>
 
             <div class="name-job">
-              <div class="firstName">{{this.$store.state.user.username}}</div>
+              <div class="firstNameLoggedOut" v-if="!$store.state.token">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Please Sign in ---></div>
+              <div class="firstName">{{ this.$store.state.user.username }}</div>
             </div>
-            <router-link v-if="!$store.state.token" v-bind:to="{ name: 'login' }"><i class="fas fa-right-to-bracket"></i></router-link>
-            <router-link v-if="$store.state.token" v-bind:to="{name: 'logout'}"><i class="fas fa-right-from-bracket"></i></router-link>
-            <!-- Logout button -->
-
+            <router-link v-if="!$store.state.token" v-bind:to="{ name: 'login' }"><i class="fa fa-right-to-bracket"></i>
+            </router-link>
+            <router-link v-if="$store.state.token" v-bind:to="{name: 'logout'}"><i class="fa fa-right-from-bracket"></i>
+            </router-link>
 
           </div>
         </li>
@@ -77,9 +86,9 @@
     <div class="home-section">
       <div class="home-content">
         <i class="fas fa-bars"></i>
-        <span class="text"></span> <!-- Drop Down Menu Name here -->
+        <span class="text"></span> <!-- Drop Down Button here. If we wanna name it... -->
       </div>
-      <router-view />
+      <router-view/>
     </div>
 
   </nav>
@@ -87,8 +96,9 @@
 
 <style>
 
-body {
-  background-color: #f3f4f6;
+.fas {
+  position: fixed;
+  z-index: 1000;
 }
 
 .sidebar {
@@ -308,8 +318,16 @@ body {
   padding: 10px;
 }
 
-.profile-details .name-job .firstName,
-.profile-details .name-job .lastName {
+.firstNameLoggedOut {
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  white-space: nowrap;
+}
+
+.profile-details .name-job .firstName {
   color: #fff;
   font-size: 18px;
   white-space: nowrap;
@@ -317,13 +335,9 @@ body {
 
 .sidebar.close .profile-details i,
 .sidebar.close .profile-details .name-job .firstName,
-.sidebar.close .profile-details .name-job .lastName {
+.sidebar.close .profile-details .name-job .firstNameLoggedOut {
   opacity: 0;
   pointer-events: none;
-}
-
-.profile-details .name-job .lastName {
-  font-size: 12px;
 }
 
 .home-section {
@@ -334,16 +348,15 @@ body {
   transition: all 0.5s ease;
 }
 
-.sidebar.close~.home-section {
+.sidebar.close ~ .home-section {
   left: 78px;
   width: calc(100% - 78px);
 }
 
 .home-section .home-content {
-  position: fixed;
-  top: 10px;
-  width: 100%;
-  z-index: 100;
+  display: flex;
+  height: 60px;
+  align-items: center;
 }
 
 .home-section .home-content i,
@@ -423,16 +436,21 @@ input[type="submit"]:hover {
     z-index: 100;
   }
 
-  .sidebar.close~.home-section {
+  .sidebar.close ~ .home-section {
     width: 100%;
     left: 0;
   }
+
+
 }
 </style>
 
 
 <script>
+import SingleDeckView from "@/views/SingleDeckView.vue";
+
 export default {
+  components: {SingleDeckView},
   data() {
     return {
       sidebar: null,

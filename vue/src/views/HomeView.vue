@@ -3,10 +3,10 @@ export default {
   data() {
     return {
       notes: [
-        { sub: 'Simplified', content: 'Complex tasks are now simple', active: false, transform: '' },
-        { sub: 'Boost Productivity', content: 'Perform Tasks in less time', active: false, transform: '' },
-        { sub: 'Facilitated learning', content: 'train anyone from anywhere', active: false, transform: '' },
-        { sub: 'Support', content: 'Now its 24/7 support', active: false, transform: '' }
+        { sub: 'Title 1', content: 'Related Text 1', active: false, transform: '' },
+        { sub: 'Title 2', content: 'Related Text 2', active: false, transform: '' },
+        { sub: 'Title 3', content: 'Related Text 3', active: false, transform: '' },
+        { sub: 'Title 4', content: 'Related Text 4', active: false, transform: '' }
       ]
     };
   },
@@ -47,11 +47,13 @@ export default {
   <div class="center">
     <div class="stack-area">
       <div class="left">
-        <div class="title">Our Features</div>
+        <div class="title">QUIP</div>
         <div class="sub-title">
           OUR FEATURES ARE BIG AND STRONG
           <br/>
-          <button @click="seeMoreDetails">Register Now And Begin Studying!</button>
+          <button>
+            <router-link v-bind:to="{ name: 'register' }">Register Now and Begin Studying!</router-link>
+          </button>
         </div>
       </div>
       <div class="right">
@@ -73,7 +75,6 @@ body {
   margin: 0;
   padding: 0;
 }
-
 .center {
   width: 100%;
   height: fit-content;
