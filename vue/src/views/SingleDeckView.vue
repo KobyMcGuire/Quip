@@ -96,7 +96,7 @@
     >
       <flash-card
         draggable="true"
-        v-on:dragstart="handleDragStart($event)"
+        v-on:dragstart="handleDragStart($event, flashcard)"
         v-on:dragend="handleDragEnd($event)"
         v-for="flashcard in this.$store.state.currentDeckFlashcards"
         v-bind:key="flashcard.cardId"
@@ -158,8 +158,15 @@ export default {
       this.newCardError = false;
     },
 
-    handleDragStart(event) {
+    handleDragStart(event, flashcard) {
       event.target.style.opacity = "0.4";
+
+      event.dataTransfer.dropEffect = 'move';
+      event.dataTransfer.effectAllowed = 'move';
+      event.dataTransfer.setData('flashCardId', flashcard.flashCardId);
+
+      let flashcardsContainer = document.querySelector(".flashcard-results-container")
+      flashcardsContainer.style.border = '1px solid black'
     },
 
     handleDragEnd(event) {

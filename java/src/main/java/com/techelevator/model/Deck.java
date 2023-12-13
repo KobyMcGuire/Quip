@@ -5,11 +5,13 @@ public class Deck {
     private int deckId;
     private String title;
     private String description;
+    private String color;
 
-    public Deck(int deckId, String title, String description) {
+    public Deck(int deckId, String title, String description, String color) {
         this.deckId = deckId;
         this.title = title;
         this.description = description;
+        this.color = color;
     }
 
     public Deck() {
@@ -37,5 +39,13 @@ public class Deck {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 }

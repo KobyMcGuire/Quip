@@ -37,24 +37,20 @@
       </router-link>
 
       <div class="image-upload">
-        <button v-on:click="defineWidget()" id="upload_widget" class="cloudinary-button" v-if="showFront">
+
+        <button v-on:click="defineWidget()" id="upload_widget" class="cloudinary-button">
           <label for="image">
-            <i class="fas fa-upload"></i>
             <!-- This is the upload icon -->
+            <i class="fas fa-upload"></i>
           </label>
-
-          
         </button>
-
+        <!--
         <button v-on:click="defineWidget()" id="upload_widget" class="cloudinary-button" v-else>
           <label for="backImage">
             <i class="fas fa-upload"></i>
-            <!-- This is the upload icon -->
           </label>
-
-          
         </button>
-
+      -->
         
       </div>
 

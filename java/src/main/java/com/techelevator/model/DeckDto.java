@@ -5,13 +5,23 @@ public class DeckDto {
 
     private String title;
     private String description;
+    private String color;
 
-    public DeckDto(String title,String description){
+    public DeckDto(String title,String description, String color){
         this.title = title;
         this.description = description;
+        this.color = color;
     }
 
     public DeckDto() {
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 
     public String getTitle() {

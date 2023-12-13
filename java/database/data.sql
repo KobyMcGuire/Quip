@@ -3,9 +3,9 @@ BEGIN TRANSACTION;
 INSERT INTO users (username,password_hash,role) VALUES ('user','$2a$08$UkVvwpULis18S19S5pZFn.YHPZt3oaqHZnDwqbCW9pft6uFtkXKDC','ROLE_USER');
 INSERT INTO users (username,password_hash,role) VALUES ('admin','$2a$08$UkVvwpULis18S19S5pZFn.YHPZt3oaqHZnDwqbCW9pft6uFtkXKDC','ROLE_ADMIN');
 
-INSERT INTO flashcard_decks (title, description) VALUES ('Biology', 'Human Anatomy');
-INSERT INTO flashcard_decks (title, description) VALUES ('Science', 'Periodic Table Elements');
-INSERT INTO flashcard_decks (title, description) VALUES ('Math', 'Geometry Formulas');
+INSERT INTO flashcard_decks (title, description, color) VALUES ('Biology', 'Human Anatomy', '#6495ED');
+INSERT INTO flashcard_decks (title, description, color) VALUES ('Science', 'Periodic Table Elements', '#228B22');
+INSERT INTO flashcard_decks (title, description, color) VALUES ('Math', 'Geometry Formulas', '#B22222');
 
 INSERT INTO flashcards (question, answer, tags, creator) VALUES('Test Biology Question 1', 'Test Biology Answer 1', 'Test Tags', 'Test Creator 1');
 INSERT INTO flashcards (question, answer, tags, creator) VALUES('Test Biology Question 2', 'Test Biology Answer 2', 'Test Tags', 'Test Creator 2');

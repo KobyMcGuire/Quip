@@ -3,10 +3,10 @@ export default {
   data() {
     return {
       notes: [
-        { sub: 'Title 1', content: 'Related Text 1', active: false, transform: '' },
-        { sub: 'Title 2', content: 'Related Text 2', active: false, transform: '' },
-        { sub: 'Title 3', content: 'Related Text 3', active: false, transform: '' },
-        { sub: 'Title 4', content: 'Related Text 4', active: false, transform: '' }
+        {sub: 'Title 1', content: 'Related Text 1', active: false, transform: ''},
+        {sub: 'Title 2', content: 'Related Text 2', active: false, transform: ''},
+        {sub: 'Title 3', content: 'Related Text 3', active: false, transform: ''},
+        {sub: 'Title 4', content: 'Related Text 4', active: false, transform: ''}
       ]
     };
   },
@@ -22,25 +22,34 @@ export default {
           angle = angle - 10;
         }
       });
+    },
+
+    startAutoScroll() {
+      window.scrollBy(0, 5);
+      window.requestAnimationFrame(this.startAutoScroll);
     }
   },
 
-  mounted() {
-    this.rotateNotes();
-    window.addEventListener("scroll", () => {
-      let proportion = this.$el.getBoundingClientRect().top / window.innerHeight;
-      if (proportion <= 0) {
-        let n = this.notes.length;
-        let index = Math.ceil((proportion * n) / 2);
-        index = Math.abs(index) - 1;
-        for (let i = 0; i < n; i++) {
-          this.notes[i].active = i <= index;
+    mounted() {
+      this.startAutoScroll();
+
+      window.addEventListener("scroll", () => {
+        if (this.$route.name === 'home') {
+          let proportion = this.$el.getBoundingClientRect().top / window.innerHeight;
+          if (proportion <= 0) {
+            let n = this.notes.length;
+            let index = Math.ceil((proportion * n) / 2);
+            index = Math.abs(index) - 1;
+            for (let i = 0; i < n; i++) {
+              this.notes[i].active = i <= index;
+            }
+            this.rotateNotes();
+          }
         }
-        this.rotateNotes();
-      }
-    });
+      });
+    }
   }
-};
+
 </script>
 
 <template>
@@ -75,6 +84,7 @@ body {
   margin: 0;
   padding: 0;
 }
+
 .center {
   width: 100%;
   height: fit-content;
