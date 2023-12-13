@@ -336,9 +336,10 @@
 }
 
 .home-section .home-content {
-  display: flex;
-  height: 60px;
-  align-items: center;
+  position: fixed;
+  top: 10px;
+  width: 100%;
+  z-index: 100;
 }
 
 .home-section .home-content i,
