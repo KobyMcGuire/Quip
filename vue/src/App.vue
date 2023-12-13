@@ -97,7 +97,8 @@
 <style>
 
 .fas {
-  position: fixed;
+  /* Was causing an issue with upload image icons */ 
+  /* position: fixed; */
   z-index: 1000;
 }
 
