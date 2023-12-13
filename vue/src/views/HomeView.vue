@@ -2,11 +2,15 @@
 export default {
   data() {
     return {
+      isAutoScrolling: true,
+      scrollCount: 0,
+      maxScrollCount: 1000,
+
       notes: [
-        { sub: 'Title 1', content: 'Related Text 1', active: false, transform: '' },
-        { sub: 'Title 2', content: 'Related Text 2', active: false, transform: '' },
-        { sub: 'Title 3', content: 'Related Text 3', active: false, transform: '' },
-        { sub: 'Title 4', content: 'Related Text 4', active: false, transform: '' }
+        {sub: 'Title 1', content: 'Related Text 1', active: false, transform: ''},
+        {sub: 'Title 2', content: 'Related Text 2', active: false, transform: ''},
+        {sub: 'Title 3', content: 'Related Text 3', active: false, transform: ''},
+        {sub: 'Title 4', content: 'Related Text 4', active: false, transform: ''}
       ]
     };
   },
@@ -14,6 +18,15 @@ export default {
   methods: {
     rotateNotes() {
       let angle = 0;
+
+      const scrollPosition = window.scrollY;
+      const containerHeight = this.$el.clientHeight;
+      const windowHeight = window.innerHeight;
+
+      if (scrollPosition >= containerHeight - windowHeight) {
+        this.cloneNotes();
+
+      }
       this.notes.forEach((note) => {
         if (note.active) {
           note.transform = `translate(-50%, -120vh) rotate(-48deg)`;
@@ -22,25 +35,54 @@ export default {
           angle = angle - 10;
         }
       });
-    }
+    },
+
+    startAutoScroll() {
+      const maxLoops = 5;
+
+      if (this.scrollCount >= this.maxScrollCount || this.scrollLoops >= maxLoops) {
+        this.scrollCount = 0;
+        this.scrollLoops = 0;
+        this.isAutoScrolling = false;
+        setTimeout(() => {
+          window.scrollTo(0, 0); // Reset scroll position after a delay
+        }, 500); // Adjust the delay as needed
+        return;
+      }
+      if (this.isAutoScrolling) {
+        setTimeout(() => {
+          window.scrollBy(0, 5);
+          this.scrollCount++;
+          this.$nextTick(this.startAutoScroll);
+        }, 20); // Adjust the delay as needed
+      }
+    },
+
+    cloneNotes() {
+      const container = document.querySelector('.cards');
+      const firstCard = container.firstElementChild.cloneNode(true);
+      container.appendChild(firstCard);
+    },
   },
 
-  mounted() {
-    this.rotateNotes();
-    window.addEventListener("scroll", () => {
-      let proportion = this.$el.getBoundingClientRect().top / window.innerHeight;
-      if (proportion <= 0) {
-        let n = this.notes.length;
-        let index = Math.ceil((proportion * n) / 2);
-        index = Math.abs(index) - 1;
-        for (let i = 0; i < n; i++) {
-          this.notes[i].active = i <= index;
+    mounted() {
+      this.startAutoScroll();
+      this.rotateNotes();
+      window.addEventListener("scroll", () => {
+        let proportion = this.$el.getBoundingClientRect().top / window.innerHeight;
+        if (proportion <= 0 && this.scrollCount > 0) {
+          let n = this.notes.length;
+          let index = Math.ceil((proportion * n) / 2);
+          index = Math.abs(index) - 1;
+          for (let i = 0; i < n; i++) {
+            this.notes[i].active = i <= index;
+          }
+          this.rotateNotes();
         }
-        this.rotateNotes();
-      }
-    });
+      });
+    }
   }
-};
+
 </script>
 
 <template>
@@ -58,7 +100,8 @@ export default {
       </div>
       <div class="right">
         <div class="cards">
-          <div class="card" v-for="(note, index) in notes" :key="index" :class="{active: note.active}" :style="{transform: note.transform}">
+          <div class="card" v-for="(note, index) in notes" :key="index" :class="{active: note.active}"
+               :style="{transform: note.transform}">
             <div class="sub">{{ note.sub }}</div>
             <div class="content">{{ note.content }}</div>
           </div>
@@ -75,6 +118,7 @@ body {
   margin: 0;
   padding: 0;
 }
+
 .center {
   width: 100%;
   height: fit-content;
