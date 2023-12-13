@@ -22,6 +22,7 @@ CREATE TABLE flashcards(
 	question text NOT NULL,
 	answer text NOT NULL,
 	tags varchar(50) NOT NULL,
+	image varchar(100) NULL,
 	creator varchar(50) NOT NULL,
 	CONSTRAINT PK_flashcards PRIMARY KEY(flashcard_id)
 );
