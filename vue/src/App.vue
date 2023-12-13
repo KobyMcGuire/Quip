@@ -417,6 +417,10 @@ input[type="submit"]:hover {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+body {
+    background-color: #F5EFDF;
+  }
+
 @media (max-width: 400px) {
   .sidebar.close .nav-list li .sub-menu {
     display: none;
@@ -441,6 +445,7 @@ input[type="submit"]:hover {
     left: 0;
   }
 
+  
 
 }
 </style>
