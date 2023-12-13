@@ -3,7 +3,8 @@
     <h1>User Profile</h1>
 
     <div class="profile-picture">
-      <img src="../assets/pfp.jpg" alt="Profile Picture" />
+      <img :src="profilePictureLink" alt="Profile Picture" />
+      <input type="file" @change="onFileChange" accept="image/*" />
     </div>
     <div class="username">
       <label for="username">Username: </label>
@@ -13,7 +14,10 @@
       <h2>User Decks</h2>
       <ul>
         <li v-for="deck in decks" :key="deck.id">
-            <router-link v-bind:to="{name: 'deck-cards', params: {id: deck.deckId}}">{{ deck.title }}</router-link>
+          <router-link
+            v-bind:to="{ name: 'deck-cards', params: { id: deck.deckId } }"
+            >{{ deck.title }}</router-link
+          >
         </li>
       </ul>
     </div>
@@ -41,16 +45,26 @@ export default {
     };
   },
   methods: {
-    async uploadProfilePicture(file) {
+    uploadProfilePicture(file) {
       try {
-        const cloudinaryResponse = await this.$axios.post(
-          "/cloudinary/upload",
-          { file }
-        );
+        const reader = new FileReader();
 
-        this.user.profilePictureUrl = cloudinaryResponse.data.url;
+        reader.onload = (e) => {
+          // Update profilePictureUrl with base64-encoded image data
+          this.profilePictureUrl = e.target.result;
+        };
+
+        // Read the selected file as a data URL
+        reader.readAsDataURL(file);
       } catch (error) {
         console.error("Error uploading profile picture:", error);
+      }
+    },
+
+    onFileChange(event) {
+      const file = event.target.files[0];
+      if (file) {
+        this.uploadProfilePicture(file);
       }
     },
 
@@ -89,6 +103,17 @@ export default {
     this.fetchUserDecks();
     this.fetchUserFlashcards();
     // this.fetchUserInfo();
+  },
+
+  computed:{
+    profilePictureLink(){
+      if(!this.profilePictureUrl){
+      return new URL('../assets/pfp.jpg', import.meta.url).href;
+    }else{
+      return this.profilePictureUrl;
+    }
+    }
+    
   }
 };
 </script>
@@ -106,7 +131,8 @@ export default {
 .form-input-group {
   margin-bottom: 1rem;
 }
-label {
+.username label {
   margin-right: 0.5rem;
+  font-weight: bold;
 }
 </style>

@@ -34,15 +34,17 @@ export default {
       this.startAutoScroll();
 
       window.addEventListener("scroll", () => {
-        let proportion = this.$el.getBoundingClientRect().top / window.innerHeight;
-        if (proportion <= 0) {
-          let n = this.notes.length;
-          let index = Math.ceil((proportion * n) / 2);
-          index = Math.abs(index) - 1;
-          for (let i = 0; i < n; i++) {
-            this.notes[i].active = i <= index;
+        if (this.$route.name === 'home') {
+          let proportion = this.$el.getBoundingClientRect().top / window.innerHeight;
+          if (proportion <= 0) {
+            let n = this.notes.length;
+            let index = Math.ceil((proportion * n) / 2);
+            index = Math.abs(index) - 1;
+            for (let i = 0; i < n; i++) {
+              this.notes[i].active = i <= index;
+            }
+            this.rotateNotes();
           }
-          this.rotateNotes();
         }
       });
     }
