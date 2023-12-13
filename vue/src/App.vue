@@ -27,7 +27,7 @@
 
         <li>
           <a href="/decks">
-            <i class="fa fa-spinner"></i>
+            <i class="fa fa-book"></i>
             <span class="link-name"><router-link v-bind:to="{ name: 'decks' }">Decks</router-link></span>
           </a>
           <ul class="sub-menu blank">
@@ -40,14 +40,13 @@
         <li>
           <div class="icon-link">
             <a href="#">
-              <i class="fa fa-book"></i>
+              <i class="fa fa-spinner"></i>
               <span class="link-name">Studies</span>
             </a>
             <i class="fa fa-caret-down arrow"></i>
           </div>
 
           <ul class="sub-menu">
-            <li><a href="#" class="link-name">Studies</a></li>
             <li><a href="#">
               <router-link v-bind:to="{ name: 'single-card-view' }">Study</router-link>
             </a></li>
