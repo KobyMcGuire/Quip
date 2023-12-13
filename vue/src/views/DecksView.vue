@@ -27,6 +27,14 @@
       v-model="newDeck.description"
     />
 
+    <label for="deckColor">Color: </label>
+    <input
+      type="color"
+      id="deckColor"
+      name="deckColor"
+      v-model="newDeck.color"
+    />
+
     <div class="new-deck-buttons">
       <label for="submitNewDeck"></label>
       <input type="submit" id="submitNewDeck" v-on:click="addDeck" />
@@ -46,6 +54,7 @@
       v-for="deck in decks"
       v-bind:key="deck.deckId"
       v-bind:deck="deck"
+      :style="`background-color: ${deck.color};`"
     ></deck-card>
   </div>
 </template>
@@ -72,11 +81,13 @@ export default {
       // Check to make sure that the title and description fields are not empty.
       if (this.newDeck.title !== "" && this.newDeck.description !== "") {
         this.error = false;
+        console.log(this.newDeck);
         DeckService.addDeck(this.newDeck)
           .then((response) => {
             this.newDeck = {
               title: "",
               description: "",
+              color: ""
             };
             this.decks.push(response.data);
           })
@@ -99,6 +110,7 @@ export default {
       newDeck: {
         title: "",
         description: "",
+        color: "",
       },
 
       decks: [],

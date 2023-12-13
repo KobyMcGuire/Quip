@@ -25,7 +25,7 @@ public class JdbcDeckDao implements DeckDao {
     @Override
     public List<Deck> getDecks() {
         List<Deck> decks = new ArrayList<>();
-        String sql = "SELECT deck_id, title, description FROM flashcard_decks;";
+        String sql = "SELECT deck_id, title, description, color FROM flashcard_decks;";
         try{
             SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
             while(results.next()){
@@ -43,7 +43,7 @@ public class JdbcDeckDao implements DeckDao {
     @Override
     public Deck getDeckById(int id) {
         Deck deck = null;
-        String sql = "SELECT deck_id, title, description FROM flashcard_decks WHERE deck_id = ?;";
+        String sql = "SELECT deck_id, title, description, color FROM flashcard_decks WHERE deck_id = ?;";
         try {
             SqlRowSet results = jdbcTemplate.queryForRowSet(sql, id);
             if(results.next()){
@@ -60,16 +60,17 @@ public class JdbcDeckDao implements DeckDao {
     @Override
     public Deck createDeck(DeckDto deckDto) {
         Deck newDeck = null;
-        String sql = "INSERT INTO flashcard_decks(title, description)\n" +
-                "VALUES(?, ?) RETURNING deck_id;";
+        String sql = "INSERT INTO flashcard_decks(title, description, color)\n" +
+                "VALUES(?, ?, ?) RETURNING deck_id;";
         try{
-            int newDeckId = jdbcTemplate.queryForObject(sql, int.class, deckDto.getTitle(), deckDto.getDescription());
+            int newDeckId = jdbcTemplate.queryForObject(sql, int.class, deckDto.getTitle(), deckDto.getDescription(), deckDto.getColor());
             newDeck = getDeckById(newDeckId);
         }catch (CannotGetJdbcConnectionException e) {
             throw new DaoException("Unable to connect to server or database", e);
         } catch (DataIntegrityViolationException e) {
             throw new DaoException("Data integrity violation", e);
         }
+
         return newDeck;
     }
 
@@ -113,6 +114,7 @@ public class JdbcDeckDao implements DeckDao {
         deck.setDeckId(results.getInt("deck_id"));
         deck.setTitle(results.getString("title"));
         deck.setDescription(results.getString("description"));
+        deck.setColor(results.getString("color"));
         return deck;
     }
 }
