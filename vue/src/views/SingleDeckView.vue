@@ -398,10 +398,15 @@ export default {
 
   margin-left: 15px;
 }
+.form-action-buttons > button:hover {
+  transform: scale(1.025);
+}
 
 .form-action-buttons > button {
   color: rgb(251, 249, 249);
   background-color: #11101d;
+
+  transition: all .2s ease-in-out;
 }
 
 .cancel-button {

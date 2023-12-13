@@ -390,6 +390,11 @@ button:hover {
 
 .cancel-button {
   background-color: #fca5a5;
+  transition: all .2s ease-in-out;
+}
+
+.cancel-button:hover {
+  transform: scale(1.025);
 }
 
 .error-message {
@@ -404,12 +409,16 @@ input[type="submit"] {
 
   padding: 8px;
 
-  background-color: #86efac;;
+  background-color: #86efac;
+
+  transition: all .2s ease-in-out ;
 }
 
 input[type="submit"]:hover {
   cursor: pointer;
   border: 1px solid black;
+
+  transform: scale(1.025);
 }
 
 * {

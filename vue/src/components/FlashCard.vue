@@ -268,8 +268,14 @@ h1 {
   margin-bottom: 30px;
 }
 .flashcard-buttons > button {
+  color: rgb(251, 249, 249);
+  background-color: #11101d;
 }
 
+.edit-button {
+  color: rgb(251, 249, 249);
+  background-color: #11101d;
+}
 .edit-button {
   min-height: 48px;
 }
