@@ -54,7 +54,10 @@ export default {
 
   text-align: center;
 
-  background-color: #6b7280;
+  border: 2px solid black;
+  border-radius: 15px;
+  
+  background-color: rgb(251, 249, 249);
 
   max-width: 60%;
 }
@@ -70,6 +73,6 @@ li {
 }
 
 .submit-button {
-  background-color: #b5c1bb;
+  background-color: #86efac;
 }
 </style>

@@ -404,7 +404,7 @@ input[type="submit"] {
 
   padding: 8px;
 
-  background-color: #bbf7d0;
+  background-color: #86efac;;
 }
 
 input[type="submit"]:hover {
@@ -416,6 +416,10 @@ input[type="submit"]:hover {
   box-sizing: border-box;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
+
+body {
+    background-color: #F5EFDF;
+  }
 
 @media (max-width: 400px) {
   .sidebar.close .nav-list li .sub-menu {
@@ -441,6 +445,7 @@ input[type="submit"]:hover {
     left: 0;
   }
 
+  
 
 }
 </style>
