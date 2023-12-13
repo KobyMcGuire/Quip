@@ -123,9 +123,9 @@ export default {
 .show-new-deck {
   margin-bottom: 10px;
   margin-left: 17px;
-  background-color: white;
 
-  border: 2px solid black;
+  color: #F5EFDF;
+  background-color: #11101d;
 
   transition: all .2s ease-in-out;
 }
@@ -157,20 +157,16 @@ export default {
   min-height: 25%;
   text-align: center;
 
-  color: black;
-  background-color: rgb(251, 249, 249);
+  color: #F5EFDF;
+  background-color: #11101d;
 
   padding: 10px;
-
-  border: 3px solid black;
 
   transition: all .2s ease-in-out;
 }
 
 .deck-card:hover {
-  border: 4px solid black;
-
-  transform: scale(1.1);
+  transform: scale(1.025);
 
   box-shadow: 10px 5px 5px rgb(198, 196, 196);
 }

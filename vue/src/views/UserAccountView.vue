@@ -1,50 +1,107 @@
 <template>
-    <div id="user">
-        <h1>User Profile</h1>
+  <div id="user">
+    <h1>User Profile</h1>
 
-    </div>
     <div class="profile-picture">
-        <img src="../assets/pfp.jpg" alt="" />
+      <img src="../assets/pfp.jpg" alt="Profile Picture" />
     </div>
-    <div class="firstname">
-        <label for="firstname">FirstName: </label>
-        <input type="text" id="firstname" v-model="user.username" required autofocus />
+    <div class="username">
+      <label for="username">Username: </label>
+      <span>{{ this.$store.state.user.username }}</span>
     </div>
-    <div class="lastname">
-        <label for="lastname">Lastname: </label>
-        <input type="text" id="lastname" v-model="user.password" required autofocus />
+    <div class="decks">
+      <h2>User Decks</h2>
+      <ul>
+        <li v-for="deck in decks" :key="deck.id">
+            <router-link v-bind:to="{name: 'deck-cards', params: {id: deck.deckId}}">{{ deck.title }}</router-link>
+        </li>
+      </ul>
     </div>
+
+    <div class="flashcards">
+      <h2>User Flashcards</h2>
+      <ul>
+        <li v-for="flashcard in flashcards" :key="flashcard.id">
+          {{ flashcard.question }}
+        </li>
+      </ul>
+    </div>
+  </div>
 </template>
 <script>
+import DeckService from '../services/DeckService';
 export default {
-    components: {},
-    data() {
-        return {
-            user: {
-                username: "",
-                password: ""
-            },
-        };
-    },
-    methods: {
-        if(){
-            
-        }
-    }
+  data() {
+    return {
+       
+        profilePictureUrl: "",
+        decks: [],
+        flashcards: [],
     
-}
+    };
+  },
+  methods: {
+    async uploadProfilePicture(file) {
+      try {
+        const cloudinaryResponse = await this.$axios.post(
+          "/cloudinary/upload",
+          { file }
+        );
 
+        this.user.profilePictureUrl = cloudinaryResponse.data.url;
+      } catch (error) {
+        console.error("Error uploading profile picture:", error);
+      }
+    },
+
+    fetchUserDecks() {
+      DeckService.getDecks()
+      .then((response)=>{
+        this.decks = response.data;
+      })
+    },
+
+    fetchUserFlashcards() {
+      DeckService.getCards()
+      .then((response)=>{
+        this.flashcards = response.data;
+      })
+    },
+
+    // fetchUserInfo(){
+    //     try {
+    //     // Call your login endpoint to get user details
+    //     const response =  this.$axios.post("/login", {
+    //       // provide login credentials if needed
+    //     });
+
+    //     // Assuming the response contains user details including username and profilePictureUrl
+    //     const userData = response.data.user;
+
+    //     this.user.username = userData.username;
+    //     this.user.profilePictureUrl = userData.profilePictureUrl;
+    //   } catch (error) {
+    //     console.error("Error fetching user information:", error);
+    //   }
+    // },
+  },
+  created(){
+    this.fetchUserDecks();
+    this.fetchUserFlashcards();
+    // this.fetchUserInfo();
+  }
+};
 </script>
 <style scoped>
 .profile-picture img {
-    height: 30%;
-    /* width: 51px; */
-    max-width: 20%;
-    border-radius: 50%;
-    display: block;
-    margin: 0 14px 0 12px;
-    background-color: #1d1b31;
-    transition: all 0.5s ease;
+  height: 30%;
+  /* width: 51px; */
+  max-width: 20%;
+  border-radius: 50%;
+  display: block;
+  margin: 0 14px 0 12px;
+  background-color: #1d1b31;
+  transition: all 0.5s ease;
 }
 .form-input-group {
   margin-bottom: 1rem;
