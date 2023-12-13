@@ -298,12 +298,7 @@ export default {
 
 .dropDownButton {
   width: 100%;
-<<<<<<< HEAD
-
-=======
   background-color: #a4a4a4;
-  
->>>>>>> 1d27cb942e90863d9ff3323ab995edb23a023f52
 }
 
 .dropDownContainer {
