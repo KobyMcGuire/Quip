@@ -31,7 +31,7 @@
           params: { id: this.flashcard.flashCardId },
         }"
       >
-        <button>
+        <button class="edit-button">
           <span class="material-symbols-outlined"> edit </span>
         </button>
       </router-link>
@@ -221,12 +221,15 @@ export default {
   display: none;
 }
 
+
 .flashcard-container {
   min-width: 30%;
   min-height: 10vh;
 
   border: 3px solid black;
   border-radius: 10px;
+
+  background-color: rgb(251, 249, 249);
 
   text-align: center;
 
@@ -255,7 +258,8 @@ h1 {
   gap: 15px;
 }
 
-.submit-flashcard-edit {
-  margin-top: 10px;
+.edit-button {
+  min-height: 48px;
 }
+
 </style>

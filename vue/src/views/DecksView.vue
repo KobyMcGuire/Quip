@@ -123,8 +123,28 @@ export default {
 .show-new-deck {
   margin-bottom: 10px;
   margin-left: 17px;
-  background-color: #f3f6f4;
+  background-color: white;
+
+  border: 2px solid black;
+
+  transition: all .2s ease-in-out;
 }
+
+.show-new-deck:hover {
+  border: 3px solid black;
+
+  transform: scale(1.025);
+
+  box-shadow: 10px 5px 5px rgb(198, 196, 196);
+}
+
+
+.show-new-deck[disabled] {
+  border: none;
+}
+
+
+
 .deck-container {
   display: flex;
   justify-content:space-around;
@@ -136,6 +156,9 @@ export default {
   min-width: 30%;
   min-height: 25%;
   text-align: center;
+
+  color: black;
+  background-color: rgb(251, 249, 249);
 
   padding: 10px;
 
