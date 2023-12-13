@@ -88,7 +88,12 @@
       </div>
     </div>
 
-    <div class="flash-cards-container">
+    <div
+      class="flash-cards-container"
+      v-on:drop="onDrop($event)"
+      @dragover.prevent
+      @dragenter.prevent
+    >
       <flash-card
         draggable="true"
         v-on:dragstart="handleDragStart($event)"
@@ -100,10 +105,9 @@
       />
     </div>
 
-    <hr class="rounded">
+    <hr class="rounded" />
 
     <search-bar></search-bar>
-
   </div>
 </template>
 
@@ -118,6 +122,11 @@ export default {
   data() {
     return {
       deck: {},
+      // flashcard: {},
+      decksFlashcards: {
+        deckId: "",
+        flashcardId: "",
+      },
       showEditDeck: false,
       editedDeck: {
         title: "",
@@ -149,15 +158,31 @@ export default {
     },
 
     handleDragStart(event) {
-      event.target.style.opacity = '0.4';
+      event.target.style.opacity = "0.4";
     },
 
     handleDragEnd(event) {
-      event.target.style.opacity = '1';
+      event.target.style.opacity = "1";
     },
 
+    onDrop(event) {
+      let flashcardId = event.dataTransfer.getData('flashCardId');
+      this.findFlashcard(flashcardId);
+    },
+
+    findFlashcard(flashcardId) {
+      DeckService.getCard(flashcardId)
+      .then((response) => {
+        this.flashcard = response.data;
+        this.addFlashcardToDeckByDragAndDrop();
+      })
+      .catch((error) => {
+        this.errorHandler(error, "fetching card");
+      })
+    },  
+
     editDeck() {
-      // Grab User input 
+      // Grab User input
       let editedTitle = document.getElementById("deck-header-title").innerText;
       let editedDescription = document.getElementById(
         "deck-header-description"
@@ -176,7 +201,6 @@ export default {
 
       DeckService.editDeck(this.$route.params.id, this.editedDeck)
         .then((response) => {
-
           // Force reactivity without refreshing
           this.deck.title = this.editedDeck.title;
           this.deck.description = this.editedDeck.description;
@@ -186,7 +210,6 @@ export default {
             title: "",
             description: "",
           };
-
         })
         .catch((error) => {
           this.errorHandler(error, "Edited Deck");
@@ -235,11 +258,39 @@ export default {
       }
     },
 
+    addFlashcardToDeckByDragAndDrop() {
+      this.decksFlashcards.deckId = this.$route.params.id;
+      this.decksFlashcards.flashcardId = this.flashcard.flashCardId;
+
+      DeckService.addFlashcardToDeck(this.decksFlashcards)
+        .then((response) => {
+          let indexOfRemovedCard = "";
+          for (let i = 0; i < this.$store.state.currentSearchFlashcards.length; i++) {
+            if (this.$store.state.currentSearchFlashcards[i].flashCardId === this.flashcard.flashCardId) {
+              indexOfRemovedCard = i;
+            }
+          }
+
+          // Add flashcard to current decks flashcards
+          this.$store.state.currentDeckFlashcards.push(
+            this.$store.state.currentSearchFlashcards[indexOfRemovedCard]
+          );
+
+          // Remove the flashcard from the current search flashcards array
+          this.$store.state.currentSearchFlashcards.splice(
+            indexOfRemovedCard,
+            1
+          );
+        })
+        .catch((error) => {
+          this.errorHandler(error, "putting card in to new deck");
+        });
+    },
+
     // Make error handler display message to site.
     errorHandler(error, verb) {
       console.log(`There was an error ${verb}. The error was: ${error}`);
     },
-    
   },
 
   computed: {},
@@ -354,14 +405,13 @@ export default {
 }
 
 .edit-flashcard-button{
-  background-color: #a4a4a4;
+  background-color: #f3f6f4;
 
 }
 
 .create-flashcard-button{
-  background-color: #a4a4a4;
+  background-color: #f3f6f4;
 
 }
-
 
 </style>
