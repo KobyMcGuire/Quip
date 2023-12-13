@@ -107,20 +107,10 @@ export default {
       event.dataTransfer.dropEffect = "move";
       event.dataTransfer.effectAllowed = "move";
       event.dataTransfer.setData("flashCardId", flashcard.flashCardId);
-
-      let flashcardsContainer = document.querySelector(
-        ".flash-cards-container"
-      );
-      flashcardsContainer.style.border = "1px solid black";
     },
 
     handleDragEnd(event) {
       event.target.style.opacity = "1";
-
-      let flashcardsContainer = document.querySelector(
-        ".flash-cards-container"
-      );
-      flashcardsContainer.style.border = "none";
     },
 
     onDrop(event) {
@@ -192,6 +182,9 @@ export default {
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
+
+  min-width: 100%;
+  min-height: 50px;
 
   gap: 20px;
 }

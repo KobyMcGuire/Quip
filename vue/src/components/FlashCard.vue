@@ -2,16 +2,12 @@
   <div class="flashcard-container">
     <div class="flashcard-text-content" v-on:click="flipCard">
       <div class="question" v-if="showFront">
-        
-          <img :src="image" alt="" />
-     
+        <img :src="image" alt="" v-if="image != ''" />
         <p>{{ flashcard.question }}</p>
       </div>
 
       <div class="answer" v-if="!showFront">
-
-        <img :src="backImage" alt="" />
-
+        <img :src="backImage" alt="" v-if="image != ''" />
         <p>{{ flashcard.answer }}</p>
       </div>
 
@@ -37,8 +33,11 @@
       </router-link>
 
       <div class="image-upload">
-
-        <button v-on:click="defineWidget()" id="upload_widget" class="cloudinary-button">
+        <button
+          v-on:click="defineWidget()"
+          id="upload_widget"
+          class="cloudinary-button"
+        >
           <label for="image">
             <!-- This is the upload icon -->
             <i class="fas fa-upload"></i>
@@ -50,9 +49,7 @@
             <i class="fas fa-upload"></i>
           </label>
         </button>
-      -->
-        
-      </div>
+      --></div>
 
       <button v-if="deleteButton" v-on:click="deleteFlashcard">
         <span class="material-symbols-outlined"> delete </span>
@@ -108,9 +105,7 @@ export default {
     },
 
     handleImageUpload(event) {
-      
       const file = event.target.files[0];
-      
 
       if (file && file.type.startsWith("image/")) {
         const reader = new FileReader();
@@ -187,25 +182,27 @@ export default {
       const cloudName = "dz0w5cehu";
       const uploadPreset = "gooah3bb";
       const folder = "final-capstone";
-      this.myWidget = window.cloudinary.createUploadWidget(
-        {
-          cloudName: cloudName,
-          uploadPreset: uploadPreset,
-          folder: folder,
-          // ... other options
-        },
-        (error, result) => {
-          if (!error && result && result.event === "success") {
-            console.log("Done! Here is the image info: ", result.info);
+      this.myWidget = window.cloudinary
+        .createUploadWidget(
+          {
+            cloudName: cloudName,
+            uploadPreset: uploadPreset,
+            folder: folder,
+            // ... other options
+          },
+          (error, result) => {
+            if (!error && result && result.event === "success") {
+              console.log("Done! Here is the image info: ", result.info);
 
-            this.image = result.info.secure_url;
-            // document
-            //   .getElementById("uploadedimage")
-            //   .setAttribute("src", result.info.secure_url);
-            this.$emit("image-uploaded", result.info.secure_url);
+              this.image = result.info.secure_url;
+              // document
+              //   .getElementById("uploadedimage")
+              //   .setAttribute("src", result.info.secure_url);
+              this.$emit("image-uploaded", result.info.secure_url);
+            }
           }
-        }
-      ).open();
+        )
+        .open();
     },
   },
 };
@@ -217,10 +214,16 @@ export default {
   display: none;
 }
 
-
 .flashcard-container {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
   min-width: 30%;
-  min-height: 10vh;
+  min-height: 150px;
 
   border: 3px solid black;
   border-radius: 10px;
@@ -231,7 +234,7 @@ export default {
 
   padding: 10px;
 
-  transition: all .2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 
 .flashcard-container:hover {
@@ -251,11 +254,23 @@ h1 {
 .flashcard-buttons {
   display: flex;
   justify-content: center;
+  align-items: center;
+
   gap: 15px;
+
+  position: absolute;
+  left: 50%;
+  right: 50%;
+  bottom: 5px;
+}
+
+.flashcard-text-content {
+  margin-bottom: 30px;
+}
+.flashcard-buttons > button {
 }
 
 .edit-button {
   min-height: 48px;
 }
-
 </style>

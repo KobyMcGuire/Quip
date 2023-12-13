@@ -136,7 +136,7 @@ export default {
   margin-bottom: 10px;
   margin-left: 17px;
 
-  color: #F5EFDF;
+  color: rgb(251, 249, 249);
   background-color: #11101d;
 
   transition: all .2s ease-in-out;
@@ -169,8 +169,7 @@ export default {
   min-height: 25%;
   text-align: center;
 
-  color: #F5EFDF;
-  background-color: #11101d;
+  color: #11101d;
 
   padding: 10px;
 
@@ -180,6 +179,7 @@ export default {
 .deck-card:hover {
   transform: scale(1.025);
 
+  border: 3px solid #11101d;
   box-shadow: 10px 5px 5px rgb(198, 196, 196);
 }
 

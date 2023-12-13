@@ -164,9 +164,6 @@ export default {
       event.dataTransfer.dropEffect = 'move';
       event.dataTransfer.effectAllowed = 'move';
       event.dataTransfer.setData('flashCardId', flashcard.flashCardId);
-
-      let flashcardsContainer = document.querySelector(".flashcard-results-container")
-      flashcardsContainer.style.border = '1px solid black'
     },
 
     handleDragEnd(event) {
@@ -400,6 +397,11 @@ export default {
   gap: 10px;
 
   margin-left: 15px;
+}
+
+.form-action-buttons > button {
+  color: rgb(251, 249, 249);
+  background-color: #11101d;
 }
 
 .cancel-button {
