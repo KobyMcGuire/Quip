@@ -159,7 +159,6 @@ export default {
 
   color: #F5EFDF;
   background-color: #11101d;
-  border: 2px solid white;
 
   padding: 10px;
 
@@ -167,8 +166,6 @@ export default {
 }
 
 .deck-card:hover {
-  border: 4px solid white;
-
   transform: scale(1.025);
 
   box-shadow: 10px 5px 5px rgb(198, 196, 196);
