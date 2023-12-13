@@ -102,6 +102,7 @@
         v-bind:key="flashcard.cardId"
         v-bind:flashcard="flashcard"
         v-bind:deleteButton="deleteButton"
+        @image-uploaded="handleImageUploaded"
       />
     </div>
 
@@ -291,6 +292,10 @@ export default {
     errorHandler(error, verb) {
       console.log(`There was an error ${verb}. The error was: ${error}`);
     },
+
+    handleImageUploaded(imageUrl){
+      this.$set(this.flashcard, 'image', imageUrl);
+    }
   },
 
   computed: {},

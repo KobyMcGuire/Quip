@@ -2,13 +2,16 @@
   <div class="flashcard-container">
     <div class="flashcard-text-content" v-on:click="flipCard">
       <div class="question" v-if="showFront">
-        <p v-if="image && image.length">
+        
           <img :src="image" alt="" />
-        </p>
-        <p v-else>{{ flashcard.question }}</p>
+     
+        <p>{{ flashcard.question }}</p>
       </div>
 
       <div class="answer" v-if="!showFront">
+
+        <img :src="backImage" alt="" />
+
         <p>{{ flashcard.answer }}</p>
       </div>
 
@@ -34,18 +37,25 @@
       </router-link>
 
       <div class="image-upload">
-        <button v-on:click="defineWidget()" id="upload_widget" class="cloudinary-button">
+        <button v-on:click="defineWidget()" id="upload_widget" class="cloudinary-button" v-if="showFront">
           <label for="image">
             <i class="fas fa-upload"></i>
             <!-- This is the upload icon -->
           </label>
-          <!-- <input
-            id="image"
-            type="file"
-            accept="image/*"
-            @click="handleImageUpload"
-          /> -->
+
+          
         </button>
+
+        <button v-on:click="defineWidget()" id="upload_widget" class="cloudinary-button" v-else>
+          <label for="backImage">
+            <i class="fas fa-upload"></i>
+            <!-- This is the upload icon -->
+          </label>
+
+          
+        </button>
+
+        
       </div>
 
       <button v-if="deleteButton" v-on:click="deleteFlashcard">
@@ -78,6 +88,7 @@ export default {
     return {
       showFront: true,
       image: "",
+      backImage: "",
       editedFlashcard: {
         question: this.flashcard.question,
         answer: this.flashcard.answer,
@@ -101,9 +112,9 @@ export default {
     },
 
     handleImageUpload(event) {
-      console.log(event.target.files);
+      
       const file = event.target.files[0];
-      console.log(file);
+      
 
       if (file && file.type.startsWith("image/")) {
         const reader = new FileReader();
@@ -190,6 +201,8 @@ export default {
         (error, result) => {
           if (!error && result && result.event === "success") {
             console.log("Done! Here is the image info: ", result.info);
+
+            this.image = result.info.secure_url;
             // document
             //   .getElementById("uploadedimage")
             //   .setAttribute("src", result.info.secure_url);
@@ -206,11 +219,6 @@ export default {
 .image-upload input[type="file"] {
   margin-bottom: 10px;
   display: none;
-}
-.viewedQuestion img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
 }
 
 
