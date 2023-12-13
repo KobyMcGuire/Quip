@@ -1,39 +1,68 @@
 <template>
-  <div>
-    <h1 class="lightning-round-header" >Pick a Deck and Begin Lightning Round</h1>
-    <div class="dropDownContainer">
-      <select class="dropDownButton" v-model="selectedDeck" v-bind:disabled="selectedDeck">
+  <div class="main-lightning-round-container">
+    <div class="header-content">
+      <h1 class="lightning-round-header" v-if="!selectedDeck">
+        Pick a Deck to Begin a Lightning Round
+      </h1>
+
+      <select
+        class="dropDownButton"
+        v-model="selectedDeck"
+        v-if="!selectedDeck"
+      >
         <option v-for="deck in decks" :key="deck.deckId" :value="deck">
           {{ deck.title }}
         </option>
       </select>
     </div>
+
     <div v-if="selectedDeck">
-      <h5>Correct Answers: {{ this.$store.state.correctAnswers }} / {{ cards.length }}</h5>
+      <h5>
+        Correct Answers: {{ this.$store.state.correctAnswers }} /
+        {{ cards.length }}
+      </h5>
       <div v-if="timerVisible">
         <p>Time remaining: {{ remainingTime }} seconds</p>
       </div>
 
-      <div class="viewedQuestion" :draggable="!dragged" @dragstart="handleDragStart" @dragend="handleDragEnd">
+      <div
+        class="viewedQuestion"
+        :draggable="!dragged"
+        @dragstart="handleDragStart"
+        @dragend="handleDragEnd"
+      >
         {{ cards[currentCardIndex] && cards[currentCardIndex].question }}
       </div>
 
       <div class="answer-container">
-        <button tabindex="0" v-for="(answer, index) in randomAnswers" :key="index" class="answer-item"
-                @click="changeUserAnswer($event); markAnswerSelected($event)" @keyup="handleKeyPress($event)" @drop="handleDrop" @dragover="handleDragOver">
+        <button
+          tabindex="0"
+          v-for="(answer, index) in randomAnswers"
+          :key="index"
+          class="answer-item"
+          @click="
+            changeUserAnswer($event);
+            markAnswerSelected($event);
+          "
+          @keyup="handleKeyPress($event)"
+          @drop="handleDrop"
+          @dragover="handleDragOver"
+        >
           {{ answer }}
         </button>
       </div>
     </div>
 
-    <div class="study-submit-button" v-if="selectedDeck">
-      <router-link :to="{ name: 'completed-study-session' }" v-if="currentCardIndex === cards.length - 1">
-        <input type="submit" @click="submitAndMoveNext(); clearSelectedAnswer()">
+    <div class="lightning-round-buttons" v-if="selectedDeck">
+      <router-link
+        v-bind:correctAnswers="correctAnswers"
+        :to="{ name: 'completed-study-session' }"
+      >
+        <button class="cancel-button" v-if="selectedDeck" v-on:click="handleLeaveEarly">
+          Leave Quiz
+        </button>
       </router-link>
-
-      <input type="submit" v-else @click="submitAndMoveNext(); clearSelectedAnswer()">
     </div>
-
   </div>
 </template>
 <script>
@@ -56,14 +85,14 @@ export default {
       roundDuration: 5,
       timerId: null,
       remainingTime: 0,
-      timerVisible: false
+      timerVisible: false,
     };
   },
   methods: {
     handleDragStart(event) {
-      event.dataTransfer.setData('text/plain', 'question-card');
+      event.dataTransfer.setData("text/plain", "question-card");
       this.dragged = true;
-      console.log('HandleDragStart')
+      console.log("HandleDragStart");
     },
     handleDragEnd() {
       this.dragged = false;
@@ -72,10 +101,10 @@ export default {
     handleDrop(event) {
       event.preventDefault();
       if (this.dragged) {
-        const data = event.dataTransfer.getData('text/plain');
-        if (data === 'question-card') {
+        const data = event.dataTransfer.getData("text/plain");
+        if (data === "question-card") {
           this.submitAndMoveNext();
-          this.clearSelectedAnswer()
+          this.clearSelectedAnswer();
         }
       }
     },
@@ -86,11 +115,14 @@ export default {
         const offsetX = event.clientX - rect.left;
         const offsetY = event.clientY - rect.top;
 
-        const isOverAnswer = offsetX > 0 && offsetX < rect.width && offsetY > 0 && offsetY < rect.height;
+        const isOverAnswer =
+          offsetX > 0 &&
+          offsetX < rect.width &&
+          offsetY > 0 &&
+          offsetY < rect.height;
         if (isOverAnswer) {
           this.selectedAnswer = event.currentTarget.innerText;
           this.markAnswerSelected();
-
         } else {
           this.clearSelectedAnswer();
         }
@@ -99,18 +131,18 @@ export default {
 
     handleKeyPress(event) {
       switch (event.key) {
-        case 'ArrowLeft':
+        case "ArrowLeft":
           this.selectedAnswer = this.randomAnswers[0];
           this.markAnswerSelected();
           this.submitAndMoveNext();
           break;
-        case 'ArrowRight':
+        case "ArrowRight":
           this.selectedAnswer = this.randomAnswers[1];
           this.markAnswerSelected();
           this.submitAndMoveNext();
           break;
       }
-      this.clearSelectedAnswer()
+      this.clearSelectedAnswer();
     },
 
     submitAndMoveNext() {
@@ -132,18 +164,18 @@ export default {
 
     nextCard() {
       if (this.currentCardIndex < this.cards.length - 1) {
-        this.currentCardIndex++
+        this.currentCardIndex++;
         this.randomAnswers = this.getRandomAnswers();
       }
     },
 
     getRandomAnswers() {
-      console.log(this.cards[this.currentCardIndex].answer)
+      console.log(this.cards[this.currentCardIndex].answer);
       const correctAnswer = this.cards[this.currentCardIndex].answer;
 
       const wrongAnswers = this.cards
-          .filter(card => card.answer !== correctAnswer)
-          .map(card => card.answer);
+        .filter((card) => card.answer !== correctAnswer)
+        .map((card) => card.answer);
 
       const shuffleWrongAnswers = wrongAnswers.sort(() => Math.random() - 0.5);
       const selectedWrongAnswers = shuffleWrongAnswers.slice(0, 1);
@@ -154,7 +186,7 @@ export default {
 
     shuffleCards(array) {
       let cardLength = array.length,
-          currentIndex;
+        currentIndex;
       for (currentIndex = cardLength - 1; currentIndex > 0; currentIndex--) {
         let randomIndex = Math.floor(Math.random() * (currentIndex + 1));
         let temp = array[currentIndex];
@@ -176,6 +208,13 @@ export default {
 
     changeUserAnswer(event) {
       this.selectedAnswer = event.target.innerText;
+    },
+
+    handleLeaveEarly() {
+      // Push remaining questions into incorrect questions array
+      for (let i = this.currentCardIndex; i < this.cards.length; i++) {
+        this.$store.state.incorrectQuestions.push(this.cards[i].question);
+      }
     },
 
     startTimer() {
@@ -203,11 +242,13 @@ export default {
     },
 
     navigateToCompletedView() {
-      this.$router.push({name: 'completed-study-session'});
+      this.$router.push({ name: "completed-study-session" });
     },
 
     pushIncorrectQuestions() {
-      this.$store.state.incorrectQuestions.push(this.cards[this.currentCardIndex].question)
+      this.$store.state.incorrectQuestions.push(
+        this.cards[this.currentCardIndex].question
+      );
     },
 
     markAnswerSelected() {
@@ -217,7 +258,9 @@ export default {
           button.classList.remove("selected-answer");
         });
 
-        let targetButton = Array.from(allButtons).find(button => button.innerText === this.selectedAnswer);
+        let targetButton = Array.from(allButtons).find(
+          (button) => button.innerText === this.selectedAnswer
+        );
         if (targetButton) {
           targetButton.classList.add("selected-answer");
         }
@@ -233,49 +276,48 @@ export default {
   },
 
   created() {
-
     DeckService.getDecks()
-        .then((response) => {
-          this.decks = response.data;
-        })
-        .catch((error) => {
-          console.log(error, "Deck selection");
-        });
-
+      .then((response) => {
+        this.decks = response.data;
+      })
+      .catch((error) => {
+        console.log(error, "Deck selection");
+      });
   },
 
   mounted() {
-    document.addEventListener('keyup', this.handleKeyPress)
+    document.addEventListener("keyup", this.handleKeyPress);
   },
 
   beforeUnmount() {
     clearInterval(this.timerId);
-    document.removeEventListener('keyup', this.handleKeyPress);
-
+    document.removeEventListener("keyup", this.handleKeyPress);
   },
 
   watch: {
     selectedDeck(newDeck) {
       if (newDeck) {
         DeckService.getCardsByDeckId(newDeck.deckId)
-            .then((response) => {
-              this.cards = response.data;
-              this.shuffleCards(this.cards);
-              this.currentCardIndex = 0;
-              this.randomAnswers = this.getRandomAnswers();
-              this.startTimer();
-            })
-            .catch((error) => {
-              console.log(error, "Card selection");
-            });
+          .then((response) => {
+            this.cards = response.data;
+            this.shuffleCards(this.cards);
+            this.currentCardIndex = 0;
+            this.randomAnswers = this.getRandomAnswers();
+            this.startTimer();
+          })
+          .catch((error) => {
+            console.log(error, "Card selection");
+          });
       }
-    }
-  }
-}
-
-
+    },
+  },
+};
 </script>
 <style scoped>
+.main-lightning-round-container {
+  padding-left: 15px;
+  padding-right: 15px;
+}
 
 .viewedQuestion[draggable="true"]:active {
   cursor: move;
@@ -297,13 +339,17 @@ export default {
 }
 
 .dropDownButton {
-  width: 100%;
-  background-color: #a4a4a4;
+  width: 20%;
+  height: 30px;
+  border-radius: 15px;
 }
 
-.dropDownContainer {
-  width: 20%;
-  margin: auto;
+.dropDownButton:focus {
+  border: 2px solid black;
+}
+
+.submit-button {
+  background-color: #86efac;
 }
 
 h1 {
@@ -324,16 +370,18 @@ h1 {
   max-width: 30%;
   min-height: 25%;
   max-height: 30%;
-  margin-left: 35%;
 
-  /* border: 3px solid black; */
+  margin-left: auto;
+  margin-right: auto;
+
+  border: 3px solid black;
   border-radius: 10px;
-  display: flex;
 
-  text-align: center;
+  display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #6b7280;
+
+  text-align: center;
 
   padding: 10px;
 }
@@ -346,26 +394,23 @@ h1 {
 }
 
 .answer-item {
-  /* border: 1px solid black; */
+  border: 1px solid black;
   padding: 10px;
   text-align: center;
-  background-color: #6b7280;
-
 }
 
 .selected-answer {
-  background-color: rgb(159, 159, 159);
+  background-color: #d4d4d8;
+  border: 2px solid black;
 }
 
-.study-submit-button {
+.lightning-round-buttons {
   margin-top: 10px;
-  background-color: #4b5563;
   display: flex;
   justify-content: center;
 }
 
 .submit-button {
-  background-color: #a4a4a4;
 }
 
 .cancel-button {
@@ -373,6 +418,5 @@ h1 {
 }
 
 input[type="submit"] {
-  background-color: #a4a4a4;
 }
 </style>

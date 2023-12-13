@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="main-quiz-container">
     <div class="header-content">
       <h1 v-if="!selectedDeck">Select a Deck to Begin Quiz</h1>
 
@@ -200,6 +200,11 @@ export default {
 
     handleLeaveEarly() {
 
+      // Push remaining questions into incorrect questions array
+      for (let i = this.currentCardIndex; i < this.cards.length; i++) {
+        this.$store.state.incorrectQuestions.push(this.cards[i].question);
+      }
+
     },
 
     textToSpeech(text) {
@@ -295,6 +300,13 @@ export default {
 </script>
 
 <style scoped>
+
+.main-quiz-container {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+
 .header-content {
   display: flex;
   flex-direction: column;
