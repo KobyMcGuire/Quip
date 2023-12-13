@@ -1,13 +1,15 @@
 <template>
   <div class="main-container">
     <div class="search-field">
-      <label for="flashcardSearch"> Search </label>
-      <input
-        type="text"
-        id="flashcardSearch"
-        name="flashcardSearch"
-        v-model="searchTerms"
-      />
+        <label for="flashcardSearch">
+          <span class="material-symbols-outlined"> search </span>
+        </label>
+        <input
+          type="text"
+          id="flashcardSearch"
+          name="flashcardSearch"
+          v-model="searchTerms"
+        />
 
       <div class="radioButtons">
         <label for="question">Question </label>
@@ -114,20 +116,20 @@ export default {
     },
 
     onDrop(event) {
-      let flashcardId = event.dataTransfer.getData('flashCardId');
+      let flashcardId = event.dataTransfer.getData("flashCardId");
       this.findFlashcard(flashcardId);
     },
 
     findFlashcard(flashcardId) {
       DeckService.getCard(flashcardId)
-      .then((response) => {
-        this.flashcard = response.data;
-        // Delete card from current Deck
-        this.deleteFlashcardByDragAndDrop();
-      })
-      .catch((error) => {
-        this.errorHandler(error, "fetching card");
-      })
+        .then((response) => {
+          this.flashcard = response.data;
+          // Delete card from current Deck
+          this.deleteFlashcardByDragAndDrop();
+        })
+        .catch((error) => {
+          this.errorHandler(error, "fetching card");
+        });
     },
 
     deleteFlashcardByDragAndDrop() {
@@ -137,8 +139,15 @@ export default {
       )
         .then((response) => {
           let indexOfRemovedCard = "";
-          for (let i = 0; i < this.$store.state.currentDeckFlashcards.length; i++) {
-            if (this.$store.state.currentDeckFlashcards[i].flashCardId === this.flashcard.flashCardId) {
+          for (
+            let i = 0;
+            i < this.$store.state.currentDeckFlashcards.length;
+            i++
+          ) {
+            if (
+              this.$store.state.currentDeckFlashcards[i].flashCardId ===
+              this.flashcard.flashCardId
+            ) {
               indexOfRemovedCard = i;
             }
           }
@@ -198,12 +207,37 @@ export default {
   margin-right: 5%;
 }
 
+.search-field {
+  min-width: 50%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .search-field label {
   margin-right: 5px;
 }
 
 .search-field input[type="text"] {
-  width: 200px;
+  width: 50%;
+  min-height: 30px;
+
+  border: 1px solid #11101d;
+  border-radius: 20px;
+
+  padding: 5px;
+
+  transition: all .1s ease-in-out;
+}
+
+.search-field input[type="text"]:hover {
+  border: 3px solid #11101d;
+}
+
+.search-field input[type="text"]:focus {
+  border: 3px solid #11101d;
 }
 
 .search-field input[type="submit"] {
