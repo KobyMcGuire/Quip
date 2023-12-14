@@ -73,6 +73,28 @@ export default {
 </script>
 
 <style scoped>
+
+.text-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  text-align: center;
+
+  background-color: #FCF5E5;
+
+  border: 2px solid black;
+  border-radius: 5px;
+
+  box-shadow: 10px 10px 5px rgb(198, 196, 196);
+
+  max-width: 50%;
+
+  margin-left: auto;
+  margin-right: auto;
+}
+
+
 .form-input-group {
   margin-bottom: 1rem;
 }

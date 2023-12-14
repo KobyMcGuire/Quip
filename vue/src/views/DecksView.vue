@@ -11,7 +11,7 @@
       <p>You must enter a title and a description</p>
     </div>
 
-    <label for="deckTitle">Title: </label>
+    <label for="deckTitle">Title </label>
     <input
       type="text"
       id="deckTitle"
@@ -19,7 +19,7 @@
       v-model="newDeck.title"
     />
 
-    <label for="deckDescription">Description: </label>
+    <label for="deckDescription">Description </label>
     <input
       type="text"
       id="deckDescription"
@@ -27,7 +27,7 @@
       v-model="newDeck.description"
     />
 
-    <label for="deckColor">Color: </label>
+    <label for="deckColor">Color </label>
     <input
       type="color"
       id="deckColor"
