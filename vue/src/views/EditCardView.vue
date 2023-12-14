@@ -124,11 +124,12 @@ export default {
   width: 50%;
   padding: 10px;
 
+  border: 2px solid black;
   border-radius: 10px;
 
   box-shadow: 10px 10px 5px rgb(198, 196, 196);
 
-  background-color: #53bac1;
+  background-color: #FCF5E5;
 }
 
 .edit-card-form > h1 {
@@ -153,8 +154,6 @@ input {
 .submit-button {
   position: absolute;
   bottom: 15px;
-
-  background-color: #EDEDED;
 }
 
 input:focus {

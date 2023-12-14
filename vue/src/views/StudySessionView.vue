@@ -435,6 +435,11 @@ input:checked + .slider:before {
   bottom: 10px;
 }
 
+.voice-buttons > button {
+  color:white;
+  background-color: #11101d;
+}
+
 .question-to-speech {
   margin-right: 10px;
   background-color: #d4d4d8;

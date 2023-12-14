@@ -57,7 +57,9 @@ export default {
   border: 2px solid black;
   border-radius: 15px;
   
-  background-color: rgb(251, 249, 249);
+  background-color: #FCF5E5;
+
+  box-shadow: 10px 10px 5px rgb(198, 196, 196);
 
   max-width: 60%;
 }
@@ -69,7 +71,7 @@ ul {
 }
 
 li {
-  margin-top: 5px;
+  margin-top: 10px;
 }
 
 .submit-button {
