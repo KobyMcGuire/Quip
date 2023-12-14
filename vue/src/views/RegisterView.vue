@@ -17,7 +17,7 @@
         <label for="confirmPassword">Confirm Password</label>
         <input type="password" id="confirmPassword" v-model="user.confirmPassword" required />
       </div>
-      <button type="submit">Create Account</button>
+      <button type="submit" class="create-button">Create Account</button>
       <p><router-link v-bind:to="{ name: 'login' }">Already have an account? Log in.</router-link></p>
     </form>
   </div>
@@ -89,15 +89,27 @@ export default {
   box-shadow: 10px 10px 5px rgb(198, 196, 196);
 
   max-width: 50%;
+  min-height: 40%;
 
   margin-left: auto;
   margin-right: auto;
+}
+
+.create-button {
+  background-color: #86efac;
+
+  transition: all .1s ease-in-out;
+}
+
+.create-button:hover {
+  transform: scale(1.025);
 }
 
 
 .form-input-group {
   margin-bottom: 1rem;
 }
+
 label {
   margin-right: 0.5rem;
 }
