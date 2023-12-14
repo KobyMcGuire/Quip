@@ -109,8 +109,12 @@ export default {
 
 <style scoped>
 .edit-card-form {
+  position: relative;
+
   margin-left: auto;
   margin-right: auto;
+
+  min-height: 40%;
 
   display: flex;
   flex-direction: column;
@@ -122,7 +126,39 @@ export default {
 
   border-radius: 10px;
 
-  background-color: #f5f5f4;
+  box-shadow: 10px 10px 5px rgb(198, 196, 196);
+
+  background-color: #53bac1;
+}
+
+.edit-card-form > h1 {
+  position: absolute;
+  top: 5px;
+}
+
+label {
+  font-weight: bold;
+  margin-top: 5px;
+  margin-bottom: 2px;
+}
+
+input {
+  border-radius: 5px;
+  border: none;
+
+  padding: 3px;
+}
+
+
+.submit-button {
+  position: absolute;
+  bottom: 15px;
+
+  background-color: #EDEDED;
+}
+
+input:focus {
+  border: 3px solid #11101d;
 }
 
 .input-fields {

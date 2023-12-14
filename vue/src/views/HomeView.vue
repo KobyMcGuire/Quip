@@ -98,7 +98,7 @@ export default {
           OUR FEATURES ARE BIG AND STRONG
           <br/>
           <button>
-            <router-link v-bind:to="{ name: 'register' }">Register Now and Begin Studying!</router-link>
+            <router-link v-bind:to="{ name: 'register' }" class="sign-up-button">Register Now and Begin Studying!</router-link>
           </button>
         </div>
       </div>
@@ -236,6 +236,11 @@ body {
   outline: none;
   cursor: pointer;
   margin-top: 20px;
+}
+
+.sign-up-button {
+  color:white;
+  text-decoration: none;
 }
 
 </style>
