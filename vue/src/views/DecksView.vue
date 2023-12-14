@@ -136,10 +136,10 @@ export default {
   margin-bottom: 10px;
   margin-left: 17px;
 
-  color: rgb(251, 249, 249);
+  color: white;
   background-color: #11101d;
 
-  transition: all .2s ease-in-out;
+  transition: all .1s ease-in-out;
 }
 
 .show-new-deck:hover {
