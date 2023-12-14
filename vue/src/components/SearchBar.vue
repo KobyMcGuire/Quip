@@ -1,13 +1,20 @@
 <template>
   <div class="main-container">
     <div class="search-field">
-      <label for="flashcardSearch"> Search </label>
-      <input
-        type="text"
-        id="flashcardSearch"
-        name="flashcardSearch"
-        v-model="searchTerms"
-      />
+      <div class="search-bar-container">
+        <label for="flashcardSearch">
+          <span class="material-symbols-outlined" id="search-icon">
+            search
+          </span>
+        </label>
+        <input
+          type="text"
+          placeholder="Search for Flashcards..."
+          id="flashcardSearch"
+          name="flashcardSearch"
+          v-model="searchTerms"
+        />
+      </div>
 
       <div class="radioButtons">
         <label for="question">Question </label>
@@ -29,7 +36,12 @@
       <input type="submit" v-on:click="searchFlashCards" />
     </div>
 
-    <div class="flashcard-results-container">
+    <div
+      class="flashcard-results-container"
+      v-on:drop="onDrop($event)"
+      @dragover.prevent
+      @dragenter.prevent
+    >
       <flash-card
         draggable="true"
         v-on:dragstart="handleDragStart($event, flashcard)"
@@ -64,20 +76,22 @@ export default {
       for (let i = 0; i < this.$store.state.currentDeckFlashcards.length; i++) {
         if (i === this.$store.state.currentDeckFlashcards.length - 1) {
           currentFlashcardIds =
-            currentFlashcardIds + `${this.$store.state.currentDeckFlashcards[i].flashCardId}`;
+            currentFlashcardIds +
+            `${this.$store.state.currentDeckFlashcards[i].flashCardId}`;
         } else {
-          currentFlashcardIds =
-            currentFlashcardIds = currentFlashcardIds + `${this.$store.state.currentDeckFlashcards[i].flashCardId}` + ",";
+          currentFlashcardIds = currentFlashcardIds =
+            currentFlashcardIds +
+            `${this.$store.state.currentDeckFlashcards[i].flashCardId}` +
+            ",";
         }
 
         console.log(this.$store.state.currentSearchFlashcards);
       }
 
-
       if (this.searchByQuestion === false) {
         DeckService.getCardsByTag(this.searchTerms, currentFlashcardIds)
           .then((response) => {
-            console.log("Data from search" , response.data)
+            console.log("Data from search", response.data);
             this.$store.state.currentSearchFlashcards = response.data;
           })
           .catch((error) => {
@@ -95,23 +109,66 @@ export default {
     },
 
     handleDragStart(event, flashcard) {
-      event.target.style.opacity = '0.4';
-      
-      event.dataTransfer.dropEffect = 'move';
-      event.dataTransfer.effectAllowed = 'move';
-      event.dataTransfer.setData('flashCardId', flashcard.flashCardId);
+      event.target.style.opacity = "0.4";
 
-      let flashcardsContainer = document.querySelector(".flash-cards-container")
-      flashcardsContainer.style.border = '1px solid black'
+      event.dataTransfer.dropEffect = "move";
+      event.dataTransfer.effectAllowed = "move";
+      event.dataTransfer.setData("flashCardId", flashcard.flashCardId);
     },
 
     handleDragEnd(event) {
-      event.target.style.opacity = '1';
-
-      let flashcardsContainer = document.querySelector(".flash-cards-container")
-      flashcardsContainer.style.border = 'none'
+      event.target.style.opacity = "1";
     },
 
+    onDrop(event) {
+      let flashcardId = event.dataTransfer.getData("flashCardId");
+      this.findFlashcard(flashcardId);
+    },
+
+    findFlashcard(flashcardId) {
+      DeckService.getCard(flashcardId)
+        .then((response) => {
+          this.flashcard = response.data;
+          // Delete card from current Deck
+          this.deleteFlashcardByDragAndDrop();
+        })
+        .catch((error) => {
+          this.errorHandler(error, "fetching card");
+        });
+    },
+
+    deleteFlashcardByDragAndDrop() {
+      DeckService.deleteFlashcard(
+        this.flashcard.flashCardId,
+        this.$route.params.id
+      )
+        .then((response) => {
+          let indexOfRemovedCard = "";
+          for (
+            let i = 0;
+            i < this.$store.state.currentDeckFlashcards.length;
+            i++
+          ) {
+            if (
+              this.$store.state.currentDeckFlashcards[i].flashCardId ===
+              this.flashcard.flashCardId
+            ) {
+              indexOfRemovedCard = i;
+            }
+          }
+
+          // Update search store flashcards array to include deleted card
+          this.$store.state.currentSearchFlashcards.push(
+            this.$store.state.currentDeckFlashcards[indexOfRemovedCard]
+          );
+
+          // Remove card from the stores current deck flashcards array
+          this.$store.state.currentDeckFlashcards.splice(indexOfRemovedCard, 1);
+        })
+        .catch((error) => {
+          this.errorHandler(error, "deleting flashcard");
+        });
+    },
 
     errorHandler(error, verb) {
       console.log(`There was an error ${verb}. The error was: ${error}`);
@@ -140,6 +197,9 @@ export default {
   align-items: center;
   flex-wrap: wrap;
 
+  min-width: 100%;
+  min-height: 50px;
+
   gap: 20px;
 }
 
@@ -152,12 +212,51 @@ export default {
   margin-right: 5%;
 }
 
+.search-field {
+  min-width: 50%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.search-bar-container {
+  display: flex;
+  justify-content:  center;
+  
+  width: 100%;
+}
+
 .search-field label {
   margin-right: 5px;
 }
 
+#search-icon {
+  color: #11101d;
+  
+  position: relative;
+  bottom: -6px;
+}
+
 .search-field input[type="text"] {
-  width: 200px;
+  width: 50%;
+  min-height: 40px;
+
+  border: 1px solid #11101d;
+  border-radius: 20px;
+
+  padding: 5px;
+
+  transition: all 0.1s ease-in-out;
+}
+
+.search-field input[type="text"]:hover {
+  border: 3px solid #11101d;
+}
+
+.search-field input[type="text"]:focus {
+  border: 3px solid #11101d;
 }
 
 .search-field input[type="submit"] {

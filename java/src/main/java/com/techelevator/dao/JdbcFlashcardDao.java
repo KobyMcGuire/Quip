@@ -120,6 +120,7 @@ public class JdbcFlashcardDao implements FlashcardDao {
         if(useWildcard){
             tag = "%" + tag + "%";
         }
+
         try{
             SqlRowSet results = jdbcTemplate.queryForRowSet(sql, tag);
             while(results.next()){
@@ -207,13 +208,13 @@ public class JdbcFlashcardDao implements FlashcardDao {
     @Override
     public FlashcardDto updateFlashcard(FlashcardDto flashcardDto, int id) {
         String sql = "UPDATE flashcards\n" +
-                "SET question = ?, answer = ?, tags = ?\n" +
+                "SET question = ?, answer = ?, tags = ?, image = ?\n" +
                 "WHERE flashcard_id = ?";
 //        String sql = "UPDATE flashcards\n" +
 //                "SET deck_id = ?, question = ?, answer = ?, tags = ?, creator = ?\n" +
 //                "WHERE flashcard_id = ?";
         try {
-            int numOfRowsUpdated = jdbcTemplate.update(sql, flashcardDto.getQuestion(), flashcardDto.getAnswer(), flashcardDto.getTag(), id);
+            int numOfRowsUpdated = jdbcTemplate.update(sql, flashcardDto.getQuestion(), flashcardDto.getAnswer(), flashcardDto.getTag(), flashcardDto.getImage(), id);
             if(numOfRowsUpdated == 0){
                 throw new DaoException("No records were updated");
             }

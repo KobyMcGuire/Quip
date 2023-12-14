@@ -11,7 +11,6 @@ public interface DeckDao {
 
     Deck getDeckById(int id);
 
-    //createDeck() probably needs to pass in a Dto as an argument
     Deck createDeck(DeckDto deckDto);
 
     DeckDto updateDeck(DeckDto deckDto, int id);

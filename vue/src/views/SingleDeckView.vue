@@ -96,12 +96,13 @@
     >
       <flash-card
         draggable="true"
-        v-on:dragstart="handleDragStart($event)"
+        v-on:dragstart="handleDragStart($event, flashcard)"
         v-on:dragend="handleDragEnd($event)"
         v-for="flashcard in this.$store.state.currentDeckFlashcards"
         v-bind:key="flashcard.cardId"
         v-bind:flashcard="flashcard"
         v-bind:deleteButton="deleteButton"
+        @image-uploaded="handleImageUploaded"
       />
     </div>
 
@@ -157,8 +158,12 @@ export default {
       this.newCardError = false;
     },
 
-    handleDragStart(event) {
+    handleDragStart(event, flashcard) {
       event.target.style.opacity = "0.4";
+
+      event.dataTransfer.dropEffect = 'move';
+      event.dataTransfer.effectAllowed = 'move';
+      event.dataTransfer.setData('flashCardId', flashcard.flashCardId);
     },
 
     handleDragEnd(event) {
@@ -291,6 +296,10 @@ export default {
     errorHandler(error, verb) {
       console.log(`There was an error ${verb}. The error was: ${error}`);
     },
+
+    handleImageUploaded(imageUrl){
+      this.$set(this.flashcard, 'image', imageUrl);
+    }
   },
 
   computed: {},
@@ -359,6 +368,8 @@ export default {
   flex-wrap: wrap;
   gap: 20px;
 
+  min-height: 50px;
+
   margin-top: 10px;
 }
 
@@ -389,13 +400,23 @@ export default {
 
   margin-left: 15px;
 }
+.form-action-buttons > button:hover {
+  transform: scale(1.025);
+}
+
+.form-action-buttons > button {
+  color: rgb(251, 249, 249);
+  background-color: #11101d;
+
+  transition: all .2s ease-in-out;
+}
 
 .cancel-button {
   margin-left: 10px;
 }
 
 .rounded {
-  border-top: 3px solid #bbb;
+  border-top: 3px solid #11101d;
   border-radius: 5px;
 
   width: 70%;

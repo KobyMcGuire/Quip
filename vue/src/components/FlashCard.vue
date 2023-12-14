@@ -2,13 +2,12 @@
   <div class="flashcard-container">
     <div class="flashcard-text-content" v-on:click="flipCard">
       <div class="question" v-if="showFront">
-        <p v-if="image && image.length">
-          <img :src="image" alt="" />
-        </p>
-        <p v-else>{{ flashcard.question }}</p>
+        <img :src="image" alt="" v-if="image != ''" />
+        <p>{{ flashcard.question }}</p>
       </div>
 
       <div class="answer" v-if="!showFront">
+        <img :src="backImage" alt="" v-if="image != ''" />
         <p>{{ flashcard.answer }}</p>
       </div>
 
@@ -28,25 +27,29 @@
           params: { id: this.flashcard.flashCardId },
         }"
       >
-        <button>
+        <button class="edit-button">
           <span class="material-symbols-outlined"> edit </span>
         </button>
       </router-link>
 
       <div class="image-upload">
-        <button v-on:click="defineWidget()" id="upload_widget" class="cloudinary-button">
+        <button
+          v-on:click="defineWidget()"
+          id="upload_widget"
+          class="cloudinary-button"
+        >
           <label for="image">
-            <i class="fas fa-upload"></i>
             <!-- This is the upload icon -->
+            <i class="fas fa-upload"></i>
           </label>
-          <!-- <input
-            id="image"
-            type="file"
-            accept="image/*"
-            @click="handleImageUpload"
-          /> -->
         </button>
-      </div>
+        <!--
+        <button v-on:click="defineWidget()" id="upload_widget" class="cloudinary-button" v-else>
+          <label for="backImage">
+            <i class="fas fa-upload"></i>
+          </label>
+        </button>
+      --></div>
 
       <button v-if="deleteButton" v-on:click="deleteFlashcard">
         <span class="material-symbols-outlined"> delete </span>
@@ -78,6 +81,7 @@ export default {
     return {
       showFront: true,
       image: "",
+      backImage: "",
       editedFlashcard: {
         question: this.flashcard.question,
         answer: this.flashcard.answer,
@@ -101,9 +105,7 @@ export default {
     },
 
     handleImageUpload(event) {
-      console.log(event.target.files);
       const file = event.target.files[0];
-      console.log(file);
 
       if (file && file.type.startsWith("image/")) {
         const reader = new FileReader();
@@ -180,23 +182,27 @@ export default {
       const cloudName = "dz0w5cehu";
       const uploadPreset = "gooah3bb";
       const folder = "final-capstone";
-      this.myWidget = window.cloudinary.createUploadWidget(
-        {
-          cloudName: cloudName,
-          uploadPreset: uploadPreset,
-          folder: folder,
-          // ... other options
-        },
-        (error, result) => {
-          if (!error && result && result.event === "success") {
-            console.log("Done! Here is the image info: ", result.info);
-            // document
-            //   .getElementById("uploadedimage")
-            //   .setAttribute("src", result.info.secure_url);
-            this.$emit("image-uploaded", result.info.secure_url);
+      this.myWidget = window.cloudinary
+        .createUploadWidget(
+          {
+            cloudName: cloudName,
+            uploadPreset: uploadPreset,
+            folder: folder,
+            // ... other options
+          },
+          (error, result) => {
+            if (!error && result && result.event === "success") {
+              console.log("Done! Here is the image info: ", result.info);
+
+              this.image = result.info.secure_url;
+              // document
+              //   .getElementById("uploadedimage")
+              //   .setAttribute("src", result.info.secure_url);
+              this.$emit("image-uploaded", result.info.secure_url);
+            }
           }
-        }
-      ).open();
+        )
+        .open();
     },
   },
 };
@@ -207,24 +213,28 @@ export default {
   margin-bottom: 10px;
   display: none;
 }
-.viewedQuestion img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
 
 .flashcard-container {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
   min-width: 30%;
-  min-height: 10vh;
+  min-height: 150px;
 
   border: 3px solid black;
   border-radius: 10px;
+
+  background-color: rgb(251, 249, 249);
 
   text-align: center;
 
   padding: 10px;
 
-  transition: all .2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }
 
 .flashcard-container:hover {
@@ -244,10 +254,29 @@ h1 {
 .flashcard-buttons {
   display: flex;
   justify-content: center;
+  align-items: center;
+
   gap: 15px;
+
+  position: absolute;
+  left: 50%;
+  right: 50%;
+  bottom: 5px;
 }
 
-.submit-flashcard-edit {
-  margin-top: 10px;
+.flashcard-text-content {
+  margin-bottom: 30px;
+}
+.flashcard-buttons > button {
+  color: rgb(251, 249, 249);
+  background-color: #11101d;
+}
+
+.edit-button {
+  color: rgb(251, 249, 249);
+  background-color: #11101d;
+}
+.edit-button {
+  min-height: 48px;
 }
 </style>

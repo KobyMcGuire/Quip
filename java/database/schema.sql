@@ -13,6 +13,7 @@ CREATE TABLE users (
 CREATE TABLE flashcard_decks(
 	deck_id SERIAL,
 	title varchar(50) NOT NULL,
+	color varchar(50) NULL,
 	description varchar(100),
 	CONSTRAINT PK_flashcard_decks PRIMARY KEY(deck_id)
 );
@@ -22,6 +23,7 @@ CREATE TABLE flashcards(
 	question text NOT NULL,
 	answer text NOT NULL,
 	tags varchar(50) NOT NULL,
+	image varchar(100) NULL,
 	creator varchar(50) NOT NULL,
 	CONSTRAINT PK_flashcards PRIMARY KEY(flashcard_id)
 );

@@ -27,6 +27,14 @@
       v-model="newDeck.description"
     />
 
+    <label for="deckColor">Color: </label>
+    <input
+      type="color"
+      id="deckColor"
+      name="deckColor"
+      v-model="newDeck.color"
+    />
+
     <div class="new-deck-buttons">
       <label for="submitNewDeck"></label>
       <input type="submit" id="submitNewDeck" v-on:click="addDeck" />
@@ -46,6 +54,7 @@
       v-for="deck in decks"
       v-bind:key="deck.deckId"
       v-bind:deck="deck"
+      :style="`background-color: ${deck.color};`"
     ></deck-card>
   </div>
 </template>
@@ -72,11 +81,13 @@ export default {
       // Check to make sure that the title and description fields are not empty.
       if (this.newDeck.title !== "" && this.newDeck.description !== "") {
         this.error = false;
+        console.log(this.newDeck);
         DeckService.addDeck(this.newDeck)
           .then((response) => {
             this.newDeck = {
               title: "",
               description: "",
+              color: ""
             };
             this.decks.push(response.data);
           })
@@ -99,6 +110,7 @@ export default {
       newDeck: {
         title: "",
         description: "",
+        color: "",
       },
 
       decks: [],
@@ -123,8 +135,28 @@ export default {
 .show-new-deck {
   margin-bottom: 10px;
   margin-left: 17px;
-  background-color: #f3f6f4;
+
+  color: rgb(251, 249, 249);
+  background-color: #11101d;
+
+  transition: all .2s ease-in-out;
 }
+
+.show-new-deck:hover {
+  border: 3px solid black;
+
+  transform: scale(1.025);
+
+  box-shadow: 10px 5px 5px rgb(198, 196, 196);
+}
+
+
+.show-new-deck[disabled] {
+  border: none;
+}
+
+
+
 .deck-container {
   display: flex;
   justify-content:space-around;
@@ -137,18 +169,17 @@ export default {
   min-height: 25%;
   text-align: center;
 
-  padding: 10px;
+  color: #11101d;
 
-  border: 3px solid black;
+  padding: 10px;
 
   transition: all .2s ease-in-out;
 }
 
 .deck-card:hover {
-  border: 4px solid black;
+  transform: scale(1.025);
 
-  transform: scale(1.1);
-
+  border: 3px solid #11101d;
   box-shadow: 10px 5px 5px rgb(198, 196, 196);
 }
 
