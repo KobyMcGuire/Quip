@@ -223,6 +223,7 @@ export default {
   align-items: center;
 
   min-width: 30%;
+  max-width: 30%;
   min-height: 150px;
 
   border: 3px solid black;
