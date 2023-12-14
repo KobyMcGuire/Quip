@@ -115,7 +115,7 @@ export default {
   </div>
 </template>
 
-<style>
+<style scoped>
 body {
   width: 100%;
   height: fit-content;

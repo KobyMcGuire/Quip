@@ -1,21 +1,11 @@
 <template>
-  <div class="main-study-container">
-    <div class="header-content">
-      <h1 class="study-header" v-if="!selectedDeck">Pick a Deck to Study</h1>
-
-      <select class="dropDownButton" v-model="selectedDeck" v-if="!selectedDeck">
-        <option v-for="deck in decks" :key="deck.deckId" :value="deck">
-          {{ deck.title }}
-        </option>
-      </select>
-    </div>
-  </div>
-
-  <div @click="flipCard()" v-if="selectedDeck && cards.length > 0">
-    <div class="card" v-for="(card, index) in cards" :key="index">
-      <h2 v-if="!flipped">{{ cards[currentIndex].question }}</h2>
-      <p v-else>{{ cards[currentIndex].answer }}</p>
-    </div>
+  <div class="header-content">
+    <h1 class="study-header" v-if="!selectedDeck">Pick a Deck to Study</h1>
+    <select class="dropDownButton" v-model="selectedDeck" v-if="!selectedDeck">
+      <option v-for="deck in decks" :key="deck.deckId" :value="deck">
+        {{ deck.title }}
+      </option>
+    </select>
   </div>
 
   <div class="buttons">
@@ -24,15 +14,23 @@
     <button @click="selectedDeck = false">Back to Decks</button>
   </div>
 
+  <div class="main-study-container">
+    <div class="cardBox" @click="flipCard()" v-if="selectedDeck && cards.length > 0">
+        <div class="card1" v-for="(card, index) in cards" :key="index">
+          <h2 v-if="!flipped">{{ cards[currentIndex].question }}</h2>
+          <p v-else>{{ cards[currentIndex].answer }}</p>
+        </div>
+    </div>
+  </div>
+
+
 </template>
 
 <script>
 import DeckService from "../services/DeckService";
 
 export default {
-  components: {
-
-  },
+  components: {},
 
   data() {
     return {
@@ -97,10 +95,30 @@ export default {
 .header-content > h1 {
   margin-top: 0;
 }
+
 .dropDownButton {
   width: 20%;
   height: 30px;
   border-radius: 15px;
 }
+
+.main-study-container {
+  height: 100vh;
+}
+
+.cardBox {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-items: flex-start;
+
+}
+
+.card1 {
+  height: 100%;
+  text-align: center;
+}
+
 
 </style>
