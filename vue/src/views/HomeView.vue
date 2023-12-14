@@ -2,6 +2,7 @@
 export default {
   data() {
     return {
+      animationId: 0,
       notes: [
         {
           sub: 'Versatile Learning',
@@ -46,23 +47,16 @@ export default {
 
     startAutoScroll() {
       window.scrollBy(0, 4);
-      window.requestAnimationFrame(this.startAutoScroll);
+      this.animationId = window.requestAnimationFrame(this.startAutoScroll);
     },
 
     stopAutoScroll() {
-      window.cancelAnimationFrame(this.startAutoScroll);
+      window.scrollBy(0, 0)
+      window.cancelAnimationFrame(this.animationId);
+      window.removeEventListener("scroll", this.scrollAnimation)
     },
 
-    // handleScroll() {
-    //   if (this.$route.name !== 'home') {
-    //     this.stopAutoScroll();
-    //   }
-    // },
-  },
-
-  mounted() {
-    this.startAutoScroll();
-    window.addEventListener("scroll", () => {
+    scrollAnimation() {
       if (this.$route.name === 'home') {
         let proportion = this.$el.getBoundingClientRect().top / window.innerHeight;
         if (proportion <= 0) {
@@ -77,13 +71,19 @@ export default {
       } else {
         this.stopAutoScroll();
       }
-    });
+
+    },
+  },
+
+  mounted() {
+    this.startAutoScroll();
+    window.addEventListener("scroll", this.scrollAnimation);
   },
 
   beforeUnmount() {
-    window.removeEventListener("scroll",() => {
+    console.log("here");
       this.stopAutoScroll()
-    });
+
   }
 }
 
