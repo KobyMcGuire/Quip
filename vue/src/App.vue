@@ -88,13 +88,10 @@
         <i class="fas fa-bars"></i>
         <span class="text"></span> <!-- Drop Down Button here. If we wanna name it... -->
       </div>
-<!--      <router-view/>-->
+      <router-view/>
     </div>
 
   </nav>
-  <div class="pages">
-    <router-view/>
-  </div>
 </template>
 
 <style>
@@ -103,10 +100,6 @@
   /* Was causing an issue with upload image icons */
   position: fixed;
   z-index: 1000;
-}
-
-.pages {
-  margin-left: 60px;
 }
 
 .sidebar {
@@ -358,7 +351,7 @@
 
 .home-section {
   position: relative;
-  height: 5vh;
+  height: 100vh;
   width: calc(100% - 260px);
   left: 260px;
   transition: all 0.5s ease;
