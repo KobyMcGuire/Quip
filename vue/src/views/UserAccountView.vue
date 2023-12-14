@@ -7,11 +7,11 @@
         <img src="../assets/pfp.jpg" alt="" />
     </div>
     <div class="firstname">
-        <label for="firstname">FirstName: </label>
+        <label for="firstname">First Name: </label>
         <input type="text" id="firstname" v-model="user.username" required autofocus />
     </div>
     <div class="lastname">
-        <label for="lastname">Lastname: </label>
+        <label for="lastname">Last Name: </label>
         <input type="text" id="lastname" v-model="user.password" required autofocus />
     </div>
 </template>
