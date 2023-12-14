@@ -95,9 +95,9 @@
 
 <style>
 
-.fas {
-  /* Was causing an issue with upload image icons */ 
-  /* position: fixed; */
+.fas.fa-bars {
+  /* Was causing an issue with upload image icons */
+  position: fixed;
   z-index: 1000;
 }
 
