@@ -368,6 +368,8 @@ export default {
   flex-wrap: wrap;
   gap: 20px;
 
+  min-height: 50px;
+
   margin-top: 10px;
 }
 
@@ -414,7 +416,7 @@ export default {
 }
 
 .rounded {
-  border-top: 3px solid #bbb;
+  border-top: 3px solid #11101d;
   border-radius: 5px;
 
   width: 70%;

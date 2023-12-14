@@ -1,15 +1,20 @@
 <template>
   <div class="main-container">
     <div class="search-field">
+      <div class="search-bar-container">
         <label for="flashcardSearch">
-          <span class="material-symbols-outlined"> search </span>
+          <span class="material-symbols-outlined" id="search-icon">
+            search
+          </span>
         </label>
         <input
           type="text"
+          placeholder="Search for Flashcards..."
           id="flashcardSearch"
           name="flashcardSearch"
           v-model="searchTerms"
         />
+      </div>
 
       <div class="radioButtons">
         <label for="question">Question </label>
@@ -216,20 +221,34 @@ export default {
   align-items: center;
 }
 
+.search-bar-container {
+  display: flex;
+  justify-content:  center;
+  
+  width: 100%;
+}
+
 .search-field label {
   margin-right: 5px;
 }
 
+#search-icon {
+  color: #11101d;
+  
+  position: relative;
+  bottom: -6px;
+}
+
 .search-field input[type="text"] {
   width: 50%;
-  min-height: 30px;
+  min-height: 40px;
 
   border: 1px solid #11101d;
   border-radius: 20px;
 
   padding: 5px;
 
-  transition: all .1s ease-in-out;
+  transition: all 0.1s ease-in-out;
 }
 
 .search-field input[type="text"]:hover {
