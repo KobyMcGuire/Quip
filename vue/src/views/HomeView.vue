@@ -3,10 +3,30 @@ export default {
   data() {
     return {
       notes: [
-        {sub: 'Title 1', content: 'Related Text 1', active: false, transform: ''},
-        {sub: 'Title 2', content: 'Related Text 2', active: false, transform: ''},
-        {sub: 'Title 3', content: 'Related Text 3', active: false, transform: ''},
-        {sub: 'Title 4', content: 'Related Text 4', active: false, transform: ''}
+        {
+          sub: 'Versatile Learning',
+          content: 'Craft notecards, take quizzes, and study – all in one place!',
+          active: false,
+          transform: ''
+        },
+        {
+          sub: 'Your Learning, Your Way',
+          content: 'Customize notecards, quizzes, and sessions to fit your style.',
+          active: false,
+          transform: ''
+        },
+        {
+          sub: 'Effortless Prep',
+          content: 'Build notecards in seconds for efficient, effective learning.',
+          active: false,
+          transform: ''
+        },
+        {
+          sub: 'Smart and Adaptive',
+          content: 'Experience smart learning that evolves with you.',
+          active: false,
+          transform: ''
+        }
       ]
     };
   },
@@ -25,30 +45,47 @@ export default {
     },
 
     startAutoScroll() {
-      window.scrollBy(0, 5);
+      window.scrollBy(0, 4);
       window.requestAnimationFrame(this.startAutoScroll);
-    }
+    },
+
+    stopAutoScroll() {
+      window.cancelAnimationFrame(this.startAutoScroll);
+    },
+
+    // handleScroll() {
+    //   if (this.$route.name !== 'home') {
+    //     this.stopAutoScroll();
+    //   }
+    // },
   },
 
-    mounted() {
-      this.startAutoScroll();
-
-      window.addEventListener("scroll", () => {
-        if (this.$route.name === 'home') {
-          let proportion = this.$el.getBoundingClientRect().top / window.innerHeight;
-          if (proportion <= 0) {
-            let n = this.notes.length;
-            let index = Math.ceil((proportion * n) / 2);
-            index = Math.abs(index) - 1;
-            for (let i = 0; i < n; i++) {
-              this.notes[i].active = i <= index;
-            }
-            this.rotateNotes();
+  mounted() {
+    this.startAutoScroll();
+    window.addEventListener("scroll", () => {
+      if (this.$route.name === 'home') {
+        let proportion = this.$el.getBoundingClientRect().top / window.innerHeight;
+        if (proportion <= 0) {
+          let n = this.notes.length;
+          let index = Math.ceil((proportion * n) / 2);
+          index = Math.abs(index) - 1;
+          for (let i = 0; i < n; i++) {
+            this.notes[i].active = i <= index;
           }
+          this.rotateNotes();
         }
-      });
-    }
+      } else {
+        this.stopAutoScroll();
+      }
+    });
+  },
+
+  beforeUnmount() {
+    window.removeEventListener("scroll",() => {
+      this.stopAutoScroll()
+    });
   }
+}
 
 </script>
 
@@ -67,7 +104,8 @@ export default {
       </div>
       <div class="right">
         <div class="cards">
-          <div class="card" v-for="(note, index) in notes" :key="index" :class="{active: note.active}" :style="{transform: note.transform}">
+          <div class="card" v-for="(note, index) in notes" :key="index" :class="{active: note.active}"
+               :style="{transform: note.transform}">
             <div class="sub">{{ note.sub }}</div>
             <div class="content">{{ note.content }}</div>
           </div>
@@ -156,12 +194,12 @@ body {
 }
 
 .sub {
-  font-size: 20px;
+  font-size: 15px;
   font-weight: 700;
 }
 
 .content {
-  font-size: 44px;
+  font-size: 33px;
   font-weight: 700;
   line-height: 54px;
 }

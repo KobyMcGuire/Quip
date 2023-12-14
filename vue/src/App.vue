@@ -72,6 +72,7 @@
               <div class="firstNameLoggedOut" v-if="!$store.state.token">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Please Sign in ---></div>
               <div class="firstName">{{ this.$store.state.user.username }}</div>
             </div>
+
             <router-link v-if="!$store.state.token" v-bind:to="{ name: 'login' }"><i class="fa fa-right-to-bracket"></i>
             </router-link>
             <router-link v-if="$store.state.token" v-bind:to="{name: 'logout'}"><i class="fa fa-right-from-bracket"></i>
@@ -191,6 +192,14 @@
 }
 
 .sidebar.close .nav-list li i.arrow {
+  display: none;
+}
+
+.sidebar.close .nav-list .fa.fa-right-to-bracket {
+  display: none;
+}
+
+.sidebar.close .nav-list .fa.fa-right-from-bracket {
   display: none;
 }
 
