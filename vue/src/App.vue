@@ -28,7 +28,7 @@
         <li>
           <a href="/decks">
             <i class="fa fa-book"></i>
-            <span class="link-name"><router-link v-bind:to="{ name: 'decks' }">Decks</router-link></span>
+            <span class="link-name"><router-link class="deck-link" v-bind:to="{ name: 'decks' }">Decks</router-link></span>
           </a>
           <ul class="sub-menu blank">
             <li><a href="#" class="link-name">
@@ -376,6 +376,10 @@
   font-weight: 600;
 }
 
+.deck-link {
+  color: white;
+}
+
 button {
   border: none;
   border-radius: 15px;
@@ -427,7 +431,7 @@ input[type="submit"]:hover {
 }
 
 body {
-    background-color: #F5EFDF;
+    background-color: #fffafa;
   }
 
 @media (max-width: 400px) {
