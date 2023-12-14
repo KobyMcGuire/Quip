@@ -4,8 +4,9 @@
 
     <div class="profile-picture">
       <img :src="profilePictureLink" alt="Profile Picture" />
-      <input type="file" @change="onFileChange" accept="image/*" />
+      <!-- <input type="file" @change="onFileChange" accept="image/*" /> -->
     </div>
+
     <div class="username">
       <label for="username">Username: </label>
       <span>{{ this.$store.state.user.username }}</span>
@@ -30,6 +31,7 @@
         </li>
       </ul>
     </div>
+
   </div>
 </template>
 <script>
@@ -118,6 +120,30 @@ export default {
 };
 </script>
 <style scoped>
+
+ul {
+  list-style-type: none;
+}
+
+a {
+  color: black;
+  text-decoration: underline;
+}
+
+#user {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.profile-picture {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .profile-picture img {
   height: 30%;
   /* width: 51px; */
@@ -127,6 +153,13 @@ export default {
   margin: 0 14px 0 12px;
   background-color: #1d1b31;
   transition: all 0.5s ease;
+}
+
+.flashcards {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 .form-input-group {
   margin-bottom: 1rem;
