@@ -5,11 +5,7 @@
         Pick a Deck to Begin a Lightning Round
       </h1>
 
-      <select
-        class="dropDownButton"
-        v-model="selectedDeck"
-        v-if="!selectedDeck"
-      >
+      <select class="dropDownButton" v-model="selectedDeck" v-if="!selectedDeck">
         <option v-for="deck in decks" :key="deck.deckId" :value="deck">
           {{ deck.title }}
         </option>
@@ -18,45 +14,50 @@
 
     <div v-if="selectedDeck">
       <h5>
-        Correct Answers: {{ this.$store.state.correctAnswers }} /
-        {{ cards.length }}
+        Correct Answers: {{ this.$store.state.correctAnswers }} / {{ cards.length }}
       </h5>
       <div v-if="timerVisible">
         <p>Time remaining: {{ remainingTime }} seconds</p>
       </div>
 
-      <div
-        class="viewedQuestion"
-        :draggable="!dragged"
-        @dragstart="handleDragStart"
-        @dragend="handleDragEnd"
-      >
-        {{ cards[currentCardIndex] && cards[currentCardIndex].question }}
-      </div>
-
-      <div class="answer-container">
+      <div class="question-answer-container">
         <button
-          tabindex="0"
-          v-for="(answer, index) in randomAnswers"
-          :key="index"
-          class="answer-item"
-          @click="
-            changeUserAnswer($event);
-            markAnswerSelected($event);
-          "
-          @keyup="handleKeyPress($event)"
-          @drop="handleDrop"
-          @dragover="handleDragOver"
+            tabindex="0"
+            class="answer-item"
+            @click="changeUserAnswer($event); markAnswerSelected($event);"
+            @keyup="handleKeyPress($event)"
+            @drop="handleDrop"
+            @dragover="handleDragOver"
         >
-          {{ answer }}
+          {{ randomAnswers[0] }}
+        </button>
+
+        <div
+            class="viewedQuestion"
+            :draggable="!dragged"
+            @dragstart="handleDragStart"
+            @dragend="handleDragEnd"
+        >
+          {{ cards[currentCardIndex] && cards[currentCardIndex].question }}
+        </div>
+
+        <button
+            tabindex="0"
+            class="answer-item"
+            @click="changeUserAnswer($event); markAnswerSelected($event);"
+            @keyup="handleKeyPress($event)"
+            @drop="handleDrop"
+            @dragover="handleDragOver"
+        >
+          {{ randomAnswers[1] }}
         </button>
       </div>
     </div>
 
     <div class="lightning-round-buttons" v-if="selectedDeck">
       <router-link
-        v-bind:correctAnswers="correctAnswers"
-        :to="{ name: 'completed-study-session' }"
+          v-bind:correctAnswers="correctAnswers"
+          :to="{ name: 'completed-study-session' }"
       >
         <button class="cancel-button" v-if="selectedDeck" v-on:click="handleLeaveEarly">
           Leave Quiz
@@ -348,20 +349,10 @@ export default {
   border: 2px solid black;
 }
 
-.submit-button {
-  background-color: #86efac;
-}
-
 h1 {
   text-align: center;
 }
 
-.cardMovementButtons {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 2px;
-}
 
 .viewedQuestion {
   width: 250px;
@@ -393,10 +384,27 @@ h1 {
   padding-top: 20px;
 }
 
+.question-answer-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 20px;
+}
+
 .answer-item {
-  border: 1px solid black;
+  background-color: #fffafa;;
+  min-width: fit-content;
   padding: 10px;
   text-align: center;
+  margin: 0 10px;
+  height: 65vh;
+  min-height: 100%;
+  width: 100%;
+}
+
+.answer-item button {
+  width: 300%;
+  height: 100vh;
 }
 
 .selected-answer {

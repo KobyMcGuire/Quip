@@ -1,17 +1,14 @@
 <template>
-  <div class="main-study-container">
-    <div class="header-content">
-      <h1 class="study-header">Pick a Deck to Study</h1>
+  <div class="header-content">
+    <h1 class="study-header">Pick a Deck to Study</h1>
 
-      <select
-        class="dropDownButton"
-        v-model="selectedDeck"
-      >
-        <option v-for="deck in decks" :key="deck.deckId" :value="deck">
-          {{ deck.title }}
-        </option>
-      </select>
-    </div>
+    <select class="dropDownButton" v-model="selectedDeck">
+      <option v-for="deck in decks" :key="deck.deckId" :value="deck">
+        {{ deck.title }}
+      </option>
+    </select>
+  </div>
+  <div class="main-study-container">
 
     <div @click="flipCard()" v-if="selectedDeck && cards.length > 0" class="flashcard-container">
       <div class="flashcard">
@@ -158,5 +155,9 @@ export default {
 }
 p {
   font-size: large;
+}
+
+.header-content > h1 {
+  margin-top: 0;
 }
 </style>
